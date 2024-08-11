@@ -1,2 +1,3 @@
 # Depenency directories
 node_modules
+back_end/mongodb-connection.js
