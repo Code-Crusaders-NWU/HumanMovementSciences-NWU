@@ -8,7 +8,7 @@ exports.assign = async(req, res, next) => {
         const{assignm_Num, assignm_Date, assignm_Feedback, stu_Num, lec_Num, grade, due_date} = req.body;
 
         //Await confirmation of successful assignment opload
-        const success = await AssignmentService.assignment(assignm_Num, assignm_Feedback, stu_Num, lec_Num, grade, due_date);
+        const success = await AssignmentService.assignment(assignm_Num, assignm_Date, assignm_Feedback, stu_Num, lec_Num, grade, due_date);
 
         res.json({status: "true", success: 'Assignment uploaded successfully'});
     } catch (error) {

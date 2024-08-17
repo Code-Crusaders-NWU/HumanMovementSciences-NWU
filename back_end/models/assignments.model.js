@@ -10,7 +10,6 @@ const assignment_schema = new Schema({
         type : Number,
         unique : true,
     },
-    
     assignm_Date : {
         type : Date,
     },
@@ -38,7 +37,7 @@ const assignment_schema = new Schema({
 });
 
 //Create mongoose model from the assignment schema
-const assignment_model = mongoose.model('Assignment', assignment_schema);
+const assignment_model = mongoose.model('assignment', assignment_schema);
 
 //Export user model so that the rest of the codebase can access it
 module.exports = assignment_model;
