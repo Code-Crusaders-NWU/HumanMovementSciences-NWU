@@ -1,4 +1,4 @@
-const Video_Model = require('../models/videos.model');
+const Video_Model = require('../models/video.model');
 
 class VideoService {
     static async createVideo(vid_Num, stu_Num, vid_Link, upload_Date, assignm_Num) {
