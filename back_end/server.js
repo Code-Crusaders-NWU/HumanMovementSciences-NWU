@@ -1,8 +1,8 @@
-const express = require('experess');
+const express = require('express');
 
 //Called automatically when server initiates
 const database = require('./config/database');
-const userModel = require('./model/user.model');
+const userModel = require('./models/user.model');
 const app = require('./app');
 
 app.get('/', (req, res) => {

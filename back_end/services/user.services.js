@@ -1,4 +1,4 @@
-const User_Model = require('../model/user.model');
+const User_Model = require('../models/user.model');
 
 class UserService {
     
@@ -6,7 +6,7 @@ class UserService {
     static async signUp(email, password) {
         try {
             // See if the user already exists within the database.
-            const existingUser = await UserModel.findOne({ email });
+            const existingUser = await User_Model.findOne({ email });
 
             // If the user exists the server should return an error
             if (existingUser) {
@@ -14,7 +14,7 @@ class UserService {
             }
 
             // If no user exists with this email the function can proceed to create a new user
-            const newUser = new UserModel({ email, password });
+            const newUser = new User_Model({ email, password });
             
             // Save the new user to the database and return the saved user object
             return await newUser.save();
@@ -23,7 +23,20 @@ class UserService {
             throw error;
         }
     }
+
+
+    static async verifyUser(email){
+        try{
+            return await User_Model({email});
+        }
+        catch(err){
+            throw err;
+        }
+    }
 }
+
+
+
 
 // Export the UserService class so it can be used in other parts of the application
 module.exports = UserService;
