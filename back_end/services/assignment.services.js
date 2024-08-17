@@ -1,8 +1,8 @@
 //Call Assignm_Model
-const Assignment_Model = require('../model/assignment.model');
+const Assignment_Model = require('../models/assignments.model');
 
 class AssignmentService {
-    static async assignment(assignm_Num) {
+    static async assignment(assignm_Num, assignm_Date, assignm_Feedback, stu_Num, lec_Num, grade, due_date) {
         try {
             //Check if the assignment already exists within the database.
             const existingAssignment = await Assignment_Model.findOne({assignm_Num, assignm_Date, assignm_Feedback, stu_Num, lec_Num, grade, due_date});

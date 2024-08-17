@@ -10,11 +10,11 @@ const assignment_schema = new Schema({
         type : Number,
         unique : true,
     },
-
+    
     assignm_Date : {
         type : Date,
     },
-
+   
     assignm_Feedback : {
         type : String,
     },
@@ -24,16 +24,17 @@ const assignment_schema = new Schema({
     },
 
     lec_Num : {
-        type : Numberm,
+        type : Number,
     },
 
     grade : {
         type : Number,
     },
-
+    
     due_date : {
         type : Date,
     },
+    
 });
 
 //Create mongoose model from the assignment schema
