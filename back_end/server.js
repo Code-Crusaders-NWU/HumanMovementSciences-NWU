@@ -9,6 +9,8 @@ app.get('/', (req, res) => {
     res.send("")                //Edit
 });
 
+
+//Started a Local Server on Port 8000
 app.listen(8000, () => {
     console.log("Server started on port => 8000");
 });
