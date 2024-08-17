@@ -4,10 +4,10 @@ const AssignmentService = require('../services/assignment.services');
 //Export the assignment function so it can be used in the Route handler for an API request
 exports.assign = async(req, res, next) => {
     try{
-        //Extracts assignm_Num from the API request body
+        //Extracts assignment information from the API request body
         const{assignm_Num, assignm_Date, assignm_Feedback, stu_Num, lec_Num, grade, due_date} = req.body;
 
-        //Await confirmation of successful assignment opload
+        //Await confirmation of successful assignment upload
         const success = await AssignmentService.assignment(assignm_Num, assignm_Date, assignm_Feedback, stu_Num, lec_Num, grade, due_date);
 
         res.json({status: "true", success: 'Assignment uploaded successfully'});
