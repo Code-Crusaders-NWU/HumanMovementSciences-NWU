@@ -1,0 +1,1 @@
+## Controllers: This folder manages the incoming requests and responses. Controllers are responsible for receiving requests from the routers, calling the appropriate service functions, and sending back the responses to the client. They act as intermediaries between the router and the service layer.

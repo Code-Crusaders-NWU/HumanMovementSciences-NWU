@@ -1,0 +1,1 @@
+## Model: This folder contains the schema definitions for the MongoDB collections. Models define the structure of the data and how it is stored in the database. For instance, a user model might specify the fields for a user document in MongoDB, such as name, email, and password.

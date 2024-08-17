@@ -1,0 +1,1 @@
+## Routers: This folder contains the route definitions. Routes define how different URLs (or endpoints) are handled by the server.
