@@ -14,7 +14,6 @@ const user_schema = new Schema({
     },
     password : {
         type : String,
-        lowercase : true,
     }
 });
 //This is the user schema "blue-print" for properties the data must have to be accepted into the database.
@@ -31,6 +30,19 @@ user_schema.pre('save', async function(){
         console.log('Error whilst hashing password: '+err);
     }
 })
+
+/*This creates a method within the user schema which is used to compares the input_password from the API with the database passowrd, 
+this is done using the built in compare method from the bcrypt library which we used to hash the password*/ 
+
+user_schema.methods.passwordcheck = async function(input_password){
+    try {
+        const status = await bcrypt.compare(input_password,this.password);
+        return status;  //True or False, if passwords match or not
+    } catch (error) {
+        throw error;
+    }
+} 
+
 
 /*Mongoose model is created from user schema 
 => Mongoose Model is a tool from Mongoose library in Node to interact with the documents in a MongoDB collection.

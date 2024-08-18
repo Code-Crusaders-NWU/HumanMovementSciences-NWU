@@ -9,5 +9,5 @@ app.use(bodyParser.json());
 
 app.use('/', userRouter);
 app.use('/', assignment_router);
-app.use('/', video_router)
+app.use('/', video_router);
 module.exports = app;

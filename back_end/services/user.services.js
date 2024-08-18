@@ -1,4 +1,5 @@
 const User_Model = require('../models/user.model');
+const jwt = require('jsonwebtoken')
 
 class UserService {
     
@@ -24,14 +25,18 @@ class UserService {
         }
     }
 
+    static async verifyUser(email) {
+        try {
+            const user = await User_Model.findOne({ email });
+            return user;
+        } //Exception handling if database operation goes south
+        catch (err) {
+            throw err; 
+        }
+    }
 
-    static async verifyUser(email){
-        try{
-            return await User_Model({email});
-        }
-        catch(err){
-            throw err;
-        }
+    static async createToken(token,secretKey,jwt_expire){
+       return jwt.sign(token,secretKey,{expiresIn:jwt_expire});
     }
 }
 
