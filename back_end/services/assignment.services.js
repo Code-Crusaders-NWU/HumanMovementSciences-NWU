@@ -35,7 +35,7 @@ class AssignmentService {
             }
 
             //Delete the assignment from the database
-            await Assignment_Model.deleteOne({ assignm_Num });    //Edit?
+            await Assignment_Model.deleteOne({ assignm_Num });
             return {message: 'Assignment deleted successfully'};
 
         } catch (error) {

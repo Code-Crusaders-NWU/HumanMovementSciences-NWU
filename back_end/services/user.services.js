@@ -25,6 +25,25 @@ class UserService {
         }
     }
 
+    //Delete user function
+    static async deleteUser(email) {
+        try {
+            //Check if the user to be deleted exists within the database
+            const existingUser = await User_Model.findOne({email});
+
+            //If the user doesn't exist, throw an error
+            if (!existingUser) {
+                throw new Error('Specified user not found');
+            }
+
+            //Delete the user from the database
+            await User_Model.deleteOne({ email });
+            return {message: 'User deleted successfully'};
+        } catch (error) {
+            throw error;
+        }
+    }
+
     static async verifyUser(email) {
         try {
             const user = await User_Model.findOne({ email });

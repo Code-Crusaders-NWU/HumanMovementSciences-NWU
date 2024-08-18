@@ -19,6 +19,27 @@ exports.register = async(req, res, next)=>{
         next(error);
     }};
 
+//Export the delete function so it can be used in the Route handler for an API request
+exports.delete = async(req, res, next) => {
+    try {
+        //Extract user email from the API request body
+        const { email } = req.body;
+        
+        //Await confirmation of successful user deletion
+        const success = await UserService.deleteUser(email);
+
+        if (success) {
+            res.json({status: true, message: 'User deleted successfully'});
+        } else {
+            res.status(404).json({success: false, message: 'Specified user not found'});
+        }
+    } catch (error) {
+        //Respond with server error (Status code: 500)
+        res.status(500).json({success: false, message: 'An error has occurred during user deletion'});
+        next(error);
+    }
+}
+
 exports.login = async(req,res,next)=>{
     try {
         //Gets email and password yet again from API BODY

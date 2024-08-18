@@ -2,9 +2,15 @@
 const router = require('express').Router();
 const UserController = require("../controller/user.controller")
 
+//When the signup api is called the register function is called from the user.coltroller.js file
+router.post('/signup',UserController.register);  
 
-router.post('/signup',UserController.register);  //When the signup api is called the register function is called from the user.coltroller.js file
-router.post('/login',UserController.login);  //When Login API is called
+//When Login API is called
+router.post('/login',UserController.login);
+
+//When the Delete API is called
+router.delete('/user', UserController.delete);
+
 //Work in progress
 //router.post('/login',UserController.register);
 //Work in progress

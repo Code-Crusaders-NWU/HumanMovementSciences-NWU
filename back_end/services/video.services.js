@@ -20,6 +20,26 @@ class VideoService {
             throw error;
         }
     }
+
+    //Delete video function
+    static async deleteVideo(vid_Num) {
+        try {
+            //Check if the video to be deleted exists
+            const existingVideo = await Video_Model.findOne({ vid_Num });
+
+            //If the video doesn't exist, throw an error
+            if (!existingVideo) {
+                throw new Error('Specified video not found');
+            }
+
+            //Delete the video from the database
+            await Video_Model.deleteOne({ vid_Num });
+            return {message: 'Video deleted successfully'};
+
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 //Export the VideoService class, so that the rest of the codebase can access it

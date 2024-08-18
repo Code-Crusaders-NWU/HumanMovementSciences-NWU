@@ -22,7 +22,7 @@ exports.assign = async(req, res, next) => {
 //Export the delete function so it can be used in the Route handler for an API request
 exports.delete = async(req, res, next) => {
     try {
-        //Extract assignment number form the API request body
+        //Extract assignment number from the API request body
         const { assignm_Num } = req.body;
 
         //Await confirmation of successful assignment deletion
