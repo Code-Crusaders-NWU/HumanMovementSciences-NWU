@@ -5,13 +5,13 @@ const UserService = require("../services/user.services")
 exports.register = async(req, res, next)=>{
     try{
         //Extracts email and password from the body of an API request.
-        const{email,password} = req.body;
+        const{email,password,user_type} = req.body;
         
         //wait for a success confirmation if the user uploading was successful.
-        const success = await UserService.signUp(email,password);
+        const success = await UserService.signUp(email,password,user_type);
 
 
-        res.json({status: true, success: 'User has successfully signed up'});
+        res.status(201).json({status:"true",success: 'User has successfully signed up'});
     }catch(error){
 
         // Respond with status code 500 to indicate a server error in the event of an error

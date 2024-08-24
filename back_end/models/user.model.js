@@ -11,11 +11,20 @@ const user_schema = new Schema({
         type: String,
         lowercase: true,
         unique : true,
+        required : true
     },
     password : {
         type : String,
+        required : true
+    },
+    user_type : {               //Property of user to manage access control. D
+        type : String,
+        lowercase: true,    
+        required : true
     }
 });
+
+
 //This is the user schema "blue-print" for properties the data must have to be accepted into the database.
 user_schema.pre('save', async function(){
     try{
