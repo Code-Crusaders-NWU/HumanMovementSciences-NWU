@@ -3,10 +3,10 @@ const Assignment_Model = require('../models/assignments.model');
 
 class AssignmentService {
     //Create assignment function
-    static async createAssignment(assignm_Num, assignm_Date, assignm_Feedback, stu_Num, lec_Num, grade, due_date) {
+    static async createAssignment(assignm_Num, assignm_Date, assignm_Feedback, stu_Email, lec_Num, grade, due_date) {
         try {
             //Check if the assignment already exists within the database.
-            const existingAssignment = await Assignment_Model.findOne({assignm_Num, assignm_Date, assignm_Feedback, stu_Num, lec_Num, grade, due_date});
+            const existingAssignment = await Assignment_Model.findOne({assignm_Num, assignm_Date, assignm_Feedback, stu_Email, lec_Num, grade, due_date});
 
             //If the assignment exists, the server throws an error
             if (existingAssignment) {
@@ -14,7 +14,7 @@ class AssignmentService {
             }
 
             //If no assignment with the specified number exists, the function can proceed
-            const newAssignment = new Assignment_Model({assignm_Num, assignm_Date, assignm_Feedback, stu_Num, lec_Num, grade, due_date});
+            const newAssignment = new Assignment_Model({assignm_Num, assignm_Date, assignm_Feedback, stu_Email, lec_Num, grade, due_date});
 
             //Store the new assignment in the database and return the saved object
             return await newAssignment.save();

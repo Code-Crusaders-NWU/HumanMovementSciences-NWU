@@ -9,6 +9,7 @@ const assignment_schema = new Schema({
         type : Number,
         unique : true,
     },
+    
     assignm_Date : {
         type : Date,
     },
@@ -17,12 +18,12 @@ const assignment_schema = new Schema({
         type : String,
     },
 
-    stu_Num : {
-        type : Number,
+    stu_Email : {
+        type : String,
     },
 
-    lec_Num : {
-        type : Number,
+    lec_Email : {
+        type : String,
     },
 
     grade : {

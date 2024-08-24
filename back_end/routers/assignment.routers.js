@@ -7,7 +7,5 @@ router.post('/assignment', AssignmentController.assign);
 //When the delete API is called
 router.delete('/assignment', AssignmentController.delete);
 
-//router.post
-
 //Export the router so it accessible by the main application
 module.exports = router;

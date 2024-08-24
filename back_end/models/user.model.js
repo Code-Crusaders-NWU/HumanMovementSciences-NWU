@@ -27,7 +27,7 @@ user_schema.pre('save', async function(){
         user.password = hash_password;
     }
     catch(err){
-        console.log('Error whilst hashing password: '+err);
+        console.log('Error whilst hashing password: ' + err);
     }
 })
 

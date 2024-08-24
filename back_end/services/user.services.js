@@ -59,8 +59,5 @@ class UserService {
     }
 }
 
-
-
-
 // Export the UserService class so it can be used in other parts of the application
 module.exports = UserService;

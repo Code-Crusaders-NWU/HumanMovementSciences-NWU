@@ -10,7 +10,7 @@ const video_schema = new Schema({
         unique : true,
     },
 
-    stu_Num : {
+    stu_Email : {
         type : Number
     },
 

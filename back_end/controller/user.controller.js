@@ -11,7 +11,7 @@ exports.register = async(req, res, next)=>{
         const success = await UserService.signUp(email,password);
 
 
-        res.json({status:"true",success: 'User has successfully signed up'});
+        res.json({status: true, success: 'User has successfully signed up'});
     }catch(error){
 
         // Respond with status code 500 to indicate a server error in the event of an error
