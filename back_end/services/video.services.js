@@ -1,10 +1,10 @@
 const Video_Model = require('../models/video.model');
 
 class VideoService {
-    static async createVideo(vid_Num, stu_Num, vid_Link, upload_Date, assignm_Num) {
+    static async createVideo(vid_Num, stu_Email, vid_Link, upload_Date, assignm_Num) {
         try {
             //Check if the video already exists within the database
-            const existingVideo = await Video_Model.findOne({vid_Num, stu_Num, vid_Link, upload_Date, assignm_Num});
+            const existingVideo = await Video_Model.findOne({vid_Num, stu_Email, vid_Link, upload_Date, assignm_Num});
 
             //If the video exists, the server throws an error
             if (existingVideo) {
@@ -12,7 +12,7 @@ class VideoService {
             }
 
             //If no video with the specified number exists, the function can continue
-            const newVideo = new Video_Model({vid_Num, stu_Num, vid_Link, upload_Date, assignm_Num});
+            const newVideo = new Video_Model({vid_Num, stu_Email, vid_Link, upload_Date, assignm_Num});
 
             //Store the new video in the database and return the saved object
             return await newVideo.save();

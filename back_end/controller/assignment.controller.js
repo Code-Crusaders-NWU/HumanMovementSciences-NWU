@@ -5,12 +5,12 @@ const AssignmentService = require('../services/assignment.services');
 exports.assign = async(req, res, next) => {
     try{
         //Extracts assignment information from the API request body
-        const{assignm_Num, assignm_Date, assignm_Feedback, stu_Num, lec_Num, grade, due_date} = req.body;
+        const{assignm_Num, assignm_Date, assignm_Feedback, stu_Email, lec_Email, grade, due_date} = req.body;
 
         //Await confirmation of successful assignment upload
-        const success = await AssignmentService.createAssignment(assignm_Num, assignm_Date, assignm_Feedback, stu_Num, lec_Num, grade, due_date);
+        const success = await AssignmentService.createAssignment(assignm_Num, assignm_Date, assignm_Feedback, stu_Email, lec_Email, grade, due_date);
 
-        res.json({status: "true", success: 'Assignment uploaded successfully'});
+        res.json({status: true, success: 'Assignment uploaded successfully'});
     } catch (error) {
         //Respond with server error (Status code: 500)
         res.status(500).json({success: false, message: 'An error has occurred during assignment upload', error: error.message });

@@ -5,10 +5,10 @@ const VideoService = require('../services/video.services');
 exports.videoUpload = async(req, res, next) => {
     try {
         //Extracts video information from the API request body
-        const{vid_Num, stu_Num, vid_Link, upload_Date, assignm_Num} = req.body;
+        const{vid_Num, stu_Email, vid_Link, upload_Date, assignm_Num} = req.body;
 
         //Await confimation of successful video upload
-        const success = await VideoService.createVideo(vid_Num, stu_Num, vid_Link, upload_Date, assignm_Num);
+        const success = await VideoService.createVideo(vid_Num, stu_Email, vid_Link, upload_Date, assignm_Num);
 
         res.json({status: "true", success: 'Video uploaded successfully'});
     } catch (error) {
