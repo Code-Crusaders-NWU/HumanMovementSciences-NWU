@@ -35,7 +35,7 @@ exports.delete = async(req, res, next) => {
         } 
     } catch (error) {
         //Respond with server error (Status code: 500)
-        res.status(500).json({success: false, message: 'An error has occurred during assignment deletion'});
+        res.status(500).json({success: false, message: 'An error has occurred during assignment deletion', error: error.message});
         next(error);
     }
 }
