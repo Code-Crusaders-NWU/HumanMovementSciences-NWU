@@ -44,19 +44,27 @@ exports.delete = async(req, res, next) => {
 exports.viewAll = async(req, res, next) => {
     try {
         //Extract lecturer's email from the API request body
-        const { lec_Email } = req.body;
+        const {lec_Email} = req.body;
+
+        //Validate if lec_Email is not undefined
+        if (!lec_Email) {
+            res.status(404).json({status: false, message: 'No submissions found for the specified lecturer'});
+
+        } 
 
         //Await the result of viewAllAssignments function
         const assignments = await AssignmentService.viewAllAssignments(lec_Email);
+        
 
         if (assignments) {
-            res.json({status: true, assignments});
+            res.json({ status: true, assignments });
         } else {
-            res.status(404).json({status: false, message: 'No assignments found for the specified lecturer'});
+            res.status(404).json({ status: false, message: 'No assignments found for the specified lecturer' });
         }
+
     } catch (error) {
         //Respond with server error (Status code: 500)
         res.status(500).json({status: false, message: 'An error has occurred during assignment retrieval'});
         next(error);
     }
-}
+  }

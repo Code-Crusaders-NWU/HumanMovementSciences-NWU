@@ -22,16 +22,24 @@ exports.submit = async(req, res, next) => {
 exports.viewAll = async(req, res, next) => {
     try {
         //Extract student's email from the API request body
-        const { stu_Email } = req.body;
+        const {stu_Email} = req.body;
+
+        //Validate if stu_Email is not undefined
+        if (!stu_Email) {
+            res.status(404).json({status: false, message: 'No submissions found for the specified student'});
+
+        } 
 
         //Await the result of viewAllSubmissions function
         const submissions = await SubmissionService.viewAllSubmissions(stu_Email);
+        
 
         if (submissions) {
-            res.json({status: true, submissions});
+            res.json({ status: true, submissions });
         } else {
-            res.status(404).json({status: false, message: 'No submissions found for the specified student'});
+            res.status(404).json({ status: false, message: 'No submissions found for the specified student' });
         }
+
     } catch (error) {
         //Respond with server error (Status code: 500)
         res.status(500).json({status: false, message: 'An error has occurred during submission retrieval'});
