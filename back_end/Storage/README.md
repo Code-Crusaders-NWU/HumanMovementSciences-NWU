@@ -18,4 +18,6 @@ The code aims to allow users to upload files to an AWS S3 Bucket. Acces to the b
  - AWS_SECRET_ACCESS_KEY
  - AWS_BUCKET_NAME
  - AWS_REGION
- 
+
+
+ For information regarding testing, error handling and a more in-depth description see the full documentation which is stored under "Storage".
