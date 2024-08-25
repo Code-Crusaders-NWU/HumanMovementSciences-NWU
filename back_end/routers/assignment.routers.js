@@ -1,8 +1,6 @@
 const router = require('express').Router();
 const AssignmentController = require('../controller/assignment.controller');
 
-//When the assign API is called
-
 /**
  * @swagger
  * /assignment:
@@ -95,10 +93,15 @@ const AssignmentController = require('../controller/assignment.controller');
  *                   example: "Detailed error message here"
  */
 
+
+//When the assign API is called
 router.post('/assignment', AssignmentController.assign);
 
 //When the delete API is called
 router.delete('/assignment', AssignmentController.delete);
+
+//When the viewAll API is called
+router.get('/assignment', AssignmentController.viewAll);
 
 //Export the router so it accessible by the main application
 module.exports = router;

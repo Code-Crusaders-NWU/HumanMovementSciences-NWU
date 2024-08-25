@@ -23,6 +23,7 @@ class AssignmentService {
         }
     }
 
+
     //Delete assignment function
     static async deleteAssignment(assignm_Num) {
         try {
@@ -38,6 +39,25 @@ class AssignmentService {
             await Assignment_Model.deleteOne({ assignm_Num });
             return {message: 'Assignment deleted successfully'};
 
+        } catch (error) {
+            throw error;
+        }
+    }
+
+
+    //viewAllAssignments function that allows a lecturer to view all the assignments they have created
+    static async viewAllAssignments(lec_Email) {
+        try {
+            //Find all assignments where the lecturer's email matches the provided one
+            const lecAssignments = await Assignment_Model.find({lec_Email});
+
+            //If no assignments are found, throw an error
+            if (!lecAssignments) {
+                throw new Error('Specified lecturer has not created any assignments');
+            }
+
+            //Return the list of the lecturer's assignments
+            return lecAssignments;
         } catch (error) {
             throw error;
         }
