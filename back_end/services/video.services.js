@@ -3,6 +3,10 @@ const Video_Model = require('../models/video.model');
 class VideoService {
     static async createVideo(vid_Num, stu_Email, vid_Link, upload_Date, assignm_Num) {
         try {
+
+            this.validation(vid_Num, stu_Email, upload_Date, assignm_Num);
+
+            
             //Check if the video already exists within the database
             const existingVideo = await Video_Model.findOne({vid_Num, stu_Email, vid_Link, upload_Date, assignm_Num});
 
@@ -40,6 +44,57 @@ class VideoService {
             throw error;
         }
     }
+
+
+    static validation(vid_Num, stu_Email, upload_Date, assignm_Num){
+        try {
+
+            //Check that the vid number is valid 
+            if(vid_Num < 1){
+                throw new Error('Invalid video number');
+            }
+
+            //Check that the assignm_Num number is valid 
+            if(assignm_Num < 1){
+                throw new Error('Invalid assignment number');
+            }
+
+            //Check if the upload date is valid
+            const checkDate = new Date(upload_Date);
+            if (!(checkDate instanceof Date) || isNaN(checkDate)) {
+                throw new Error('Upload Date is not in the correct format');
+            }
+
+
+            //Date variables needed for validation
+            const currentDate = new Date();
+            const currentYear = currentDate.getFullYear();
+
+
+            //Ensures the upload date is in the current year
+            if (upload_Date.getFullYear() !== currentYear) {
+                throw new Error('Due date has to be in the current year');
+            }
+
+
+            //Use validation from the validator NodeJS library to check if stu email is in the correct format.   
+            if(!validator.isEmail(stu_Email)){
+                throw new Error('Invalid email adress');
+            }
+
+            // Validate stu email length
+            if (stu_Email.length < 5 || stu_Email.length > 50) {
+                throw new Error('Email should only be between 5 and 50 characters. ');
+            }
+
+
+        } catch (error) {
+            throw error;
+        }
+       
+    }
+
+
 }
 
 //Export the VideoService class, so that the rest of the codebase can access it
