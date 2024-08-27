@@ -14,3 +14,11 @@ app.get('/', (req, res) => {
 app.listen(8000, () => {
     console.log("Server started on port => 8000");
 });
+
+
+//To better close the server
+process.on('SIGINT', () => {
+    server.close(() => {
+        console.log('Process terminated');
+    });
+});

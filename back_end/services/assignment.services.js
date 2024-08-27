@@ -1,5 +1,6 @@
 //Call Assignm_Model
 const Assignment_Model = require('../models/assignments.model');
+const validator = require('validator');
 
 class AssignmentService {
     //Create assignment function
@@ -75,6 +76,18 @@ class AssignmentService {
                 throw new Error('Invalid assignment number');
             }
 
+            // **Test due date and test assignment date**
+                const dateFormat = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/; // YYYY-MM-DDTHH:mm:ssZ format
+
+                if (!dateFormat.test(due_date)) {
+                throw new Error('Due date format is invalid. Use YYYY-MM-DDTHH:mm:ssZ.');
+                }
+
+
+                if (!dateRegex.test(assignm_Date)) {
+                throw new Error('Due date format is invalid. Use YYYY-MM-DDTHH:mm:ssZ.');
+                }
+
             //Check if the assignment date is valid
             const checkDate = new Date(assignm_Date);
             if (!(checkDate instanceof Date) || isNaN(checkDate)) {
@@ -97,21 +110,30 @@ class AssignmentService {
             const currentDate = new Date();
             const currentYear = currentDate.getFullYear();
 
+            //Had to create this variable because the .getFullYear does not work without the variable being a date object.
+            const tempDueDate = new Date(due_date);
+
             //Checks to ensure the due date is either current date or in the future
-            if (due_date < currentDate) {
+            if (tempDueDate < currentDate) {
                 throw new Error('Due date must be the current date or a future date');
             }
 
+            console.log(tempDueDate);
             //Ensures the due date is in the current year
-            if (due_date.getFullYear() !== currentYear) {
+            
+            if (tempDueDate.getFullYear() !== currentYear) {
                 throw new Error('Due date has to be in the current year');
             }
+            
+            //Same error as due date.
+            const tempAssignDate = new Date(due_date);
 
             //Ensures the creation date is in the current year
-            if (assignm_Date.getFullYear() !== currentYear) {
+            if (tempAssignDate.getFullYear() !== currentYear) {
                 throw new Error('Due date has to be in the current year');
             }
-
+            
+           
 
             //Use validation from the validator NodeJS library to check if stu email is in the correct format.   
             if(!validator.isEmail(stu_Email)){
