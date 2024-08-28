@@ -1,5 +1,6 @@
 //Call AssignmentService
 const AssignmentService = require('../services/assignment.services');
+const { verifyLecturer } = require('../services/lecturer.services');
 
 //Export the assign function so it can be used in the Route handler for an API request
 exports.assign = async(req, res, next) => {
@@ -46,21 +47,19 @@ exports.viewAll = async(req, res, next) => {
         //Extract lecturer's email from the API request body
         const {lec_Email} = req.body;
 
-        //Validate if lec_Email is not undefined
-        if (!lec_Email) {
-            res.status(404).json({status: false, message: 'No submissions found for the specified lecturer'});
-
-        } 
+        //Call verifyLecturer function from assignment.services
+        verifyLecturer();
 
         //Await the result of viewAllAssignments function
         const assignments = await AssignmentService.viewAllAssignments(lec_Email);
         
 
-        if (assignments) {
-            res.json({ status: true, assignments });
-        } else {
-            res.status(404).json({ status: false, message: 'No assignments found for the specified lecturer' });
-        }
+     /*   if (assignments.length === 0) {
+            res.status(404).json({ status: false, message: 'Enter a lecturer email address' });
+        }  */
+
+        //Return assignments
+        return res.json({ status: true, assignments });
 
     } catch (error) {
         //Respond with server error (Status code: 500)

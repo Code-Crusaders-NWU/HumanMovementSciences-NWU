@@ -1,5 +1,6 @@
 //Call SubmissionService
 const SubmissionService = require('../services/submission.services')
+const { verifyStudent } = require('../services/student.services');
 
 //Export the submit function so it can be used in the Route handler for an API request
 exports.submit = async(req, res, next) => {
@@ -24,21 +25,19 @@ exports.viewAll = async(req, res, next) => {
         //Extract student's email from the API request body
         const {stu_Email} = req.body;
 
-        //Validate if stu_Email is not undefined
-        if (!stu_Email) {
-            res.status(404).json({status: false, message: 'No submissions found for the specified student'});
-
-        } 
+        //Call verifyStudent from student.services
+        verifyStudent();
 
         //Await the result of viewAllSubmissions function
         const submissions = await SubmissionService.viewAllSubmissions(stu_Email);
         
 
-        if (submissions) {
-            res.json({ status: true, submissions });
-        } else {
+      /*  if (submissions.length === 0) {
             res.status(404).json({ status: false, message: 'No submissions found for the specified student' });
-        }
+        } */
+
+        //Return submissions
+        return res.json({ status: true, submissions });
 
     } catch (error) {
         //Respond with server error (Status code: 500)

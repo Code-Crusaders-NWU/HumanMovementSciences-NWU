@@ -5,10 +5,10 @@ class StudentService {
     static async createStudent(stu_Email, stu_Name, stu_Surname) {
         try {
             //Check if the student already exists within the database
-            const existingStudent = await Student_Model.findOne({stu_Email, stu_Name, stu_Surname});
+            const status = await this.verifyStudent(stu_Email);
 
             //If the student exists, the server throws an error
-            if (existingStudent) {
+            if (status) {
                 throw new Error('A student with these credentials already exists');
             }
 
@@ -36,6 +36,17 @@ class StudentService {
             //Delete the student from the database
             await Student_Model.deleteOne({stu_Email});
             return {message: 'Student deleted successfully'};
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    //Method to confirm the student exists
+    static async verifyStudent(stu_Email) {
+        try {
+            const existingStudent = await Student_Model.findOne({stu_Email});
+            console.log(!!existingStudent);
+            return !!existingStudent;
         } catch (error) {
             throw error;
         }
