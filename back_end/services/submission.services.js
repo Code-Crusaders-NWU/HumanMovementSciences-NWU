@@ -1,5 +1,7 @@
 //Call submission model
 const Submission_Model = require('../models/submission.model');
+const validator = require('validator');
+
 
 class SubmissionService {
     //Create submission function
