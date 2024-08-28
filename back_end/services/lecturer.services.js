@@ -6,10 +6,10 @@ class LecturerService {
     static async createLecturer(lec_Email, lec_Name, lec_Surname, title, degree) {
         try {
             //Check if the lecturer already exists within the database
-            const existingLecturer = await Lecturer_Model.findOne({lec_Email, lec_Name, lec_Surname, title, degree});
+            const status = await this.verifyLecturer(lec_Email); //True or false
 
             //If the lecturer exists, the server throws an error
-            if (existingLecturer) {
+            if (status) {
                 throw new Error('A lecturer with these credentials already exists');
             }
 
@@ -37,6 +37,17 @@ class LecturerService {
             //Delete the lecturer from the database
             await Lecturer_Model.deleteOne({lec_Email});
             return {message: 'Lecturer deleted successfully'};
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    //method to confirm lecturer exists, might use in other modules.
+    static async verifyLecturer(lec_Email){
+        try {
+            const existingLecturer = await Lecturer_Model.findOne({lec_Email});
+            console.log(!!existingLecturer);
+            return !!existingLecturer; //Return true or false
         } catch (error) {
             throw error;
         }
