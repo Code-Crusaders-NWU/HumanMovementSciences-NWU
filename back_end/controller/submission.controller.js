@@ -46,6 +46,29 @@ exports.viewAll = async(req, res, next) => {
     }
   }
 
+  //Export the view downloadMarks function so it can be used in the Route handler for an API request
+  exports.downloadMarks = async (req, res, next) => {
+    try {
+
+        //get the path to the csv file
+        const filePath = await SubmissionService.getAllMarks();
+
+        //send the file as a download
+        res.download(filePath, 'marks.csv', (err) => {
+
+            if (err) {
+               res.status(500).json({ status: false, message: 'Error occured during download', error: err.message}); 
+               next(err);
+            }
+
+        });
+
+    } catch (error) {
+        res.status(500).json({ status: false, message: 'Error occured during download', error: error.message}); 
+        next(error);
+    }
+  };
+
   //Export the grade function so it can be used in the Route handler for an API request
   exports.grade = async(req, res, next) => {
     try {

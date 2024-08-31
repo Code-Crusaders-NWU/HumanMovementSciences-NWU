@@ -6,7 +6,7 @@ const userModel = require('./models/user.model');
 const app = require('./app');
 
 app.get('/', (req, res) => {
-    res.send("")                //Edit
+    res.json({message : 'Code Crusaders HMS BACKEND'})                //Edit
 });
 
 
