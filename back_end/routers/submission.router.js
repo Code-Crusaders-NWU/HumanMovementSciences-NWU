@@ -7,5 +7,8 @@ router.post('/submission', SubmissionController.submit);
 //When the viewAll API is called
 router.get('/submission', SubmissionController.viewAll);
 
+//Route for downloading marks
+router.get('/submission/download_marks', SubmissionController.downloadMarks);
+
 //Export the router
 module.exports = router;
