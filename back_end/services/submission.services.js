@@ -2,6 +2,8 @@
 const Submission_Model = require('../models/submission.model');
 const validator = require('validator');
 const StudentService = require('../services/student.services');
+const fs = require('fs');
+const {format} = require('@fast-csv/format');
 
 
 class SubmissionService {
@@ -110,6 +112,53 @@ class SubmissionService {
         }
        
     }
+
+    //getting all marks in csv format
+    static async getAllMarks(){
+
+     try{
+            
+        
+
+        //get submissions
+        const submissions = await Submission_Model.find();
+
+        //Validation for if there is no submissions
+        if(submissions.length === 0){
+            throw new Error('No submissions available');
+        }
+
+        //stream for csv data
+        const Stream = format({headers: true});
+        const writeStream = fs.createWriteStream("grading.csv");
+        Stream.pipe(writeStream);
+
+        //Add student emails and grade of all submissions to stream
+        submissions.forEach(submission => {
+            Stream.write({
+                assignm_Num: submission.assignm_Num,
+                stu_Email: submission.stu_Email,
+                grade: submission.grade
+            })
+        })
+
+        Stream.end();
+
+        //let the stream finish
+        await new Promise((resolve, reject) => {
+            writeStream.on('finish', reslove);
+            writeStream.on('error', reject);
+        });
+
+        //return csv file path
+        return 'marks.csv';
+
+    } catch (error){
+        throw error;
+    }
+
+   }
+ 
 }
 
 //Export the SubmissionService class, so that the rest of the codebase can access it
