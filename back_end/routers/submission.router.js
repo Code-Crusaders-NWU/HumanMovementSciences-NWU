@@ -7,5 +7,8 @@ router.post('/submission', SubmissionController.submit);
 //When the viewAll API is called
 router.get('/submission', SubmissionController.viewAll);
 
+//When the grade API is called
+router.patch('/grade-submission', SubmissionController.grade);
+
 //Export the router
 module.exports = router;

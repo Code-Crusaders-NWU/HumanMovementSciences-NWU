@@ -19,7 +19,7 @@ exports.submit = async(req, res, next) => {
     }
 }
 
-//Export the view submissions function so it can be used in the Route handler for an API request
+//Export the view all submissions function so it can be used in the Route handler for an API request
 exports.viewAll = async(req, res, next) => {
     try {
         //Extract student's email from the API request body
@@ -43,5 +43,21 @@ exports.viewAll = async(req, res, next) => {
         //Respond with server error (Status code: 500)
         res.status(500).json({status: false, message: 'An error has occurred during submission retrieval'});
         next(error);
+    }
+  }
+
+  //Export the grade function so it can be used in the Route handler for an API request
+  exports.grade = async(req, res, next) => {
+    try {
+        //Extracts submission information from the API request body
+        const {assignm_Num, stu_Email, grade} = req.body;
+
+        //Await confirmation of successful submission grade assignment
+        const success = await SubmissionService.gradeSubmission(assignm_Num, stu_Email, grade);
+
+        res.json({status: true, success: 'Submission graded successfully'});
+    } catch(error) {
+        //Respond with server error (Status code: 500)
+        res.status(500).json({success: false, message: 'An error has occurred during the grade assignment process', error: error.message});
     }
   }

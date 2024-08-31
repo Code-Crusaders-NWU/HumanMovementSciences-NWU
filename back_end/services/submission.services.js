@@ -49,10 +49,33 @@ class SubmissionService {
         }
     }
 
+    
+    //gradeSubmission function that allows a lecturer to grade a student's work
+    static async gradeSubmission(assignm_Num, stu_Email, grade) {
+        try {
+            //Find the submission by assign_Num and stu_Email
+            const submission = await Submission_Model.findOne({assignm_Num, stu_Email});
+
+            //Check if the submission exists
+            if (!submission) {
+                throw new Error('Specified submission not found');
+            }
+
+            //Assign the grade to the submission
+            submission.grade = grade;
+            await submission.save();
+
+            return grade;
+
+        } catch (error) {
+            throw new Error('Grade assignment failed');
+        }
+    }
+
+    
+    //Validation
     static validation(assignm_Num, stu_Email, submission_Date, content, grade, feedback){
         try {
-
-           
             //Check that the assignm_Num number is valid 
             if(assignm_Num < 1){
                 throw new Error('Invalid assignment number');
@@ -64,11 +87,9 @@ class SubmissionService {
                 throw new Error('Submission Date is not in the correct format');
             }
 
-
             //Date variables needed for validation
             const currentDate = new Date();
             const currentYear = currentDate.getFullYear();
-
 
             //Create an object of date from submission_date, the getFullYear does not work if the variable is not a date object
             const tempUploadDate = new Date(submission_Date);
@@ -82,7 +103,6 @@ class SubmissionService {
             if (tempUploadDate < currentDate) {
                 throw new Error('Submission date must be the current date');
             }
-
 
             //Use validation from the validator NodeJS library to check if stu email is in the correct format.   
             if(!validator.isEmail(stu_Email)){
