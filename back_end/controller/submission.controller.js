@@ -64,7 +64,7 @@ exports.viewAll = async(req, res, next) => {
         });
 
     } catch (error) {
-        res.status(500).json({ status: false, message: 'Error occured during download', error: err.message}); 
-        next(err);
+        res.status(500).json({ status: false, message: 'Error occured during download', error: error.message}); 
+        next(error);
     }
   };

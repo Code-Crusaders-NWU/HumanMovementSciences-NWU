@@ -146,12 +146,12 @@ class SubmissionService {
 
         //let the stream finish
         await new Promise((resolve, reject) => {
-            writeStream.on('finish', reslove);
+            writeStream.on('finish', resolve);
             writeStream.on('error', reject);
         });
 
         //return csv file path
-        return 'marks.csv';
+        return 'grading.csv';
 
     } catch (error){
         throw error;
