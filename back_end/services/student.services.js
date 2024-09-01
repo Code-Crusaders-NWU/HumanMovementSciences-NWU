@@ -4,6 +4,9 @@ class StudentService {
     //Create student function
     static async createStudent(stu_Email, stu_Name, stu_Surname) {
         try {
+
+            this.validation(stu_Email, stu_Name,stu_Surname);
+
             //Check if the student already exists within the database
             const status = await this.verifyStudent(stu_Email);
 
@@ -51,6 +54,46 @@ class StudentService {
             throw error;
         }
     }
+
+
+    static validation(stu_Email, stu_Name,stu_Surname){
+        try {
+            //Use validation from the validator NodeJS library to check if email is in the correct format.   
+            if(!validator.isEmail(stu_Email)){
+                throw new Error('Invalid email adress');
+            }
+
+            // Validate stu_email length
+            if (stu_Email.length < 5 || stu_Email.length > 50) {
+                throw new Error('Email should only be between 5 and 50 characters. ');
+            }
+
+            // Validate stu_name length
+            if (stu_Name.length < 1 || stu_Name.length > 50) {
+                throw new Error('Name should only be between 1 and 50 characters. ');
+            }
+
+            // Validate stu_name characters
+            if (!/^[a-zA-Z\s\-]+$/.test(stu_Name)) {
+                throw new Error('Name should only contain alphabetic characters, hyphens, and spaces. ');
+            }
+
+            // Validate surname length
+            if (stu_Surname.length < 1 || stu_Surname.length > 50) {
+                throw new Error('Surname should only be between 1 and 50 characters. ');
+            }
+
+            // Validate surname characters
+            if (!/^[a-zA-Z\s\-]+$/.test(stu_Surname)) {
+                throw new Error('Surname should only contain alphabetic characters, hyphens, and spaces. ');
+            }
+
+        } catch (error) {
+            throw error;
+        }
+       
+    }
+
 }
 
 //Export the StudentService class, so that the rest of the codebase can access it
