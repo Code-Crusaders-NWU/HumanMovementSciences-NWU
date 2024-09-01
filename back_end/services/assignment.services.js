@@ -1,5 +1,6 @@
 //Call Assignm_Model
 const Assignment_Model = require('../models/assignments.model');
+const LecturerService = require('../services/lecturer.services');
 const validator = require('validator');
 
 class AssignmentService {
@@ -7,7 +8,7 @@ class AssignmentService {
     static async createAssignment(assignm_Num, assignm_Date, assignm_Feedback, stu_Email, lec_Email, grade, due_date) {
         try {
 
-            this.validation(assignm_Num, assignm_Date, stu_Email, lec_Email, grade, due_date);
+            await this.validation(assignm_Num, assignm_Date, stu_Email, lec_Email, grade, due_date);
 
             
             //Check if the assignment already exists within the database.
@@ -68,8 +69,14 @@ class AssignmentService {
         }
     }
 
-    static validation(assignm_Num, assignm_Date, stu_Email, lec_Email, grade, due_date){
+    //Validation
+    static async validation(assignm_Num, assignm_Date, stu_Email, lec_Email, grade, due_date){
         try {
+
+            const lecturerExists = await LecturerService.verifyLecturer(lec_Email);
+            if (!lecturerExists) {
+                throw new Error('Lecturer does not exist');
+            }
 
             //Check that the assignment number is valid 
             if(assignm_Num < 1){
@@ -84,7 +91,7 @@ class AssignmentService {
                 }
 
 
-                if (!dateRegex.test(assignm_Date)) {
+                if (!dateFormat.test(assignm_Date)) {
                 throw new Error('Due date format is invalid. Use YYYY-MM-DDTHH:mm:ssZ.');
                 }
 

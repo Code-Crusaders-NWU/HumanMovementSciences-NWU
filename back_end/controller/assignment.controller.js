@@ -1,5 +1,8 @@
 //Call AssignmentService
 const AssignmentService = require('../services/assignment.services');
+const { verifyLecturer } = require('../services/lecturer.services');
+const logger = require('../config/logger')
+
 
 //Export the assign function so it can be used in the Route handler for an API request
 exports.assign = async(req, res, next) => {
@@ -9,10 +12,10 @@ exports.assign = async(req, res, next) => {
 
         //Await confirmation of successful assignment upload
         const success = await AssignmentService.createAssignment(assignm_Num, assignm_Date, assignm_Feedback, stu_Email, lec_Email, grade, due_date);
-
+        logger.assignmentLogger.log('info','Assignment uploaded successfully');
         res.json({status: true, success: 'Assignment uploaded successfully'});
     } catch (error) {
-        //Respond with server error (Status code: 500)
+        logger.assignmentLogger.log('error',error.message);
         res.status(500).json({success: false, message: 'An error has occurred during assignment upload', error: error.message });
         next(error); 
     }
@@ -29,12 +32,14 @@ exports.delete = async(req, res, next) => {
         const success = await AssignmentService.deleteAssignment(assignm_Num);
 
         if (success) {
+            logger.assignmentLogger.log('info','Assignment deleted successfully');
             res.json({status: true, success: 'Assignment deleted successfully'});            
         } else {
+            logger.assignmentLogger.log('info','Specified assignment not found')
             res.status(404).json({success: false, message: 'Specified assignment not found'});
         } 
     } catch (error) {
-        //Respond with server error (Status code: 500)
+        logger.assignmentLogger.log('error',error.message)
         res.status(500).json({success: false, message: 'An error has occurred during assignment deletion', error: error.message});
         next(error);
     }
@@ -46,24 +51,19 @@ exports.viewAll = async(req, res, next) => {
         //Extract lecturer's email from the API request body
         const {lec_Email} = req.body;
 
-        //Validate if lec_Email is not undefined
-        if (!lec_Email) {
-            res.status(404).json({status: false, message: 'No submissions found for the specified lecturer'});
-
-        } 
+        //Call verifyLecturer function from assignment.services
+        verifyLecturer();
 
         //Await the result of viewAllAssignments function
         const assignments = await AssignmentService.viewAllAssignments(lec_Email);
-        
 
-        if (assignments) {
-            res.json({ status: true, assignments });
-        } else {
-            res.status(404).json({ status: false, message: 'No assignments found for the specified lecturer' });
-        }
+        //Return assignments
+        logger.assignmentLogger.log('info','showing all assignments from email')
+        return res.json({ status: true, assignments });
 
     } catch (error) {
         //Respond with server error (Status code: 500)
+        logger.assignmentLogger.log('error',error.message)
         res.status(500).json({status: false, message: 'An error has occurred during assignment retrieval'});
         next(error);
     }

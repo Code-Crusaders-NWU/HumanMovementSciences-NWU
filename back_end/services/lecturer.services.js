@@ -5,11 +5,14 @@ class LecturerService {
     //Create lecturer function
     static async createLecturer(lec_Email, lec_Name, lec_Surname, title, degree) {
         try {
+
+            this.validation(lec_Email, lec_Name,lec_Surname,title,degree);
+
             //Check if the lecturer already exists within the database
-            const existingLecturer = await Lecturer_Model.findOne({lec_Email, lec_Name, lec_Surname, title, degree});
+            const status = await this.verifyLecturer(lec_Email); //True or false
 
             //If the lecturer exists, the server throws an error
-            if (existingLecturer) {
+            if (status) {
                 throw new Error('A lecturer with these credentials already exists');
             }
 
@@ -40,6 +43,67 @@ class LecturerService {
         } catch (error) {
             throw error;
         }
+    }
+
+    //method to confirm lecturer exists, might use in other modules.
+    static async verifyLecturer(lec_Email){
+        try {
+            const existingLecturer = await Lecturer_Model.findOne({lec_Email});
+            console.log(!!existingLecturer);
+            return !!existingLecturer; //Return true or false
+        } catch (error) {
+            throw error;
+        }
+    }
+
+
+    static validation(lec_Email, lec_Name,lec_Surname,title,degree){
+        try {
+            //Use validation from the validator NodeJS library to check if email is in the correct format.   
+            if(!validator.isEmail(lec_Email)){
+                throw new Error('Invalid email adress');
+            }
+
+            // Validate lec_Email length
+            if (lec_Email.length < 5 || lec_Email.length > 50) {
+                throw new Error('Email should only be between 5 and 50 characters. ');
+            }
+
+            // Validate lec_Name length
+            if (lec_Name.length < 1 || lec_Name.length > 50) {
+                throw new Error('Name should only be between 1 and 50 characters. ');
+            }
+
+            // Validate lec_Name characters
+            if (!/^[a-zA-Z\s\-]+$/.test(lec_Name)) {
+                throw new Error('Name should only contain alphabetic characters, hyphens, and spaces. ');
+            }
+
+            // Validate lec_surname length
+            if (lec_Surname.length < 1 || lec_Surname.length > 50) {
+                throw new Error('Surname should only be between 1 and 50 characters. ');
+            }
+
+            // Validate lec_surname characters
+            if (!/^[a-zA-Z\s\-]+$/.test(lec_Surname)) {
+                throw new Error('Surname should only contain alphabetic characters, hyphens, and spaces. ');
+            }
+
+
+            //validate title of lecturer
+            //if (title !== "-" && title !== "-" && title !== "-") {
+            //    throw new Error("The provided lecturer title is not valid.");
+            //}
+
+            //validate degree of lecturer
+            //if (title !== "-" && title !== "-" && title !== "-") {
+            //    throw new Error("The provided lecturer degree is not valid.");
+            //}
+
+        } catch (error) {
+            throw error;
+        }
+       
     }
 }
 

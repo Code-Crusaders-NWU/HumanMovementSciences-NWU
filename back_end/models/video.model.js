@@ -11,7 +11,7 @@ const video_schema = new Schema({
     },
 
     stu_Email : {
-        type : Number
+        type : String
     },
 
     vid_Link : {

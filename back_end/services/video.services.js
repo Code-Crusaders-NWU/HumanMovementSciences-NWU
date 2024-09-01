@@ -1,4 +1,5 @@
 const Video_Model = require('../models/video.model');
+const validator = require('validator');
 
 class VideoService {
     static async createVideo(vid_Num, stu_Email, vid_Link, upload_Date, assignm_Num) {
@@ -71,8 +72,11 @@ class VideoService {
             const currentYear = currentDate.getFullYear();
 
 
+            //Create an object of date from upload_date, the getFullYear does not work if the variable is not a date object
+            const tempUploadDate = new Date(upload_Date);
+             
             //Ensures the upload date is in the current year
-            if (upload_Date.getFullYear() !== currentYear) {
+            if (tempUploadDate.getFullYear() !== currentYear) {
                 throw new Error('Due date has to be in the current year');
             }
 

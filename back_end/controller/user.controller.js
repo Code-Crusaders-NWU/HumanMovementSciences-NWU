@@ -1,5 +1,6 @@
 // Calls the user Service to use its services for the API.
 const UserService = require("../services/user.services")
+const logger = require('../config/logger')
 
 //Export the user function so it can be used in the Route handler for API requests. 
 exports.register = async(req, res, next)=>{
@@ -9,12 +10,11 @@ exports.register = async(req, res, next)=>{
         
         //wait for a success confirmation if the user uploading was successful.
         const success = await UserService.signUp(email,password,user_type);
-
-
         res.status(201).json({status:"true",success: 'User has successfully signed up'});
+        logger.userLogger.log('info', 'User added successfully');
     }catch(error){
-
         // Respond with status code 500 to indicate a server error in the event of an error
+        logger.userLogger.log('error', error.message);
         res.status(500).json({ success: false, message: 'An error occurred during registration', error: error.message });
         next(error);
     }};
@@ -29,12 +29,15 @@ exports.delete = async(req, res, next) => {
         const success = await UserService.deleteUser(email);
 
         if (success) {
+            logger.userLogger.log('info','User deleted successfully');
             res.json({status: true, message: 'User deleted successfully'});
         } else {
+            logger.userLogger.log('info','User not found');
             res.status(404).json({success: false, message: 'Specified user not found'});
         }
     } catch (error) {
         //Respond with server error (Status code: 500)
+        logger.userLogger.log('error',error.message);
         res.status(500).json({success: false, message: 'An error has occurred during user deletion'});
         next(error);
     }
@@ -50,6 +53,7 @@ exports.login = async(req,res,next)=>{
 
         //If the user variable is empty, in other words no user was found
         if(!user){
+            logger.userLogger.log('info',`Login failed => ${email} is not in our system`);
             throw new Error(`${email} is not in our system, please sign-up`);
         }
 
@@ -57,6 +61,7 @@ exports.login = async(req,res,next)=>{
         const status = await user.passwordcheck(password);
         if (status===false)
         {
+            logger.userLogger.log('info','Login failed => invalid password');
             throw new Error("Entered password is invalid");
         }
 
@@ -73,8 +78,11 @@ exports.login = async(req,res,next)=>{
             token:token
         });
 
-    } catch (error) {
+        logger.userLogger.log('info',`Login Successful => ${email}`)
+    } 
+    catch (error) {
         // Respond with status code 500 to indicate a server error in the event of an error
+        logger.userLogger.log('error', error.message);
         res.status(500).json({ success: false, message: 'An error occurred during login', error: error.message });
         next(error);    
     }

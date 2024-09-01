@@ -6,13 +6,14 @@ const userModel = require('./models/user.model');
 const app = require('./app');
 
 app.get('/', (req, res) => {
-    res.send("")                //Edit
+    res.json({message : 'Code Crusaders HMS BACKEND'})               
 });
 
 
-//Started a Local Server on Port 8000
-app.listen(8000, () => {
-    console.log("Server started on port => 8000");
+//Started a Local Server on Port 8080
+const PORT = process.env.PORT || 8080; 
+app.listen(PORT, () => {
+    console.log("Server started on port => 8080");
 });
 
 
@@ -22,3 +23,4 @@ process.on('SIGINT', () => {
         console.log('Process terminated');
     });
 });
+ 
