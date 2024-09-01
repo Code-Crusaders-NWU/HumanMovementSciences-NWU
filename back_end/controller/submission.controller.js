@@ -30,11 +30,6 @@ exports.viewAll = async(req, res, next) => {
 
         //Await the result of viewAllSubmissions function
         const submissions = await SubmissionService.viewAllSubmissions(stu_Email);
-        
-
-      /*  if (submissions.length === 0) {
-            res.status(404).json({ status: false, message: 'No submissions found for the specified student' });
-        } */
 
         //Return submissions
         return res.json({ status: true, submissions });
@@ -82,5 +77,22 @@ exports.viewAll = async(req, res, next) => {
     } catch(error) {
         //Respond with server error (Status code: 500)
         res.status(500).json({success: false, message: 'An error has occurred during the grade assignment process', error: error.message});
+    }
+  }
+
+
+  //Export the feedback function so it can be used in the Route handler for an API request
+  exports.feedback = async(req, res, next) => {
+    try {
+        //Extracts submission information from the API request body
+        const {assignm_Num, stu_Email, feedback} = req.body;
+
+        //Await confirmation of successful submission feedback assignment
+        const success = await SubmissionService.assignFeedback(assignm_Num, stu_Email, feedback);
+
+        res.json({status: true, success: 'Submission feedback assigned successfully'});
+    } catch(error) {
+        //Respond with server error (Status code: 500)
+        res.status(500).json({success: false, message: 'An error has occurred during the assignment feedback process', error: error.message});
     }
   }
