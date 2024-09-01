@@ -10,8 +10,11 @@ router.get('/submission', SubmissionController.viewAll);
 //Route for downloading marks
 router.get('/submission/download_marks', SubmissionController.downloadMarks);
 
-//When the grade API is called
-router.patch('/grade-submission', SubmissionController.grade);
+//When the grade_submission API is called
+router.patch('/submission/grade_submission', SubmissionController.grade);
+
+//When the provide_feedback API is called
+router.patch('/submission/provide_feedback', SubmissionController.feedback);
 
 //Export the router
 module.exports = router;

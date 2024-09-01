@@ -74,6 +74,29 @@ class SubmissionService {
         }
     }
 
+
+    //assignFeedback function that allows a lecturer provide a student with feedback on their grade/work.
+    static async assignFeedback(assignm_Num, stu_Email, feedback) {
+        try {
+            //Find the submission by assign_Num and stu_Email
+            const submission = await Submission_Model.findOne({assignm_Num, stu_Email});
+    
+            //Check if the submission exists
+            if (!submission) {
+                throw new Error('Specified submission not found');
+            }
+    
+            //Assign the grade to the submission
+            submission.feedback = feedback;
+            await submission.save();
+    
+            return feedback;
+    
+        } catch (error) {
+            throw new Error('Feedback assignment failed');
+        }
+    }
+
     
     //Validation
     static validation(assignm_Num, stu_Email, submission_Date, content, grade, feedback){

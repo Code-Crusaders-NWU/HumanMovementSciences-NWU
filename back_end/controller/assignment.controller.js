@@ -56,11 +56,6 @@ exports.viewAll = async(req, res, next) => {
 
         //Await the result of viewAllAssignments function
         const assignments = await AssignmentService.viewAllAssignments(lec_Email);
-        
-
-     /*   if (assignments.length === 0) {
-            res.status(404).json({ status: false, message: 'Enter a lecturer email address' });
-        }  */
 
         //Return assignments
         logger.assignmentLogger.log('info','showing all assignments from email')
