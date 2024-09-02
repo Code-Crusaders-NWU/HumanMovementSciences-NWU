@@ -1,5 +1,6 @@
 //Call VideoService
 const VideoService = require('../services/video.services');
+const logger = require('../config/logger');
 
 //Export the video function so it can be used in the Route handler for an API request
 exports.videoUpload = async(req, res, next) => {
@@ -9,10 +10,11 @@ exports.videoUpload = async(req, res, next) => {
 
         //Await confimation of successful video upload
         const success = await VideoService.createVideo(vid_Num, stu_Email, vid_Link, upload_Date, assignm_Num);
-
         res.json({status: "true", success: 'Video uploaded successfully'});
+        logger.videoLogger.log('info', 'Video uploaded successfully');
     } catch (error) {
         //Respond with server error (Status code: 500)
+        logger.videoLogger.log('error', error.message);
         res.status(500).json({success: false, message: 'An error has occurred during video upload', error: error.message });
         next(error);
     }
@@ -28,12 +30,14 @@ exports.delete = async(req, res, next) => {
         const success = await VideoService.deleteVideo(vid_Num);
 
         if (success) {
-            res.json({status: true, success: 'Video deleted successfully'});            
+            res.json({status: true, success: 'Video deleted successfully'});
+            logger.videoLogger.log('info', 'Video deleted successfully');           
         } else {
             res.status(404).json({success: false, message: 'Specified video not found'});
         } 
     } catch (error) {
         //Respond with server error (Status code: 500)
+        logger.videoLogger.log('error', error.message);
         res.status(500).json({success: false, message: 'An error has occurred during video deletion'});
         next(error);
     }

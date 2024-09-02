@@ -8,7 +8,7 @@ exports.register = async(req, res, next)=>{
         //Extracts email and password from the body of an API request.
         const{email,password,user_type} = req.body;
         
-        //wait for a success confirmation if the user uploading was successful.
+        //Wait for a success confirmation if the user uploading was successful.
         const success = await UserService.signUp(email,password,user_type);
         res.status(201).json({status:"true",success: 'User has successfully signed up'});
         logger.userLogger.log('info', 'User added successfully');

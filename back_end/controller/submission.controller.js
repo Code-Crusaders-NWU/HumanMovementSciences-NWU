@@ -1,6 +1,7 @@
 //Call SubmissionService
 const SubmissionService = require('../services/submission.services')
 const { verifyStudent } = require('../services/student.services');
+const logger = require('../config/logger');
 
 //Export the submit function so it can be used in the Route handler for an API request
 exports.submit = async(req, res, next) => {
@@ -10,10 +11,11 @@ exports.submit = async(req, res, next) => {
 
         //Await confirmation of successful submission
         const success = await SubmissionService.createSubmission(assignm_Num, stu_Email, submission_Date, content, grade, feedback);
-
+        logger.submissionLogger.log('info', 'Submitted successfully');
         res.json({status: true, success: 'Submitted successfully'});
     } catch (error) {
         //Respond with server error (Status code: 500)
+        logger.submissionLogger.log('error', error.message);
         res.status(500).json({success: false, message: 'An error has occurred during the submission process', error: error.message});
         next(error);
     }
@@ -30,12 +32,14 @@ exports.viewAll = async(req, res, next) => {
 
         //Await the result of viewAllSubmissions function
         const submissions = await SubmissionService.viewAllSubmissions(stu_Email);
+        logger.submissionLogger.log('info', 'Submitted successfully');
 
         //Return submissions
         return res.json({ status: true, submissions });
 
     } catch (error) {
         //Respond with server error (Status code: 500)
+        logger.submissionLogger.log('error', error.message);
         res.status(500).json({status: false, message: 'An error has occurred during submission retrieval'});
         next(error);
     }
@@ -47,6 +51,7 @@ exports.viewAll = async(req, res, next) => {
 
         //get the path to the csv file
         const filePath = await SubmissionService.getAllMarks();
+        logger.submissionLogger.log('info', 'Submitted successfully');
 
         //send the file as a download
         res.download(filePath, 'marks.csv', (err) => {
@@ -59,6 +64,7 @@ exports.viewAll = async(req, res, next) => {
         });
 
     } catch (error) {
+        logger.submissionLogger.log('error', error.message);
         res.status(500).json({ status: false, message: 'Error occured during download', error: error.message}); 
         next(error);
     }
@@ -72,10 +78,11 @@ exports.viewAll = async(req, res, next) => {
 
         //Await confirmation of successful submission grade assignment
         const success = await SubmissionService.gradeSubmission(assignm_Num, stu_Email, grade);
-
+        logger.submissionLogger.log('info', 'Submitted successfully');
         res.json({status: true, success: 'Submission graded successfully'});
     } catch(error) {
         //Respond with server error (Status code: 500)
+        logger.submissionLogger.log('error', error.message);
         res.status(500).json({success: false, message: 'An error has occurred during the grade assignment process', error: error.message});
     }
   }
@@ -89,10 +96,11 @@ exports.viewAll = async(req, res, next) => {
 
         //Await confirmation of successful submission feedback assignment
         const success = await SubmissionService.assignFeedback(assignm_Num, stu_Email, feedback);
-
+        logger.submissionLogger.log('info', 'Submitted successfully');
         res.json({status: true, success: 'Submission feedback assigned successfully'});
     } catch(error) {
         //Respond with server error (Status code: 500)
+        logger.submissionLogger.log('error', error.message);
         res.status(500).json({success: false, message: 'An error has occurred during the assignment feedback process', error: error.message});
     }
   }
