@@ -5,11 +5,11 @@ const validator = require('validator');
 class UserService {
     
     // This is a static method, meaning it can be called directly on the class without creating an instance of it.
-    static async signUp(email, password,user_type) {
+    static async signUp(email, password, user_type) {
         try {
 
-
-            this.validation(email,password,user_type);
+            //Call validation function
+            this.validation(email, password, user_type);
             
             // See if the user already exists within the database.
             const existingUser = await User_Model.findOne({ email });
@@ -63,7 +63,8 @@ class UserService {
        return jwt.sign(token,secretKey,{expiresIn:jwt_expire});
     }
 
-    static validation(email, password,user_type){
+    //Validation
+    static validation(email, password, user_type){
         try {
             //Use validation from the validator NodeJS library to check if email is in the correct format.   
             if(!validator.isEmail(email)){
@@ -86,10 +87,7 @@ class UserService {
         } catch (error) {
             throw error;
         }
-       
     }
-
-
 }
 
 // Export the UserService class so it can be used in other parts of the application

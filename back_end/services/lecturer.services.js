@@ -1,4 +1,5 @@
 const Lecturer_Model = require('../models/lecturer.model');
+const validator = require('validator');
 
 class LecturerService {
     
@@ -6,7 +7,8 @@ class LecturerService {
     static async createLecturer(lec_Email, lec_Name, lec_Surname, title, degree) {
         try {
 
-            this.validation(lec_Email, lec_Name,lec_Surname,title,degree);
+            //Call validation function
+            this.validation(lec_Email, lec_Name, lec_Surname, title, degree);
 
             //Check if the lecturer already exists within the database
             const status = await this.verifyLecturer(lec_Email); //True or false
@@ -56,8 +58,8 @@ class LecturerService {
         }
     }
 
-
-    static validation(lec_Email, lec_Name,lec_Surname,title,degree){
+    //Validation
+    static validation(lec_Email, lec_Name, lec_Surname, title, degree){
         try {
             //Use validation from the validator NodeJS library to check if email is in the correct format.   
             if(!validator.isEmail(lec_Email)){
