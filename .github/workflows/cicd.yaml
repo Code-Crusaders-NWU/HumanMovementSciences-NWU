@@ -41,4 +41,5 @@ jobs:
           --image africa-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/hms-docker/hms-docker-image:${{ github.sha }} \
           --platform managed \
           --region ${{ secrets.GCP_REGION }} \
-          --allow-unauthenticated
+          --allow-unauthenticated \
+          --set-env-vars URI=${{ secrets.URI }}
