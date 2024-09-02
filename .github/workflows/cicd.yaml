@@ -27,6 +27,7 @@ jobs:
 
     - name: Build Docker image
       run: |
+        cd back_end
         docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/hms-docker-image:${{ github.sha }} .
       
     - name: Push Docker image to Google Container Registry
