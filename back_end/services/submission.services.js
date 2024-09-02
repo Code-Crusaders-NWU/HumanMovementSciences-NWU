@@ -198,6 +198,50 @@ class SubmissionService {
     }
 
    }
+
+
+   //Getting assignment spesific marks in csv format
+   static async getAssignmentMarks(assignmentNumber){
+
+    try{
+       //Get submissions for spesific assignments
+       const submissions = await Submission_Model.find({assignm_Num: assignmentNumber});
+
+       //Validation for if there is no submissions
+       if(submissions.length === 0){
+           throw new Error('No submissions available for that assignment');
+       }
+
+       //Stream for csv data
+       const Stream = format({headers: true});
+       const writeStream = fs.createWriteStream("grading.csv");
+       Stream.pipe(writeStream);
+
+       //Add student emails and grade of all submissions to stream
+       submissions.forEach(submission => {
+           Stream.write({
+               assignm_Num: submission.assignm_Num,
+               stu_Email: submission.stu_Email,
+               grade: submission.grade
+           })
+       })
+
+       Stream.end();
+
+       //Let the stream finish
+       await new Promise((resolve, reject) => {
+           writeStream.on('finish', resolve);
+           writeStream.on('error', reject);
+       });
+
+       //Return csv file path
+       return 'grading.csv';
+
+   } catch (error){
+       throw error;
+   }
+
+  }
  
 }
 
