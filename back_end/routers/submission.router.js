@@ -11,7 +11,7 @@ router.get('/submission', SubmissionController.viewAll);
 router.get('/submission/download_marks', SubmissionController.downloadMarks);
 
 //Route for downloading assignment spesific marks
-router.get('/download_Marks/:assignmentNumber', submissionController.downloadSpecificMarks);
+router.get('/download_Marks/:assignmentNumber', SubmissionController.downloadSpecificMarks);
 
 //When the grade_submission API is called
 router.patch('/submission/grade_submission', SubmissionController.grade);
