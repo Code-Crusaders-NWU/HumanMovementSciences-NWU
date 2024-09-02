@@ -23,21 +23,21 @@ jobs:
 
     - name: Authenticate Docker to Google Cloud
       run: |
-        gcloud auth configure-docker --quiet
+        gcloud auth configure-docker africa-south1-docker.pkg.dev --quiet
 
     - name: Build Docker image
       run: |
         cd back_end
-        docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/hms-docker-image:${{ github.sha }} .
-      
-    - name: Push Docker image to Google Container Registry
+        docker build -t africa-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/hms-docker/hms-docker-image:${{ github.sha }} .
+
+    - name: Push Docker image to Artifact Registry
       run: |
-        docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/hms-docker-image:${{ github.sha }}
+        docker push africa-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/hms-docker/hms-docker-image:${{ github.sha }}
 
     - name: Deploy to Cloud Run
       run: |
         gcloud run deploy hms-docker-image \
-          --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/hms-docker-image:${{ github.sha }} \
+          --image africa-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/hms-docker/hms-docker-image:${{ github.sha }} \
           --platform managed \
           --region ${{ secrets.GCP_REGION }} \
           --allow-unauthenticated
