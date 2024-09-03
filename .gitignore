@@ -1,2 +1,3 @@
 # Depenency directories
 node_modules
+.env
