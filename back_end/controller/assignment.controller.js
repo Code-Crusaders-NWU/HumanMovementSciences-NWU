@@ -58,7 +58,7 @@ exports.viewAll = async(req, res, next) => {
         const assignments = await AssignmentService.viewAllAssignments(lec_Email);
 
         //Return assignments
-        logger.assignmentLogger.log('info','showing all assignments from email')
+        logger.assignmentLogger.log('info','Showing all assignments from email')
         return res.json({ status: true, assignments });
 
     } catch (error) {
