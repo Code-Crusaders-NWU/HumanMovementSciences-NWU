@@ -1,5 +1,6 @@
 //Call LecturerService
 const LecturerService = require('../services/lecturer.services');
+const logger = require('../config/logger');
 
 //Export the lecturerCreate function so it can be used in the Route handler for API requests.
 exports.lecturerCreate = async(req, res, next) => {
@@ -9,10 +10,11 @@ exports.lecturerCreate = async(req, res, next) => {
 
         //Await confirmation of succesful lecturer creation
         const success = await LecturerService.createLecturer(lec_Email, lec_Name, lec_Surname, title, degree);
-
+        logger.lecturerLogger.log('info', 'Lecturer information uploaded successfully');
         res.json({status: true, success: 'Lecturer information uploaded successfully'});
     } catch (error) {
         //Respond with server error (Status code: 500)
+        logger.lecturerLogger.log('error', error.message);
         res.status(500).json({success: false, message: 'An error has occurred during the lecturer information upload process', error: error.message});
         next(error);
     }
@@ -29,11 +31,13 @@ exports.delete = async(req, res, next) => {
 
         if (success) {
             res.json({status: true, success: 'Lecturer deleted successfully'});            
+            logger.lecturerLogger.log('info', 'Lecturer deleted successfully');
         } else {
             res.status(404).json({success: false, message: 'Specified lecturer not found'});
         } 
     } catch (error) {
         //Respond with server error (Status code: 500)
+        logger.lecturerLogger.log('error', error.message);
         res.status(500).json({success: false, message: 'An error has occurred during lecturer deletion'});
         next(error);
     }

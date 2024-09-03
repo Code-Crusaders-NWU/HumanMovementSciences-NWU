@@ -156,14 +156,11 @@ class SubmissionService {
        
     }
 
-    //getting all marks in csv format
+    //Getting all marks in csv format
     static async getAllMarks(){
 
      try{
-            
-        
-
-        //get submissions
+        //Get submissions
         const submissions = await Submission_Model.find();
 
         //Validation for if there is no submissions
@@ -171,7 +168,7 @@ class SubmissionService {
             throw new Error('No submissions available');
         }
 
-        //stream for csv data
+        //Stream for csv data
         const Stream = format({headers: true});
         const writeStream = fs.createWriteStream("grading.csv");
         Stream.pipe(writeStream);
@@ -187,13 +184,13 @@ class SubmissionService {
 
         Stream.end();
 
-        //let the stream finish
+        //Let the stream finish
         await new Promise((resolve, reject) => {
             writeStream.on('finish', resolve);
             writeStream.on('error', reject);
         });
 
-        //return csv file path
+        //Return csv file path
         return 'grading.csv';
 
     } catch (error){
