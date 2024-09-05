@@ -25,9 +25,11 @@ afterAll(async () => {
 //Mock all methods of SubmissionModel
 jest.mock('../back_end/models/submission.model');
 
-//gradeSubmission Tests
 describe('SubmissionService', () => {
+
+    //gradeSubmission Tests
     describe('gradeSubmission', () => {
+
         it('should grade a submission successfully', async () => {
             //Mock the findOne and save methods of SubmissionModel
             const mockSubmission = {
@@ -43,6 +45,7 @@ describe('SubmissionService', () => {
 
             const result = await SubmissionService.gradeSubmission(assignm_Num, stu_Email, grade);
 
+            //Assertions
             expect(SubmissionModel.findOne).toHaveBeenCalledWith({assignm_Num, stu_Email });
             expect(mockSubmission.grade).toBe(grade);
             expect(mockSubmission.save).toHaveBeenCalledWith();
@@ -64,6 +67,7 @@ describe('SubmissionService', () => {
 
     //createSubmission Tests
     describe('createSubmission', () => {
+
         it('should successfully create a new submission', async () => {
             const submissionData = {
                 assignm_Num: '1',
