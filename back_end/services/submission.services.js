@@ -13,7 +13,6 @@ class SubmissionService {
 
             this.validation(assignm_Num, stu_Email, submission_Date, content, grade, feedback);
 
-
             //Check if the submission already exists within the database.
             const existingSubmission = await Submission_Model.findOne({assignm_Num, stu_Email, submission_Date, content, grade, feedback});
 
@@ -125,9 +124,9 @@ class SubmissionService {
             }
 
             //Checks to ensure the submission date is current date or in the future
-            if (tempUploadDate < currentDate) {
-                throw new Error('Submission date must be the current date');
-            }
+            //if (tempUploadDate < currentDate) {
+                //throw new Error('Submission date must be the current date');
+            //}
 
             //Use validation from the validator NodeJS library to check if stu email is in the correct format.   
             if(!validator.isEmail(stu_Email)){

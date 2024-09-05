@@ -2,7 +2,6 @@ const UserService = require('../back_end/services/user.services');
 const UserModel = require('../back_end/models/user.model'); //Mock the model of user
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const validator = require('validator');
 
 dotenv.config();
 
@@ -23,11 +22,6 @@ afterAll(async () => {
 
 //Mock all methods of userModel
 jest.mock('../back_end/models/user.model');
-
-// Mock the jwt module globally before any tests
-jest.mock('jsonwebtoken', () => ({
-    sign: jest.fn(), // Mock sign function explicitly
-}));
 
 describe('UserService', () => {
 
