@@ -1,5 +1,5 @@
 const AssignmentService = require('../back_end/services/assignment.services');
-const AssignmentModel = require('../back_end/models/assignment.model'); //Mock the model of user
+const AssignmentModel = require('../back_end/models/assignment.model'); //Mock the model of assignments
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 

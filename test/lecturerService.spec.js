@@ -36,15 +36,16 @@ describe('LecturerService' , () => {
                 degree: 'PhD'
             });
     
-            const mockLecturerModel = jest.spyOn(Lecturer_Model.prototype, 'save').mockImplementation(mockSave);
+            const mockLecturerModel = jest.spyOn(LecturerModel.prototype, 'save').mockImplementation(mockSave);
     
-            const mockValidation = jest.spyOn(SomeClass.prototype, 'validation').mockImplementation(() => {});
-            const mockVerifyLecturer = jest.spyOn(SomeClass.prototype, 'verifyLecturer').mockResolvedValue(false);
+            const mockValidation = jest.spyOn(LecturerService.prototype, 'validation').mockImplementation(() => {});
+            const mockVerifyLecturer = jest.spyOn(LecturerService.prototype, 'verifyLecturer').mockResolvedValue(false);
     
-            const result = await SomeClass.createLecturer(
+            const result = await LecturerService.createLecturer(
                 'test@example.com', 'John', 'Doe', 'Dr.', 'PhD'
             );
     
+            //Assertions
             expect(mockValidation).toHaveBeenCalledWith('test@example.com', 'John', 'Doe', 'Dr.', 'PhD');
             expect(mockVerifyLecturer).toHaveBeenCalledWith('test@example.com');
             expect(mockSave).toHaveBeenCalled();
@@ -59,9 +60,9 @@ describe('LecturerService' , () => {
     
         it('should throw an error if lecturer already exists', async () => {
             // if mockverify returnes true, then lecturer exists.
-            const mockVerifyLecturer = jest.spyOn(SomeClass.prototype, 'verifyLecturer').mockResolvedValue(true);
+            const mockVerifyLecturer = jest.spyOn(LecturerService.prototype, 'verifyLecturer').mockResolvedValue(true);
     
-            await expect(SomeClass.createLecturer(
+            await expect(LecturerService.createLecturer(
                 'test@example.com', 'John', 'Doe', 'Dr.', 'PhD'
             )).rejects.toThrow('A lecturer with these credentials already exists');
     
@@ -69,11 +70,11 @@ describe('LecturerService' , () => {
         });
     
         it('should throw a validation error if inputs are invalid', async () => {
-            const mockValidation = jest.spyOn(SomeClass.prototype, 'validation').mockImplementation(() => {
+            const mockValidation = jest.spyOn(LecturerService.prototype, 'validation').mockImplementation(() => {
                 throw new Error('Validation failed');
             });
     
-            await expect(SomeClass.createLecturer(
+            await expect(LecturerService.createLecturer(
                 'invalid-email', 'John', 'Doe', 'Dr.', 'PhD'
             )).rejects.toThrow('Validation failed');
     
@@ -86,8 +87,8 @@ describe('LecturerService' , () => {
     describe('deleteLecturer', () => {
     
         it('should delete a lecturer when the lecturer exists', async () => {
-            // Mock the findOne method to return an existing lecturer
-            const mockFindOne = jest.spyOn(Lecturer_Model, 'findOne').mockResolvedValue({
+            //mock findOne to get a lecturer
+            const mockFindOne = jest.spyOn(LecturerModel, 'findOne').mockResolvedValue({
                 lec_Email: 'test@example.com',
                 lec_Name: 'John',
                 lec_Surname: 'Doe',
@@ -95,42 +96,80 @@ describe('LecturerService' , () => {
                 degree: 'PhD'
             });
     
-            // Mock the deleteOne method to simulate deletion
-            const mockDeleteOne = jest.spyOn(Lecturer_Model, 'deleteOne').mockResolvedValue({ deletedCount: 1 });
+            // Mock the deleteOne method and simulate it.
+            const mockDeleteOne = jest.spyOn(LecturerModel, 'deleteOne').mockResolvedValue({ deletedCount: 1 });
     
-            // Call the function
-            const result = await SomeClass.deleteLecturer('test@example.com');
+            const result = await LecturerService.deleteLecturer('test@example.com');
     
-            // Verify that findOne and deleteOne were called with the correct arguments
+            //Assertions
             expect(mockFindOne).toHaveBeenCalledWith({ lec_Email: 'test@example.com' });
             expect(mockDeleteOne).toHaveBeenCalledWith({ lec_Email: 'test@example.com' });
             expect(result).toEqual({ message: 'Lecturer deleted successfully' });
         });
     
         it('should throw an error if the lecturer does not exist', async () => {
-            // Mock the findOne method to return null (lecturer not found)
-            const mockFindOne = jest.spyOn(Lecturer_Model, 'findOne').mockResolvedValue(null);
+            // Mock findOne method : return null = not found
+            const mockFindOne = jest.spyOn(LecturerModel, 'findOne').mockResolvedValue(null);
     
-            // Call the function and expect it to throw an error
-            await expect(SomeClass.deleteLecturer('nonexistent@example.com')).rejects.toThrow('Specified lecturer not found');
+            // vall function and expect error
+            await expect(LecturerService.deleteLecturer('nonexistent@example.com')).rejects.toThrow('Specified lecturer not found');
     
-            // Verify that findOne was called with the correct argument
+            // verify correct calling
             expect(mockFindOne).toHaveBeenCalledWith({ lec_Email: 'nonexistent@example.com' });
         });
     
-        it('should handle errors and throw them properly', async () => {
-            // Mock the findOne method to throw an error
-            const mockFindOne = jest.spyOn(Lecturer_Model, 'findOne').mockImplementation(() => {
+        it('should properly handel and throw errors ', async () => {
+            // Mock the findOne for error
+            const mockFindOne = jest.spyOn(LecturerModel, 'findOne').mockImplementation(() => {
                 throw new Error('Database error');
             });
     
-            // Call the function and expect it to throw the database error
-            await expect(SomeClass.deleteLecturer('error@example.com')).rejects.toThrow('Database error');
+            await expect(LecturerService.deleteLecturer('error@example.com')).rejects.toThrow('Database error');
     
-            // Verify that findOne was called with the correct argument
+            // Verify correct calling
             expect(mockFindOne).toHaveBeenCalledWith({ lec_Email: 'error@example.com' });
         });
     });
+
+    // Testing verifyLecturer function
+    it('should return true if the lecturer exists', async () => {
+        // Mock findOne to return a lecturer if exists
+        const mockFindOne = jest.spyOn(LecturerModel, 'findOne').mockResolvedValue({
+            lec_Email: 'existing@example.com',
+            lec_Name: 'Jane',
+            lec_Surname: 'Doe'
+        });
+
+        const result = await LecturerService.verifyLecturer('existing@example.com');
+
+        //Assertions
+        expect(mockFindOne).toHaveBeenCalledWith({ lec_Email: 'existing@example.com' });
+        expect(result).toBe(true); 
+    });
+
+    it('should return false if the lecturer does not exist', async () => {
+        // Mock findOne method : return null = not found
+        const mockFindOne = jest.spyOn(LecturerModel, 'findOne').mockResolvedValue(null);
+
+        const result = await LecturerService.verifyLecturer('nonexistent@example.com');
+
+        //Assertions
+        expect(mockFindOne).toHaveBeenCalledWith({ lec_Email: 'nonexistent@example.com' });
+        expect(result).toBe(false); 
+    });
+
+    it('should handle errors and throw them properly', async () => {
+        // Mock findOne to throw an error.
+        const mockFindOne = jest.spyOn(LecturerModel, 'findOne').mockImplementation(() => {
+            throw new Error('Database error');
+        });
+
+        // expect to throw database error.
+        await expect(LecturerService.verifyLecturer('error@example.com')).rejects.toThrow('Database error');
+
+        expect(mockFindOne).toHaveBeenCalledWith({ lec_Email: 'error@example.com' });
+    });
+
 
 });
 

@@ -93,14 +93,14 @@ class LecturerService {
 
 
             //validate title of lecturer
-            //if (title !== "-" && title !== "-" && title !== "-") {
-            //    throw new Error("The provided lecturer title is not valid.");
-            //}
+            if (title !== "B.Sc." && title !== "Hons" && title !== "M" && title !== "Dr.") {
+                throw new Error("The provided lecturer title is not valid.");
+            }
 
             //validate degree of lecturer
-            //if (title !== "-" && title !== "-" && title !== "-") {
-            //    throw new Error("The provided lecturer degree is not valid.");
-            //}
+            if (degree !== "Bachelors" && degree !== "Honours" && degree !== "Masters" && degree !== "Doctors") {
+                throw new Error("The provided lecturer degree is not valid.");
+            }
 
         } catch (error) {
             throw error;
