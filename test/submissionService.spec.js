@@ -227,48 +227,8 @@ describe('SubmissionService', () => {
     });
 
 
-    //getAssignmentMarks Tests
+    //getAssignmentMarks Test
     describe('getAssignmentMarks', () => {
-/*
-        it('should successfully retrieve marks and generate a CSV file', async () => {
-            const assignmentNumber = '1';
-            const submissions = [
-                { assignm_Num: '1', stu_Email: 'student1@example.com', grade: 85 },
-                { assignm_Num: '2', stu_Email: 'student2@example.com', grade: 90 }
-            ];
-    
-            // Mock the find method to return the submissions
-            SubmissionModel.find = jest.fn().mockResolvedValue(submissions);
-    
-            // Mock the write stream
-            const mockWriteStream = {
-                pipe: jest.fn(),
-                on: jest.fn((event, callback) => {
-                    if (event === 'finish') {
-                        callback();
-                    }
-                })
-            };
-            jest.spyOn(fs, 'createWriteStream').mockReturnValue(mockWriteStream);
-            
-            //Mock the csv format stream
-            const mockStream = {
-                pipe: jest.fn().mockReturnValue(mockWriteStream),
-                write: jest.fn(),
-                end: jest.fn()
-            };
-
-            jest.spyOn(format, 'call').mockReturnValue(mockStream);
-    
-            const result = await SubmissionService.getAssignmentMarks(assignmentNumber);
-    
-            // Assertions
-            expect(SubmissionModel.find).toHaveBeenCalledWith({ assignm_Num: assignmentNumber });
-            expect(mockStream.write).toHaveBeenCalledTimes(submissions.length);
-            expect(mockStream.pipe).toHaveBeenCalledWith(mockWriteStream);
-            expect(mockWriteStream.on).toHaveBeenCalledWith('finish', expect.any(Function));
-            expect(result).toBe('grading.csv');
-        }); */
 
         it('should throw an error if no submissions are found for the given assignment number', async () => {
             const assignmentNumber = '2';
@@ -281,47 +241,16 @@ describe('SubmissionService', () => {
                 .toThrow('No submissions available for that assignment');
         });
     });
-/*
-    //getAllMarks Tests
+
+    //getAllMarks Test
     describe('getAllMarks', () => {
 
-        it('should successfully retrieve marks and generate a CSV file', async () => {
-            const submissions = [
-                { assignm_Num: '1', stu_Email: 'student1@example.com', grade: 70 },
-                { assignm_Num: '2', stu_Email: 'student2@example.com', grade: 85 }
-            ];
+        it('should throw an error if there are no submissions', async () => {
+            SubmissionModel.find = jest.fn().mockResolvedValue([]);
     
-            // Mock the find method to return the submissions
-            SubmissionModel.find = jest.fn().mockResolvedValue(submissions);
-    
-            // Mock the write stream
-            const mockWriteStream = {
-                on: jest.fn((event, callback) => {
-                    if (event === 'finish') {
-                        callback();
-                    }
-                }),
-                write: jest.fn(),
-                end: jest.fn()
-            };
-            jest.spyOn(fs, 'createWriteStream').mockReturnValue(mockWriteStream);
-    
-            // Mock the csv format stream
-            const mockStream = {
-                pipe: jest.fn().mockReturnValue(mockWriteStream),
-                write: jest.fn(),
-                end: jest.fn()
-            };
-            jest.spyOn(format, 'call').mockReturnValue(mockStream);
-    
-            const result = await SubmissionService.getAllMarks();
-    
-            // Assertions
-            expect(SubmissionModel.find).toHaveBeenCalled();
-            expect(mockStream.write).toHaveBeenCalledTimes(submissions.length);
-            expect(mockStream.pipe).toHaveBeenCalledWith(mockWriteStream);
-            expect(mockWriteStream.on).toHaveBeenCalledWith('finish', expect.any(Function));
-            expect(result).toBe('grading.csv');
-        }); 
-    }); */
+            await expect(SubmissionService.getAllMarks())
+            .rejects
+            .toThrow('No submissions available');
+        });
+    }); 
 });
