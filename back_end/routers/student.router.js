@@ -75,6 +75,7 @@ const StudentController = require('../controller/student.controller');
  */
 
 router.post('/student', StudentController.studentCreate);
+
 /**
  * @swagger
  * /student:

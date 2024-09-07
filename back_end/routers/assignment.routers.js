@@ -93,7 +93,6 @@ const AssignmentController = require('../controller/assignment.controller');
  *                   example: "Detailed error message here"
  */
 
-
 //When the assign API is called
 router.post('/assignment', AssignmentController.assign);
 
@@ -161,6 +160,7 @@ router.post('/assignment', AssignmentController.assign);
  *                   type: string
  *                   example: "Error message"
  */
+
 //When the delete API is called
 router.delete('/assignment', AssignmentController.delete);
 

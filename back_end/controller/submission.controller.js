@@ -28,7 +28,7 @@ exports.viewAll = async(req, res, next) => {
         const {stu_Email} = req.body;
 
         //Call verifyStudent from student.services
-        verifyStudent();
+        verifyStudent(stu_Email);
 
         //Await the result of viewAllSubmissions function
         const submissions = await SubmissionService.viewAllSubmissions(stu_Email);
