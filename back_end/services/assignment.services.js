@@ -8,7 +8,7 @@ class AssignmentService {
     static async createAssignment(assignm_Num, assignm_Date, assignm_Feedback, stu_Email, lec_Email, grade, due_date) {
         try {
 
-            await this.validation(assignm_Num, assignm_Date, stu_Email, lec_Email, grade, due_date);
+            await this.validation(assignm_Num, assignm_Date, lec_Email, grade, due_date);
 
             
             //Check if the assignment already exists within the database.
@@ -70,7 +70,7 @@ class AssignmentService {
     }
 
     //Validation
-    static async validation(assignm_Num, assignm_Date, stu_Email, lec_Email, grade, due_date){
+    static async validation(assignm_Num, assignm_Date, lec_Email, grade, due_date){
         try {
 
             const lecturerExists = await LecturerService.verifyLecturer(lec_Email);
@@ -141,16 +141,6 @@ class AssignmentService {
             }
             
            
-
-            //Use validation from the validator NodeJS library to check if stu email is in the correct format.   
-            if(!validator.isEmail(stu_Email)){
-                throw new Error('Invalid email adress');
-            }
-
-            // Validate stu email length
-            if (stu_Email.length < 5 || stu_Email.length > 50) {
-                throw new Error('Email should only be between 5 and 50 characters. ');
-            }
 
             //Use validation from the validator NodeJS library to check if lec email is in the correct format.   
             if(!validator.isEmail(lec_Email)){
