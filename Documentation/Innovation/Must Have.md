@@ -3,7 +3,6 @@
 - Data Store
 - Providing Feedback on Video
 - Assignment Creation
-- User Administration
 
 ## Secure login:
 - Sign up
@@ -19,6 +18,7 @@ Validation to confirm the existence of user to be deleted. If the user exists th
 
 ### Login
 Gets email and password from API BODY. Validation to see if the user exists. The password entered is compared with the password that is encrypted using Bcrypt hashing library in the database. If they match a login token is created and the user gets logged in.
+
 
 ## Data Store
 Data store documentation is under Storage in backend branch.
