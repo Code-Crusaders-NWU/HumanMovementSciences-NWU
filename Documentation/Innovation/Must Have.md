@@ -20,4 +20,8 @@ Validation to confirm the existence of user to be deleted. If the user exists th
 ### Login
 Gets email and password from API BODY. Validation to see if the user exists. The password entered is compared with the password that is encrypted using Bcrypt hashing library in the database. If they match a login token is created and the user gets logged in.
 
+## Data Store
+Data store documentation is under Storage in backend branch.
 
+## Providing feedback on video
+The particular assignment that is going to get feedback is found by using the assignment number and student email. There is validation to determine if such a submission exists. Feedback can be given to on assignment and is saved to the database.
