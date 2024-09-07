@@ -85,7 +85,7 @@ class SubmissionService {
                 throw new Error('Specified submission not found');
             }
     
-            //Assign the grade to the submission
+            //Assign the feedback to the submission
             submission.feedback = feedback;
             await submission.save();
     
