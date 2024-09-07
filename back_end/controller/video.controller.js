@@ -2,6 +2,8 @@
 const VideoService = require('../services/video.services');
 const logger = require('../config/logger');
 
+
+
 //Export the video function so it can be used in the Route handler for an API request
 exports.videoUpload = async(req, res, next) => {
     try {
@@ -19,6 +21,8 @@ exports.videoUpload = async(req, res, next) => {
         next(error);
     }
 }
+
+
 
 //Export the delete function so it can be used in the Route handler for an API request
 exports.delete = async(req, res, next) => {

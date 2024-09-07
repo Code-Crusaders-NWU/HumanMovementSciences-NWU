@@ -97,8 +97,132 @@ const AssignmentController = require('../controller/assignment.controller');
 //When the assign API is called
 router.post('/assignment', AssignmentController.assign);
 
+/**
+ * @swagger
+ * /assignment:
+ *   delete:
+ *     summary: Delete Assignment
+ *     description: Delete an assignment by using unique assignment number as identifier.
+ *     tags:
+ *       - Assignments
+ *     requestBody:
+ *       description: Assignment number provided to delete assignment.
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               assignm_Num:
+ *                 type: integer
+ *                 description: The assignment number to be deleted.
+ *                 example: 987654
+ *     responses:
+ *       '200':
+ *         description: Assignment deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: true
+ *                 success:
+ *                   type: string
+ *                   example: "Assignment deleted successfully"
+ *       '404':
+ *         description: Assignment not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "Specified assignment not found"
+ *       '500':
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "An error has occurred during assignment deletion"
+ *                 error:
+ *                   type: string
+ *                   example: "Error message"
+ */
 //When the delete API is called
 router.delete('/assignment', AssignmentController.delete);
+
+/**
+ * @swagger
+ * /assignment:
+ *   get:
+ *     summary: Show all lecturer assignments.
+ *     description: Retrieve all assignments for a specific lecturer by using their email.
+ *     tags:
+ *       - Assignments
+ *     parameters:
+ *       - in: query
+ *         name: lec_Email
+ *         required: true
+ *         schema:
+ *           type: string
+ *           description: Lecturer's email to retreive their assignments.
+ *           example: "lecturer@example.com"
+ *     responses:
+ *       '200':
+ *         description: A list of all assignments, in JSON format.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: true
+ *                 assignments:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       assignm_Num:
+ *                         type: integer
+ *                         example: 12345
+ *                       title:
+ *                         type: string
+ *                         example: "Assignment Title"
+ *                       dueDate:
+ *                         type: string
+ *                         format: date
+ *                         example: "2024-09-15"
+ *                       description:
+ *                         type: string
+ *                         example: "Description of individual assignment"
+ *       '500':
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "An error has occurred during assignment retrieval"
+ */
 
 //When the viewAll API is called
 router.get('/assignment', AssignmentController.viewAll);

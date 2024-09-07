@@ -75,6 +75,67 @@ const StudentController = require('../controller/student.controller');
  */
 
 router.post('/student', StudentController.studentCreate);
+/**
+ * @swagger
+ * /student:
+ *   delete:
+ *     summary: DELETE student from database
+ *     description: Deletes a student by using their email. 
+ *     tags:
+ *       - Student
+ *     requestBody:
+ *       description: Student deletion request with the student's email.
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               stu_Email:
+ *                 type: string
+ *                 description: The email of the student to be deleted.
+ *                 example: "student@example.com"
+ *     responses:
+ *       '200':
+ *         description: Successfull deletion of student 
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: true
+ *                 success:
+ *                   type: string
+ *                   example: "Student deleted successfully"
+ *       '404':
+ *         description: Student not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "Specified student not found"
+ *       '500':
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "An error has occurred during student deletion"
+ */
 
 //When the delete API is called
 router.delete('/student', StudentController.delete);
