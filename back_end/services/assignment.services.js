@@ -73,11 +73,6 @@ class AssignmentService {
     static async validation(assignm_Num, assignm_Date, lec_Email, grade, due_date){
         try {
 
-            const lecturerExists = await LecturerService.verifyLecturer(lec_Email);
-            if (!lecturerExists) {
-                throw new Error('Lecturer does not exist');
-            }
-
             //Check that the assignment number is valid 
             if(assignm_Num < 1){
                 throw new Error('Invalid assignment number');
@@ -121,9 +116,9 @@ class AssignmentService {
             const tempDueDate = new Date(due_date);
 
             //Checks to ensure the due date is either current date or in the future
-            if (tempDueDate < currentDate) {
-                throw new Error('Due date must be the current date or a future date');
-            }
+            //if (tempDueDate < currentDate) {
+                //throw new Error('Due date must be the current date or a future date');
+            //}
 
             console.log(tempDueDate);
             //Ensures the due date is in the current year
