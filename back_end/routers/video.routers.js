@@ -1,5 +1,7 @@
 const router = require('express').Router();
 const VideoController = require('../controller/video.controller');
+const authenticateToken = require('../middleware/auth'); 
+const accessControl = require('../middleware/accessControl');
 
 /**
  * @swagger
@@ -71,7 +73,7 @@ const VideoController = require('../controller/video.controller');
  */
 
 //When the video upload API is called
-router.post('/video', VideoController.videoUpload);
+router.post('/video', authenticateToken, accessControl.isStudent,VideoController.videoUpload);
 
 /**
  * @swagger
@@ -137,7 +139,7 @@ router.post('/video', VideoController.videoUpload);
 
 
 //When the delete API is called
-router.delete('/video', VideoController.delete);
+router.delete('/video', authenticateToken, accessControl.isLecturer ,VideoController.delete);
 
 //router.post
 

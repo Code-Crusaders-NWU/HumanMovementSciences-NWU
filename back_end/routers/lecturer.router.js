@@ -1,5 +1,8 @@
 const router = require('express').Router();
 const LecturerController = require('../controller/lecturer.controller');
+const authenticateToken = require('../middleware/auth'); 
+const accessControl = require('../middleware/accessControl');
+
 
 /**
  * @swagger
@@ -70,7 +73,7 @@ const LecturerController = require('../controller/lecturer.controller');
 
 
 //When the lecturerCreate API is called
-router.post('/lecturer', LecturerController.lecturerCreate);
+router.post('/lecturer', authenticateToken, accessControl.isAdmin ,LecturerController.lecturerCreate);
 
 /**
  * @swagger
@@ -138,7 +141,7 @@ router.post('/lecturer', LecturerController.lecturerCreate);
 
 
 //When the delete API is called
-router.delete('/lecturer', LecturerController.delete);
+router.delete('/lecturer', authenticateToken, accessControl.isAdmin, LecturerController.delete);
 
 //Export the router so it is accessible by the main application
 module.exports = router;

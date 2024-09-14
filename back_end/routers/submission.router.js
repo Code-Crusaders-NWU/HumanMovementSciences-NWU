@@ -1,5 +1,7 @@
 const router = require('express').Router();
 const SubmissionController = require('../controller/submission.controller');
+const authenticateToken = require('../middleware/auth'); 
+const accessControl = require('../middleware/accessControl');
 
 /**
  * @swagger
@@ -72,7 +74,7 @@ const SubmissionController = require('../controller/submission.controller');
 
 
 //When the submit API is called
-router.post('/submission', SubmissionController.submit);
+router.post('/submission', authenticateToken, accessControl.isStudent ,SubmissionController.submit);
 
 /**
  * @swagger
@@ -142,7 +144,7 @@ router.post('/submission', SubmissionController.submit);
 
 
 //When the viewAll API is called
-router.get('/submission', SubmissionController.viewAll);
+router.get('/submission',authenticateToken, accessControl.isLecturer ,SubmissionController.viewAll);
 
 /**
  * @swagger
@@ -180,7 +182,7 @@ router.get('/submission', SubmissionController.viewAll);
 
 
 //Route for downloading marks
-router.get('/submission/download_marks', SubmissionController.downloadMarks);
+router.get('/submission/download_marks', authenticateToken, accessControl.isLecturer,SubmissionController.downloadMarks);
 
 /**
  * @swagger
@@ -225,7 +227,7 @@ router.get('/submission/download_marks', SubmissionController.downloadMarks);
  */
 
 //Route for downloading assignment spesific marks
-router.get('/download_marks/:assignmentNumber', SubmissionController.downloadSpesificMarks);
+router.get('/download_marks/:assignmentNumber',authenticateToken, accessControl.isLecturer ,SubmissionController.downloadSpesificMarks);
 
 /**
  * @swagger
@@ -289,7 +291,7 @@ router.get('/download_marks/:assignmentNumber', SubmissionController.downloadSpe
 
 
 //When the grade_submission API is called
-router.patch('/submission/grade_submission', SubmissionController.grade);
+router.patch('/submission/grade_submission', authenticateToken, accessControl.isLecturer,SubmissionController.grade);
 
 /**
  * @swagger
@@ -351,7 +353,7 @@ router.patch('/submission/grade_submission', SubmissionController.grade);
  */
 
 //When the provide_feedback API is called
-router.patch('/submission/provide_feedback', SubmissionController.feedback);
+router.patch('/submission/provide_feedback', authenticateToken, accessControl.isLecturer,SubmissionController.feedback);
 
 //Export the router
 module.exports = router;

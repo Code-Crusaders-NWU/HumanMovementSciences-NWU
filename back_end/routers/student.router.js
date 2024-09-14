@@ -1,5 +1,7 @@
 const router = require('express').Router();
 const StudentController = require('../controller/student.controller');
+const authenticateToken = require('../middleware/auth'); 
+const accessControl = require('../middleware/accessControl');
 
 /**
  * @swagger
@@ -74,7 +76,7 @@ const StudentController = require('../controller/student.controller');
  *                   example: "Error from system will show here"
  */
 
-router.post('/student', StudentController.studentCreate);
+router.post('/student', authenticateToken, accessControl.isStudent, StudentController.studentCreate);
 
 /**
  * @swagger
@@ -139,7 +141,7 @@ router.post('/student', StudentController.studentCreate);
  */
 
 //When the delete API is called
-router.delete('/student', StudentController.delete);
+router.delete('/student', authenticateToken, accessControl.isStudent, StudentController.delete);
 
 //Export the router so it is accessible by the main application
 module.exports = router;
