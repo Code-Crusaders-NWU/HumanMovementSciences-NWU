@@ -68,12 +68,12 @@ exports.login = async(req,res,next)=>{
 
         //Create a login token
         let token_data = {
-            _id:user._id,
-            email:user.email,
-            role : user.role
+            _id:    user._id,
+            email:  user.email,
+            user_type : user.user_type
         }
 
-        const token = await UserService.createToken(token_data,process.env.TOKEN_KEY,'2h');
+        const token = await UserService.createToken(token_data, process.env.TOKEN_KEY,  '2h');
 
         res.status(200).json({
             status: true,

@@ -181,7 +181,7 @@ router.post('/login',UserController.login);
  *                   example: "An error has occurred during user deletion"
  */
 //When the Delete API is called
-router.delete('/user',authenticateToken, isAdmin, UserController.delete);    //Only admin users can delete accounts
+router.delete('/user',authenticateToken, isAdmin ,UserController.delete);    //Only admin users can delete accounts
 
 //Work in progress
 //router.post('/login',UserController.register);
