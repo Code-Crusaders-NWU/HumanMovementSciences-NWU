@@ -1,6 +1,9 @@
 
 const router = require('express').Router();
 const UserController = require("../controller/user.controller")
+const authenticateToken = require('../middleware/auth'); 
+const isAdmin = require('../middleware/accessControl');
+
 
 /**
  * @swagger
@@ -178,7 +181,7 @@ router.post('/login',UserController.login);
  *                   example: "An error has occurred during user deletion"
  */
 //When the Delete API is called
-router.delete('/user', UserController.delete);
+router.delete('/user',authenticateToken, isAdmin, UserController.delete);    //Only admin users can delete accounts
 
 //Work in progress
 //router.post('/login',UserController.register);

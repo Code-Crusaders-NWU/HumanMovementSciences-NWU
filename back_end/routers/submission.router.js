@@ -26,7 +26,7 @@ const SubmissionController = require('../controller/submission.controller');
  *                 example: "student@example.com"
  *               submission_Date:
  *                 type: string
- *                 format: date
+ *                 format: date-time
  *                 description: The date/time of submission in ISO format.
  *                 example: "2024-09-08T14:30:00.000Z"
  *               content:

@@ -22,18 +22,9 @@ const AssignmentController = require('../controller/assignment.controller');
  *                 example: "123456"
  *               assignm_Date:
  *                 type: string
- *                 format: date
+ *                 format: date-time
  *                 description: The date the assignment opens for the students.
- *                 example: "2024-08-24"
- *               assignm_Feedback:
- *                 type: string
- *                 description: Feedback from the lecturer or in rare occassions the admin, to the student.
- *                 example: "Well done!"
- *               stu_Email:
- *                 type: string
- *                 format: email
- *                 description: The student's email address.
- *                 example: "student@example.com"
+ *                 example: "2024-09-08T14:30:00.000Z"
  *               lec_Email:
  *                 type: string
  *                 format: email
@@ -45,9 +36,9 @@ const AssignmentController = require('../controller/assignment.controller');
  *                 example: 85
  *               due_date:
  *                 type: string
- *                 format: date
+ *                 format: date-time
  *                 description: The date the assignment is due.
- *                 example: "2024-08-31"
+ *                 example: "2024-09-08T14:30:00.000Z"
  *     responses:
  *       200:
  *         description: Assignment uploaded successfully
@@ -204,8 +195,8 @@ router.delete('/assignment', AssignmentController.delete);
  *                         example: "Assignment Title"
  *                       dueDate:
  *                         type: string
- *                         format: date
- *                         example: "2024-09-15"
+ *                         format: date-time
+ *                         example: "2024-09-08T14:30:00.000Z"
  *                       description:
  *                         type: string
  *                         example: "Description of individual assignment"

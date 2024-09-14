@@ -18,11 +18,11 @@ app.use(bodyParser.json());
 // Serve Swagger documentation
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
-app.use('/', userRouter);
-app.use('/', assignment_router);
-app.use('/', video_router);
-app.use('/', lecturer_router);
-app.use('/', student_router);
-app.use('/', submission_router);
+app.use('/api/', userRouter);
+app.use('/api/', assignment_router);
+app.use('/api/', video_router);
+app.use('/api/', lecturer_router);
+app.use('/api/', student_router);
+app.use('/api/', submission_router);
 
 module.exports = app;

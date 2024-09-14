@@ -32,7 +32,7 @@ const VideoController = require('../controller/video.controller');
  *               upload_Date:
  *                 type: string
  *                 format: date
- *                 example: "2024-09-07"
+ *                 example: "2024-09-08T14:30:00.000Z"
  *                 description: "Date the video was uploaded"
  *               assignm_Num:
  *                 type: integer

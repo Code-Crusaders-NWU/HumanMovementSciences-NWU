@@ -8,10 +8,10 @@ const logger = require('../config/logger')
 exports.assign = async(req, res, next) => {
     try{
         //Extracts assignment information from the API request body
-        const{assignm_Num, assignm_Date, assignm_Feedback, stu_Email, lec_Email, grade, due_date} = req.body;
+        const{assignm_Num, assignm_Date,  lec_Email, grade, due_date} = req.body;
 
         //Await confirmation of successful assignment upload
-        const success = await AssignmentService.createAssignment(assignm_Num, assignm_Date, assignm_Feedback, stu_Email, lec_Email, grade, due_date);
+        const success = await AssignmentService.createAssignment(assignm_Num, assignm_Date, lec_Email, grade, due_date);
         logger.assignmentLogger.log('info','Assignment uploaded successfully');
         res.json({status: true, success: 'Assignment uploaded successfully'});
     } catch (error) {
