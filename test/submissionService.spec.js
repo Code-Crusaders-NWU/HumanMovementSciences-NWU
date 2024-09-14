@@ -7,19 +7,9 @@ const { format } = require('@fast-csv/format');
 
 dotenv.config();
 
-// Connect to database before running tests
-beforeAll(async () => {
-    await mongoose.connect(process.env.URI);
-});
-
 // Clears any mocked functions after each test
 afterEach(() => {
     jest.clearAllMocks();
-});
-
-// Disconnect from database after all tests
-afterAll(async () => {
-    await mongoose.disconnect();
 });
 
 //Mock all methods of SubmissionModel

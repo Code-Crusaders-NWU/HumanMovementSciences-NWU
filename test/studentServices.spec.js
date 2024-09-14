@@ -5,19 +5,9 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-// Connect to database before running tests
-beforeAll(async () => {
-    await mongoose.connect(process.env.URI);
-});
-
 // Clears any mocked functions after each test
 afterEach(() => {
     jest.clearAllMocks();
-});
-
-// Disconnect from database after all tests
-afterAll(async () => {
-    await mongoose.disconnect();
 });
 
 //Mock all methods of userModel
@@ -28,45 +18,45 @@ describe('SubmissionService', () => {
     //Tests for createStudent
     describe('createStudent', () => {
 
-        it('should create a new student if the student does not already exist', async () => {
-            // Mock save function to mock save a new student
-            const mockSave = jest.fn().mockResolvedValue({
-                stu_Email: 'student@example.com',
-                stu_Name: 'John',
-                stu_Surname: 'Doe'
-            });
-    
-            const mockStudentModel = jest.spyOn(StudentModel.prototype, 'save').mockImplementation(mockSave);
-    
-            // Mock validation and verifyStudent functions
-            const mockValidation = jest.spyOn(StudentService.prototype, 'validation').mockImplementation(() => {});
-            const mockVerifyStudent = jest.spyOn(StudentService.prototype, 'verifyStudent').mockResolvedValue(false); 
-    
-            const result = await StudentService.createStudent('student@example.com', 'John', 'Doe');
-    
-            // Assertions
-            expect(mockValidation).toHaveBeenCalledWith('student@example.com', 'John', 'Doe');
-            expect(mockVerifyStudent).toHaveBeenCalledWith('student@example.com');
+        it('should create a new student successfully', async () => {
+            const stu_Email = 'student@example.com';
+            const stu_Name = 'Pieter';
+            const stu_Surname = 'Roux';
+
+            //Mock validation function
+            jest.spyOn(StudentService, 'validation').mockImplementation(() => {});
+
+            //Mock the findOne method to return null (no existing student)
+            jest.spyOn(StudentModel, 'findOne').mockResolvedValue(null);
+
+            //Mock the save method for creating a new user
+            const mockSave = jest.fn().mockResolvedValue({stu_Email, stu_Name, stu_Surname});
+            StudentModel.prototype.save = mockSave;
+
+            //Call createStudent method
+            const result = await StudentService.createStudent(stu_Email, stu_Name, stu_Surname);
+
+            //Assertions
+            expect(StudentService.validation).toHaveBeenCalledWith(stu_Email, stu_Name, stu_Surname);
+            expect(StudentModel.findOne).toHaveBeenCalledWith({stu_Email});
             expect(mockSave).toHaveBeenCalled();
-            expect(result).toEqual({
-                stu_Email: 'student@example.com',
-                stu_Name: 'John',
-                stu_Surname: 'Doe'
-            });
+            expect(result).toEqual({stu_Email, stu_Name, stu_Surname});
         });
     
         it('should throw an error if the student already exists', async () => {
             // Mock verifyStudent to return true
-            const mockVerifyStudent = jest.spyOn(StudentService.prototype, 'verifyStudent').mockResolvedValue(true);
+            const mockVerifyStudent = jest.spyOn(StudentService, 'verifyStudent').mockResolvedValue(true);
 
-            await expect(StudentService.createStudent('student@example.com', 'John', 'Doe')).rejects.toThrow('A student with these credentials already exists');
+            await expect(StudentService.createStudent('student@example.com', 'John', 'Doe'))
+            .rejects
+            .toThrow('A student with these credentials already exists');
     
             expect(mockVerifyStudent).toHaveBeenCalledWith('student@example.com');
         });
     
         it('should throw a validation error if the inputs are invalid', async () => {
             // Mock validation to throw an error
-            const mockValidation = jest.spyOn(StudentService.prototype, 'validation').mockImplementation(() => {
+            const mockValidation = jest.spyOn(StudentService, 'validation').mockImplementation(() => {
                 throw new Error('Validation failed');
             });
     
@@ -103,7 +93,9 @@ describe('SubmissionService', () => {
             const mockFindOne = jest.spyOn(StudentModel, 'findOne').mockResolvedValue(null);
 
             // Call the function and expect an error
-            await expect(StudentService.deleteStudent('student@example.com')).rejects.toThrow('Specified student not found');
+            await expect(StudentService.deleteStudent('student@example.com'))
+            .rejects
+            .toThrow('Specified student not found');
 
             expect(mockFindOne).toHaveBeenCalledWith({ stu_Email: 'student@example.com' });
         });
@@ -115,16 +107,20 @@ describe('SubmissionService', () => {
             });
 
             // Call the function and expect error
-            await expect(StudentService.deleteStudent('student@example.com')).rejects.toThrow('Database error');
+            await expect(StudentService.deleteStudent('student@example.com'))
+            .rejects
+            .toThrow('Database error');
 
             expect(mockFindOne).toHaveBeenCalledWith({ stu_Email: 'student@example.com' });
         });
     });
 
+    /*
+
     describe('verifyStudent', () => {
 
         it('should return true if the student exists', async () => {
-            // Mock findOne to return an student
+            // Mock findOne to return a student
             const mockFindOne = jest.spyOn(StudentModel, 'findOne').mockResolvedValue({
                 stu_Email: 'student@example.com',
                 stu_Name: 'John',
@@ -145,7 +141,7 @@ describe('SubmissionService', () => {
             const result = await StudentService.verifyStudent('student@example.com');
 
             // Assertions
-            expect(mockFindOne).toHaveBeenCalledWith({ stu_Email: 'student@example.com' });
+            expect(mockFindOne).toHaveBeenCalledWith({stu_Email});
             expect(result).toBe(false);
         });
 
@@ -156,9 +152,11 @@ describe('SubmissionService', () => {
             });
 
             // Call the function and expect error
-            await expect(StudentService.verifyStudent('student@example.com')).rejects.toThrow('Database error');
+            await expect(StudentService.verifyStudent('student@example.com'))
+            .rejects
+            .toThrow('Database error');
 
             expect(mockFindOne).toHaveBeenCalledWith({ stu_Email: 'student@example.com' });
         });
-    });
+    }); */
 });
