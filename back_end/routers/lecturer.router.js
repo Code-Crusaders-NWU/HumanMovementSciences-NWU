@@ -6,10 +6,12 @@ const accessControl = require('../middleware/accessControl');
 
 /**
  * @swagger
- * /lecturer:
+ * /api/lecturer:
  *   post:
  *     summary: Create lecturer account
  *     description: Allows admin users to create a lecturers profile to give them lecturer privileges .
+ *     security:
+ *      - bearerAuth: []
  *     tags:
  *       - Lecturers
  *     requestBody:
@@ -77,10 +79,12 @@ router.post('/lecturer', authenticateToken, accessControl.isAdmin ,LecturerContr
 
 /**
  * @swagger
- * /lecturer:
+ * /api/lecturer:
  *   delete:
  *     summary: Delete a lecturer user
  *     description: Allows admin users to delete a lecturers profile.
+ *     security:
+ *      - bearerAuth: []
  *     tags:
  *       - Lecturers
  *     requestBody:

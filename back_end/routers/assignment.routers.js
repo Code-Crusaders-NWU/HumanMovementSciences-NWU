@@ -6,12 +6,14 @@ const accessControl = require('../middleware/accessControl');
 
 /**
  * @swagger
- * /assignment:
+ * /api/assignment:
  *   post:
  *     summary: Upload an assignment
  *     description: This endpoint allows authorized users(e.g. admin, lecturer) to create a new assignment.
  *     tags:
  *       - Assignments
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -88,14 +90,16 @@ const accessControl = require('../middleware/accessControl');
  */
 
 //When the assign API is called
-router.post('/assignment', authenticateToken , accessControl.isLecturer,AssignmentController.assign);
+router.post('/assignment', authenticateToken , accessControl.isLecturer, AssignmentController.assign);
 
 /**
  * @swagger
- * /assignment:
+ * /api/assignment:
  *   delete:
  *     summary: Delete Assignment
  *     description: Delete an assignment by using unique assignment number as identifier.
+ *     security:
+ *       - bearerAuth: []
  *     tags:
  *       - Assignments
  *     requestBody:
@@ -160,10 +164,12 @@ router.delete('/assignment', authenticateToken, accessControl.isLecturer ,Assign
 
 /**
  * @swagger
- * /assignment:
+ * /api/assignment:
  *   get:
  *     summary: Show all lecturer assignments.
  *     description: Retrieve all assignments for a specific lecturer by using their email.
+ *     security:
+ *       - bearerAuth: []
  *     tags:
  *       - Assignments
  *     parameters:

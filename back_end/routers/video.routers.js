@@ -5,8 +5,10 @@ const accessControl = require('../middleware/accessControl');
 
 /**
  * @swagger
- * /video:
+ * /api/video:
  *   post:
+ *     security:
+ *      - bearerAuth: []
  *     tags:
  *       - Videos
  *     summary: The MongoDB Video object referring to a video stored on AWS
@@ -77,10 +79,12 @@ router.post('/video', authenticateToken, accessControl.isStudent,VideoController
 
 /**
  * @swagger
- * /video:
+ * /api/video:
  *   delete:
  *     summary: Delete a user's video
  *     description: Delete a user video using the video number. 
+ *     security:
+ *      - bearerAuth: []
  *     tags:
  *       - Videos
  *     requestBody:

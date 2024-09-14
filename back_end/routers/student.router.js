@@ -5,12 +5,14 @@ const accessControl = require('../middleware/accessControl');
 
 /**
  * @swagger
- * /student:
+ * /api/student:
  *   post:
  *     summary: Add the students information
  *     description: This allows the creation of student which will be called together with user creation.
  *     tags:
  *       - Student
+ *     security:
+ *      - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -80,10 +82,12 @@ router.post('/student', authenticateToken, accessControl.isStudent, StudentContr
 
 /**
  * @swagger
- * /student:
+ * /api/student:
  *   delete:
  *     summary: DELETE student from database
  *     description: Deletes a student by using their email. 
+ *     security:
+ *      - bearerAuth: []
  *     tags:
  *       - Student
  *     requestBody:

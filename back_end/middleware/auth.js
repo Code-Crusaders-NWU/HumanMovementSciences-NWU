@@ -14,7 +14,6 @@ function authenticateToken(req, res, next) {
             console.error('JWT Verification Error:', err);
             return res.sendStatus(403);
         }
-        console.log('Decoded Token:', user); 
         req.user = user;
         next();
     });

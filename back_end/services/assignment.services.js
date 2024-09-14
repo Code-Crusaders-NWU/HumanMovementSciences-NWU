@@ -142,16 +142,6 @@ class AssignmentService {
             
            
 
-            //Use validation from the validator NodeJS library to check if stu email is in the correct format.   
-            if(!validator.isEmail(stu_Email)){
-                throw new Error('Invalid email adress');
-            }
-
-            // Validate stu email length
-            if (stu_Email.length < 5 || stu_Email.length > 50) {
-                throw new Error('Email should only be between 5 and 50 characters. ');
-            }
-
             //Use validation from the validator NodeJS library to check if lec email is in the correct format.   
             if(!validator.isEmail(lec_Email)){
                 throw new Error('Invalid email adress');

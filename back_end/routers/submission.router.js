@@ -5,12 +5,14 @@ const accessControl = require('../middleware/accessControl');
 
 /**
  * @swagger
- * /submission:
+ * /api/submission:
  *   post:
  *     summary: Assignment submissions
  *     description: Allows for the submission of an assignment to be completed by a student, the relevant details must also be passed along.
  *     tags:
  *       - Submissions
+ *     security:
+ *      - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -78,10 +80,12 @@ router.post('/submission', authenticateToken, accessControl.isStudent ,Submissio
 
 /**
  * @swagger
- * /submission:
+ * /api/submission:
  *   get:
  *     summary: View student submisions
  *     description: Retrieve all submissions made by a student using their email address.
+ *     security:
+ *      - bearerAuth: [] 
  *     tags:
  *       - Submissions
  *     parameters:
@@ -148,10 +152,12 @@ router.get('/submission',authenticateToken, accessControl.isLecturer ,Submission
 
 /**
  * @swagger
- * /submission/download_marks:
+ * /api/submission/download_marks:
  *   get:
  *     summary: Download all students marks as a CSV file
  *     description: Provides a CSV file which can be downloaded to show the marks.
+ *     security:
+ *      - bearerAuth: []
  *     tags:
  *       - Submissions
  *     responses:
@@ -186,10 +192,12 @@ router.get('/submission/download_marks', authenticateToken, accessControl.isLect
 
 /**
  * @swagger
- * /download_marks/{assignmentNumber}:
+ * /api/download_marks/{assignmentNumber}:
  *   get:
  *     summary: Download Assignment Marks (CSV File)
  *     description: Provides a CSV file for all the marks for students of a specific assignment number.
+ *     security:
+ *      - bearerAuth: []
  *     tags:
  *       - Submissions
  *     parameters:
@@ -231,10 +239,12 @@ router.get('/download_marks/:assignmentNumber',authenticateToken, accessControl.
 
 /**
  * @swagger
- * /submission/grade_submission:
+ * /api/submission/grade_submission:
  *   patch:
  *     summary: Grade student submission
  *     description: Allows lecturers to grade a students submission.
+ *     security:
+ *      - bearerAuth: []
  *     tags:
  *       - Submissions
  *     requestBody:
@@ -295,10 +305,12 @@ router.patch('/submission/grade_submission', authenticateToken, accessControl.is
 
 /**
  * @swagger
- * /submission/provide_feedback:
+ * /api/submission/provide_feedback:
  *   patch:
  *     summary: Lecturer provide feedback on assignment 
  *     description: Endpoint allowing lecturers to provide feedback on astudent for their submission.
+ *     security:
+ *      - bearerAuth: []
  *     tags:
  *       - Submissions
  *     requestBody:
