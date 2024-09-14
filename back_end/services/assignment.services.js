@@ -86,14 +86,14 @@ class AssignmentService {
             // **Test due date and test assignment date**
             const dateFormat = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/;
 
-                if (!dateFormat.test(due_date)) {
-                throw new Error('Due date format is invalid. Use YYYY-MM-DDTHH:mm:ssZ.');
-                }
+            if (!dateFormat.test(due_date)) {
+            throw new Error('Due date format is invalid. Use YYYY-MM-DDTHH:mm:ssZ.');
+            }
 
 
-                if (!dateFormat.test(assignm_Date)) {
-                throw new Error('Due date format is invalid. Use YYYY-MM-DDTHH:mm:ssZ.');
-                }
+            if (!dateFormat.test(assignm_Date)) {
+            throw new Error('Due date format is invalid. Use YYYY-MM-DDTHH:mm:ssZ.');
+            }
 
             //Check if the assignment date is valid
             const checkDate = new Date(assignm_Date);

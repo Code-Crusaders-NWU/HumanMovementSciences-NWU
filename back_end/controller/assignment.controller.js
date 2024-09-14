@@ -49,7 +49,7 @@ exports.delete = async(req, res, next) => {
 exports.viewAll = async(req, res, next) => {
     try {
         //Extract lecturer's email from the API request body
-        const {lec_Email} = req.body;
+        const {lec_Email} = req.query;
 
         //Call verifyLecturer function from assignment.services
         verifyLecturer();
