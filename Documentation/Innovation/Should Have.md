@@ -14,8 +14,9 @@ Three types of users:
 
 ### Lecturer
 - Create assignments
-- Grade Assingments
-- Give feedback on assignments
+- View student submissions
+- Grade Submissions
+- Give feedback on submissions
 - View student videos
 - Download student marks
 
