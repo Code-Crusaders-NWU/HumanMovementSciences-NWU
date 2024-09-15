@@ -1,0 +1,38 @@
+name: Run Unit Tests
+
+#Trigger the workflow on push or pull requests to any branch
+on:
+  push:
+    branches:
+      - 'BackEnd'
+      - 'main'
+
+  pull_request:
+    branches:
+      - 'BackEnd'
+      - 'main'
+
+#Job to run tests
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    #Install dependencies and run tests
+    steps:
+      #Checkout
+        - name: Checkout HMS
+          uses: actions/checkout@v3
+ 
+        #Set up Node.js environment
+        - name: Node.js Setup
+          uses: actions/setup-node@v3
+          with:
+           node-version: '22.5.1'
+
+      #Install dependencies with npm
+      - name: Install dependencies
+        run: npm install
+
+     #Run unit tests
+     - name: Run unit tests
+       run: npm test
