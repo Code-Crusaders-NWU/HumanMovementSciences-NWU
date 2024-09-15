@@ -17,43 +17,49 @@ describe('LecturerService' , () => {
     //createLecturer Test
     describe('createLecturer', () => {
 
-        it('should create a new lecturer when data is valid and lecturer does not exist', async () => {
+        it('should create a new lecturer successfully', async () => {
             const lec_Email = 'test@example.com';
             const lec_Name = 'Pieter';
             const lec_Surname = 'Roux';
             const title = 'Dr.';
             const degree = 'PhD';
 
-            //Mock the lecturerModel to simulate saving
+            //Mock the validation function
+            jest.spyOn(LecturerService, 'validation').mockImplementation(() => {});
+            
+            //Mock findOne method to return null (lecturer does not exist)
+            jest.spyOn(LecturerModel, 'findOne').mockResolvedValue(null);
+
+            //Mock the save method to simulate saving a new lecturer
             const mockSave = jest.fn().mockResolvedValue({lec_Email, lec_Name, lec_Surname, title, degree});
             LecturerModel.prototype.save = mockSave;
-
-            //Mock the validation function
-            const mockValidation = jest.spyOn(LecturerService, 'validation').mockImplementation(() => {});
-            
-            //Mock verifyLecturer function to return false (lecturer does not exist)
-            const mockVerifyLecturer = jest.spyOn(LecturerService, 'verifyLecturer').mockResolvedValue(false);
     
+            //Call createLecturer function
             const result = await LecturerService.createLecturer(lec_Email, lec_Name, lec_Surname, title, degree);
     
             //Assertions
             expect(mockSave).toHaveBeenCalled();
-            expect(mockValidation).toHaveBeenCalledWith(lec_Email, lec_Name, lec_Surname, title, degree);
-            expect(mockVerifyLecturer).toHaveBeenCalledWith(lec_Email);
+            expect(LecturerService.validation).toHaveBeenCalledWith(lec_Email, lec_Name, lec_Surname, title, degree);
+            expect(LecturerModel.findOne).toHaveBeenCalledWith({lec_Email});
             expect(result).toEqual({lec_Email, lec_Name, lec_Surname, title, degree});
         });
     
-        it('should throw an error if lecturer already exists', async () => {
-            // if mockverify returns true, then lecturer exists.
-            const mockVerifyLecturer = jest.spyOn(LecturerService, 'verifyLecturer').mockResolvedValue(true);
-    
-            await expect(LecturerService.createLecturer(
-                'test@example.com', 'Pieter', 'Roux', 'Dr.', 'PhD'
-            ))
+        it('should throw an error if the lecturer already exists', async () => {
+           
+            //Mock findOne methopd to return an existing lecturer
+            jest.spyOn(LecturerModel, 'findOne').mockResolvedValue({
+                lec_Email: 'lecturer@example.com',
+                lec_Name: 'Pieter',
+                lec_Surname: 'Roux',
+                title: 'Dr.',
+                degree: 'PhD'
+            });
+
+            await expect(LecturerService.createLecturer('lecturer@example.com', 'Pieter', 'van Wyk', "Dr.", "PhD"))
             .rejects
             .toThrow('A lecturer with these credentials already exists');
-    
-            expect(mockVerifyLecturer).toHaveBeenCalledWith('test@example.com');
+
+            expect(LecturerModel.findOne).toHaveBeenCalledWith({lec_Email: 'lecturer@example.com'});
         });
     
         it('should throw a validation error if inputs are invalid', async () => {
@@ -120,39 +126,6 @@ describe('LecturerService' , () => {
     
             // Verify correct calling
             expect(mockFindOne).toHaveBeenCalledWith({ lec_Email: 'error@example.com' });
-        });
-    });
-
-    //verifyLecturer Tests
-    describe('verifyLecturer', () => {
-        
-        it('should return true if the lecturer exist', async () => {
-            //Mock findOne to return a lecturer
-            const mockFindOne = jest.spyOn(LecturerModel, 'findOne').mockResolvedValue({
-                lec_Email: 'lecturer@example.com',
-                lec_Name: 'Pieter',
-                lec_Surname: 'Roux', 
-                title: 'Dr.', 
-                degree: 'PhD'
-            });
-
-            //Call the verifyLecturer function
-            const result = await LecturerService.verifyLecturer('lecturer@example.com');
-
-            //Assertions
-            expect(mockFindOne).toHaveBeenCalledWith({lec_Email: 'lecturer@example.com'});
-            expect(result).toBe(true);
-        });
-
-        it('should return false if the lecturer does not exist', async () => {
-            //Mock findOne to return null
-            const mockFindOne = jest.spyOn(LecturerModel, 'findOne').mockResolvedValue(null);
-
-            const result = await LecturerService.verifyLecturer('lecturer@example.com');
-
-            //Assertions
-            expect(mockFindOne).toHaveBeenCalledWith({lec_Email: 'lecturer@example.com'});
-            expect(result).toBe(false);
         });
     });
 
