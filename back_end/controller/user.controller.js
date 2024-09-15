@@ -1,6 +1,7 @@
 // Calls the user Service to use its services for the API.
 const UserService = require("../services/user.services")
 const logger = require('../config/logger')
+const dotenv = require('dotenv')
 
 //Export the user function so it can be used in the Route handler for API requests. 
 exports.register = async(req, res, next)=>{
@@ -67,11 +68,12 @@ exports.login = async(req,res,next)=>{
 
         //Create a login token
         let token_data = {
-            _id:user._id,
-            email:user.email
+            _id:    user._id,
+            email:  user.email,
+            user_type : user.user_type
         }
 
-        const token = await UserService.createToken(token_data,"^6s3Wvm&dz8^su",'2h');
+        const token = await UserService.createToken(token_data, process.env.TOKEN_KEY,  '2h');
 
         res.status(200).json({
             status: true,

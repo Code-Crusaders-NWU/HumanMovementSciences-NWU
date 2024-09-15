@@ -59,9 +59,10 @@ class UserService {
         }
     }
 
-    static async createToken(token,secretKey,jwt_expire){
-       return jwt.sign(token,secretKey,{expiresIn:jwt_expire});
+    static async createToken(payload, secretKey, jwt_expire) {
+        return jwt.sign(payload, secretKey, { expiresIn: jwt_expire });
     }
+    
 
     //Validation
     static validation(email, password, user_type){

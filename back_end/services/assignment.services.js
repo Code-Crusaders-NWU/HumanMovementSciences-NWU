@@ -5,14 +5,14 @@ const validator = require('validator');
 
 class AssignmentService {
     //Create assignment function
-    static async createAssignment(assignm_Num, assignm_Date, assignm_Feedback, stu_Email, lec_Email, grade, due_date) {
+    static async createAssignment(assignm_Num, assignm_Date, lec_Email, grade, due_date) {
         try {
 
-            await this.validation(assignm_Num, assignm_Date, stu_Email, lec_Email, grade, due_date);
+            await this.validation(assignm_Num, assignm_Date, lec_Email, grade, due_date);
 
             
             //Check if the assignment already exists within the database.
-            const existingAssignment = await Assignment_Model.findOne({assignm_Num, assignm_Date, assignm_Feedback, stu_Email, lec_Email, grade, due_date});
+            const existingAssignment = await Assignment_Model.findOne({assignm_Num, assignm_Date, lec_Email, grade, due_date});
 
             //If the assignment exists, the server throws an error
             if (existingAssignment) {
@@ -20,7 +20,7 @@ class AssignmentService {
             }
 
             //If no assignment with the specified number exists, the function can proceed
-            const newAssignment = new Assignment_Model({assignm_Num, assignm_Date, assignm_Feedback, stu_Email, lec_Email, grade, due_date});
+            const newAssignment = new Assignment_Model({assignm_Num, assignm_Date, lec_Email, grade, due_date});
 
             //Store the new assignment in the database and return the saved object
             return await newAssignment.save();
@@ -70,13 +70,8 @@ class AssignmentService {
     }
 
     //Validation
-    static async validation(assignm_Num, assignm_Date, stu_Email, lec_Email, grade, due_date){
+    static async validation(assignm_Num, assignm_Date, lec_Email, grade, due_date){
         try {
-
-            const lecturerExists = await LecturerService.verifyLecturer(lec_Email);
-            if (!lecturerExists) {
-                throw new Error('Lecturer does not exist');
-            }
 
             //Check that the assignment number is valid 
             if(assignm_Num < 1){
@@ -84,16 +79,16 @@ class AssignmentService {
             }
 
             // **Test due date and test assignment date**
-                const dateFormat = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/; // YYYY-MM-DDTHH:mm:ssZ format
+            const dateFormat = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/;
 
-                if (!dateFormat.test(due_date)) {
-                throw new Error('Due date format is invalid. Use YYYY-MM-DDTHH:mm:ssZ.');
-                }
+            if (!dateFormat.test(due_date)) {
+            throw new Error('Due date format is invalid. Use YYYY-MM-DDTHH:mm:ssZ.');
+            }
 
 
-                if (!dateFormat.test(assignm_Date)) {
-                throw new Error('Due date format is invalid. Use YYYY-MM-DDTHH:mm:ssZ.');
-                }
+            if (!dateFormat.test(assignm_Date)) {
+            throw new Error('Due date format is invalid. Use YYYY-MM-DDTHH:mm:ssZ.');
+            }
 
             //Check if the assignment date is valid
             const checkDate = new Date(assignm_Date);
@@ -121,9 +116,9 @@ class AssignmentService {
             const tempDueDate = new Date(due_date);
 
             //Checks to ensure the due date is either current date or in the future
-            if (tempDueDate < currentDate) {
-                throw new Error('Due date must be the current date or a future date');
-            }
+            //if (tempDueDate < currentDate) {
+                //throw new Error('Due date must be the current date or a future date');
+            //}
 
             console.log(tempDueDate);
             //Ensures the due date is in the current year
@@ -141,16 +136,6 @@ class AssignmentService {
             }
             
            
-
-            //Use validation from the validator NodeJS library to check if stu email is in the correct format.   
-            if(!validator.isEmail(stu_Email)){
-                throw new Error('Invalid email adress');
-            }
-
-            // Validate stu email length
-            if (stu_Email.length < 5 || stu_Email.length > 50) {
-                throw new Error('Email should only be between 5 and 50 characters. ');
-            }
 
             //Use validation from the validator NodeJS library to check if lec email is in the correct format.   
             if(!validator.isEmail(lec_Email)){

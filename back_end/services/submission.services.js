@@ -13,7 +13,6 @@ class SubmissionService {
 
             this.validation(assignm_Num, stu_Email, submission_Date, content, grade, feedback);
 
-
             //Check if the submission already exists within the database.
             const existingSubmission = await Submission_Model.findOne({assignm_Num, stu_Email, submission_Date, content, grade, feedback});
 
@@ -86,7 +85,7 @@ class SubmissionService {
                 throw new Error('Specified submission not found');
             }
     
-            //Assign the grade to the submission
+            //Assign the feedback to the submission
             submission.feedback = feedback;
             await submission.save();
     
@@ -125,9 +124,9 @@ class SubmissionService {
             }
 
             //Checks to ensure the submission date is current date or in the future
-            if (tempUploadDate < currentDate) {
-                throw new Error('Submission date must be the current date');
-            }
+            //if (tempUploadDate < currentDate) {
+                //throw new Error('Submission date must be the current date');
+            //}
 
             //Use validation from the validator NodeJS library to check if stu email is in the correct format.   
             if(!validator.isEmail(stu_Email)){
@@ -198,6 +197,50 @@ class SubmissionService {
     }
 
    }
+
+
+   //Getting assignment spesific marks in csv format
+   static async getAssignmentMarks(assignmentNumber){
+
+    try{
+       //Get submissions for spesific assignments
+       const submissions = await Submission_Model.find({assignm_Num: assignmentNumber});
+
+       //Validation for if there is no submissions
+       if(submissions.length === 0){
+           throw new Error('No submissions available for that assignment');
+       }
+
+       //Stream for csv data
+       const Stream = format({headers: true});
+       const writeStream = fs.createWriteStream("grading.csv");
+       Stream.pipe(writeStream);
+
+       //Add student emails and grade of all submissions to stream
+       submissions.forEach(submission => {
+           Stream.write({
+               assignm_Num: submission.assignm_Num,
+               stu_Email: submission.stu_Email,
+               grade: submission.grade
+           })
+       })
+
+       Stream.end();
+
+       //Let the stream finish
+       await new Promise((resolve, reject) => {
+           writeStream.on('finish', resolve);
+           writeStream.on('error', reject);
+       });
+
+       //Return csv file path
+       return 'grading.csv';
+
+   } catch (error){
+       throw error;
+   }
+
+  }
  
 }
 

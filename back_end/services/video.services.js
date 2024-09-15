@@ -7,7 +7,6 @@ class VideoService {
 
             this.validation(vid_Num, stu_Email, upload_Date, assignm_Num);
 
-            
             //Check if the video already exists within the database
             const existingVideo = await Video_Model.findOne({vid_Num, stu_Email, vid_Link, upload_Date, assignm_Num});
 

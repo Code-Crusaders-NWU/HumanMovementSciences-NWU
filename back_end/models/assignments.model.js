@@ -13,14 +13,6 @@ const assignment_schema = new Schema({
     assignm_Date : {
         type : Date,
     },
-   
-    assignm_Feedback : {
-        type : String,
-    },
-
-    stu_Email : {
-        type : String,
-    },
 
     lec_Email : {
         type : String,

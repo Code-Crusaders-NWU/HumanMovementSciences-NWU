@@ -1,14 +1,18 @@
 const router = require('express').Router();
 const StudentController = require('../controller/student.controller');
+const authenticateToken = require('../middleware/auth'); 
+const accessControl = require('../middleware/accessControl');
 
 /**
  * @swagger
- * /student:
+ * /api/student:
  *   post:
  *     summary: Add the students information
  *     description: This allows the creation of student which will be called together with user creation.
  *     tags:
  *       - Student
+ *     security:
+ *      - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -74,10 +78,74 @@ const StudentController = require('../controller/student.controller');
  *                   example: "Error from system will show here"
  */
 
-router.post('/student', StudentController.studentCreate);
+router.post('/student', authenticateToken, accessControl.isStudent, StudentController.studentCreate);
+
+/**
+ * @swagger
+ * /api/student:
+ *   delete:
+ *     summary: DELETE student from database
+ *     description: Deletes a student by using their email. 
+ *     security:
+ *      - bearerAuth: []
+ *     tags:
+ *       - Student
+ *     requestBody:
+ *       description: Student deletion request with the student's email.
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               stu_Email:
+ *                 type: string
+ *                 description: The email of the student to be deleted.
+ *                 example: "student@example.com"
+ *     responses:
+ *       '200':
+ *         description: Successfull deletion of student 
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: true
+ *                 success:
+ *                   type: string
+ *                   example: "Student deleted successfully"
+ *       '404':
+ *         description: Student not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "Specified student not found"
+ *       '500':
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "An error has occurred during student deletion"
+ */
 
 //When the delete API is called
-router.delete('/student', StudentController.delete);
+router.delete('/student', authenticateToken, accessControl.isStudent, StudentController.delete);
 
 //Export the router so it is accessible by the main application
 module.exports = router;

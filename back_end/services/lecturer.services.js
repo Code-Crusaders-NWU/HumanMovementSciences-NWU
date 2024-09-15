@@ -11,10 +11,9 @@ class LecturerService {
             this.validation(lec_Email, lec_Name, lec_Surname, title, degree);
 
             //Check if the lecturer already exists within the database
-            const status = await this.verifyLecturer(lec_Email); //True or false
-
+            const existingLecturer = await Lecturer_Model.findOne({lec_Email});
             //If the lecturer exists, the server throws an error
-            if (status) {
+            if (existingLecturer) {
                 throw new Error('A lecturer with these credentials already exists');
             }
 
@@ -93,14 +92,14 @@ class LecturerService {
 
 
             //validate title of lecturer
-            //if (title !== "-" && title !== "-" && title !== "-") {
-            //    throw new Error("The provided lecturer title is not valid.");
-            //}
+            if (title !== "B.Sc." && title !== "Hons" && title !== "M" && title !== "Dr.") {
+                throw new Error("The provided lecturer title is not valid.");
+            }
 
             //validate degree of lecturer
-            //if (title !== "-" && title !== "-" && title !== "-") {
-            //    throw new Error("The provided lecturer degree is not valid.");
-            //}
+            if (degree !== "Bachelors" && degree !== "Honours" && degree !== "Masters" && degree !== "Doctors") {
+                throw new Error("The provided lecturer degree is not valid.");
+            }
 
         } catch (error) {
             throw error;
