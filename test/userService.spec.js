@@ -5,19 +5,9 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-// Connect to database before running tests
-beforeAll(async () => {
-    await mongoose.connect(process.env.URI);
-});
-
 // Clears any mocked functions after each test
 afterEach(() => {
     jest.clearAllMocks();
-});
-
-// Disconnect from database after all tests
-afterAll(async () => {
-    await mongoose.disconnect();
 });
 
 //Mock all methods of userModel
@@ -126,7 +116,7 @@ describe('UserService', () => {
     //verifyUser Tests
     describe('verifyUser', () => {
 
-        it('should return a user that exists', async () => {
+        it('should return the specified user if they exist', async () => {
             const email ='test@example.com';
             const mockUser = {email, password: 'password234', user_type: 'lecturer'};
 
@@ -141,7 +131,7 @@ describe('UserService', () => {
             expect(result).toEqual(mockUser);
         });
 
-        it('should return null when the user does not exist', async () => {
+        it('should return null if the user does not exist', async () => {
             const email = 'user@example.com';
 
             //Mock the findOne method to return null (user not found)

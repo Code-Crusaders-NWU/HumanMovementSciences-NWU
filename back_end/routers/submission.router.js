@@ -1,14 +1,18 @@
 const router = require('express').Router();
 const SubmissionController = require('../controller/submission.controller');
+const authenticateToken = require('../middleware/auth'); 
+const accessControl = require('../middleware/accessControl');
 
 /**
  * @swagger
- * /submission:
+ * /api/submission:
  *   post:
  *     summary: Assignment submissions
  *     description: Allows for the submission of an assignment to be completed by a student, the relevant details must also be passed along.
  *     tags:
  *       - Submissions
+ *     security:
+ *      - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -26,7 +30,7 @@ const SubmissionController = require('../controller/submission.controller');
  *                 example: "student@example.com"
  *               submission_Date:
  *                 type: string
- *                 format: date
+ *                 format: date-time
  *                 description: The date/time of submission in ISO format.
  *                 example: "2024-09-08T14:30:00.000Z"
  *               content:
@@ -72,14 +76,16 @@ const SubmissionController = require('../controller/submission.controller');
 
 
 //When the submit API is called
-router.post('/submission', SubmissionController.submit);
+router.post('/submission', authenticateToken, accessControl.isStudent ,SubmissionController.submit);
 
 /**
  * @swagger
- * /submission:
+ * /api/submission:
  *   get:
  *     summary: View student submisions
  *     description: Retrieve all submissions made by a student using their email address.
+ *     security:
+ *      - bearerAuth: [] 
  *     tags:
  *       - Submissions
  *     parameters:
@@ -142,14 +148,16 @@ router.post('/submission', SubmissionController.submit);
 
 
 //When the viewAll API is called
-router.get('/submission', SubmissionController.viewAll);
+router.get('/submission',authenticateToken, accessControl.isLecturer ,SubmissionController.viewAll);
 
 /**
  * @swagger
- * /submission/download_marks:
+ * /api/submission/download_marks:
  *   get:
  *     summary: Download all students marks as a CSV file
  *     description: Provides a CSV file which can be downloaded to show the marks.
+ *     security:
+ *      - bearerAuth: []
  *     tags:
  *       - Submissions
  *     responses:
@@ -180,14 +188,16 @@ router.get('/submission', SubmissionController.viewAll);
 
 
 //Route for downloading marks
-router.get('/submission/download_marks', SubmissionController.downloadMarks);
+router.get('/submission/download_marks', authenticateToken, accessControl.isLecturer,SubmissionController.downloadMarks);
 
 /**
  * @swagger
- * /download_marks/{assignmentNumber}:
+ * /api/download_marks/{assignmentNumber}:
  *   get:
  *     summary: Download Assignment Marks (CSV File)
  *     description: Provides a CSV file for all the marks for students of a specific assignment number.
+ *     security:
+ *      - bearerAuth: []
  *     tags:
  *       - Submissions
  *     parameters:
@@ -225,14 +235,16 @@ router.get('/submission/download_marks', SubmissionController.downloadMarks);
  */
 
 //Route for downloading assignment spesific marks
-router.get('/download_marks/:assignmentNumber', SubmissionController.downloadSpesificMarks);
+router.get('/download_marks/:assignmentNumber',authenticateToken, accessControl.isLecturer ,SubmissionController.downloadSpesificMarks);
 
 /**
  * @swagger
- * /submission/grade_submission:
+ * /api/submission/grade_submission:
  *   patch:
  *     summary: Grade student submission
  *     description: Allows lecturers to grade a students submission.
+ *     security:
+ *      - bearerAuth: []
  *     tags:
  *       - Submissions
  *     requestBody:
@@ -289,14 +301,16 @@ router.get('/download_marks/:assignmentNumber', SubmissionController.downloadSpe
 
 
 //When the grade_submission API is called
-router.patch('/submission/grade_submission', SubmissionController.grade);
+router.patch('/submission/grade_submission', authenticateToken, accessControl.isLecturer,SubmissionController.grade);
 
 /**
  * @swagger
- * /submission/provide_feedback:
+ * /api/submission/provide_feedback:
  *   patch:
  *     summary: Lecturer provide feedback on assignment 
  *     description: Endpoint allowing lecturers to provide feedback on astudent for their submission.
+ *     security:
+ *      - bearerAuth: []
  *     tags:
  *       - Submissions
  *     requestBody:
@@ -351,7 +365,7 @@ router.patch('/submission/grade_submission', SubmissionController.grade);
  */
 
 //When the provide_feedback API is called
-router.patch('/submission/provide_feedback', SubmissionController.feedback);
+router.patch('/submission/provide_feedback', authenticateToken, accessControl.isLecturer,SubmissionController.feedback);
 
 //Export the router
 module.exports = router;

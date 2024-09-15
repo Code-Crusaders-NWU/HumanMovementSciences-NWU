@@ -1,25 +1,14 @@
 const SubmissionService = require('../back_end/services/submission.services');
 const SubmissionModel = require('../back_end/models/submission.model'); //Mock the model of submissions
-const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const fs = require('fs');
 const { format } = require('@fast-csv/format');
 
 dotenv.config();
 
-// Connect to database before running tests
-beforeAll(async () => {
-    await mongoose.connect(process.env.URI);
-});
-
 // Clears any mocked functions after each test
 afterEach(() => {
     jest.clearAllMocks();
-});
-
-// Disconnect from database after all tests
-afterAll(async () => {
-    await mongoose.disconnect();
 });
 
 //Mock all methods of SubmissionModel
@@ -101,6 +90,7 @@ describe('SubmissionService', () => {
         }); 
 
         it('should throw an error if a submission already exists', async () => {
+            
             const submissionData = {
                 assignm_Num: '1',
                 stu_Email: 'student@example.com',
@@ -118,10 +108,13 @@ describe('SubmissionService', () => {
                 submissionData.content,
                 null, //grade
                 null //feedback
-            )).rejects.toThrow('This submission already exists');
+            ))
+            .rejects
+            .toThrow('This submission already exists');
         });
 
         it('should throw a validation error if required fields are missing', async () => {
+            
             SubmissionService.validation = jest.fn(() => {throw new Error('Validation failed'); });
 
             await expect(SubmissionService.createSubmission(
@@ -131,7 +124,9 @@ describe('SubmissionService', () => {
                 null, //content
                 null, //grade
                 null //feedback
-            )).rejects.toThrow('Validation failed');
+            ))
+            .rejects
+            .toThrow('Validation failed');
         });
     });
 
@@ -155,7 +150,7 @@ describe('SubmissionService', () => {
             expect(result).toEqual(mockSubmissions);
         });
 
-        it('should throw an error if no submissions are found for the given student email', async () => {
+        it('should throw an error if no submissions are found for a given student', async () => {
             const stu_Email = 'student@example.com';
 
             // Mocking find to simulate no submissions found

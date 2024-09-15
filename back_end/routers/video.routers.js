@@ -1,10 +1,14 @@
 const router = require('express').Router();
 const VideoController = require('../controller/video.controller');
+const authenticateToken = require('../middleware/auth'); 
+const accessControl = require('../middleware/accessControl');
 
 /**
  * @swagger
- * /video:
+ * /api/video:
  *   post:
+ *     security:
+ *      - bearerAuth: []
  *     tags:
  *       - Videos
  *     summary: The MongoDB Video object referring to a video stored on AWS
@@ -32,7 +36,7 @@ const VideoController = require('../controller/video.controller');
  *               upload_Date:
  *                 type: string
  *                 format: date
- *                 example: "2024-09-07"
+ *                 example: "2024-09-08T14:30:00.000Z"
  *                 description: "Date the video was uploaded"
  *               assignm_Num:
  *                 type: integer
@@ -71,14 +75,16 @@ const VideoController = require('../controller/video.controller');
  */
 
 //When the video upload API is called
-router.post('/video', VideoController.videoUpload);
+router.post('/video', authenticateToken, accessControl.isStudent,VideoController.videoUpload);
 
 /**
  * @swagger
- * /video:
+ * /api/video:
  *   delete:
  *     summary: Delete a user's video
  *     description: Delete a user video using the video number. 
+ *     security:
+ *      - bearerAuth: []
  *     tags:
  *       - Videos
  *     requestBody:
@@ -137,7 +143,7 @@ router.post('/video', VideoController.videoUpload);
 
 
 //When the delete API is called
-router.delete('/video', VideoController.delete);
+router.delete('/video', authenticateToken, accessControl.isLecturer ,VideoController.delete);
 
 //router.post
 

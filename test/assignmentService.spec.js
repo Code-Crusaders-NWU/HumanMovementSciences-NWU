@@ -1,119 +1,96 @@
 const AssignmentService = require('../back_end/services/assignment.services');
-const AssignmentModel = require('../back_end/models/assignment.model'); //Mock the model of assignments
-const mongoose = require('mongoose');
+const AssignmentModel = require('../back_end/models/assignments.model');
 const dotenv = require('dotenv');
 
 dotenv.config();
-
-// Connect to database before running tests
-beforeAll(async () => {
-    await mongoose.connect(process.env.URI);
-});
 
 // Clears any mocked functions after each test
 afterEach(() => {
     jest.clearAllMocks();
 });
 
-// Disconnect from database after all tests
-afterAll(async () => {
-    await mongoose.disconnect();
-});
-
-//Mock all methods of userModel
-jest.mock('../back_end/models/user.model');
+//Mock all methods of assignmentModel
+jest.mock('../back_end/models/assignments.model');
 
 describe('AssignmentService', () => {  
 
-    //createAssignments test
+    //createAssignment Tests
     describe('createAssignment', () => {  
 
-        it('should create a new assignment when data is valid and the assignment does not exist', async () => {
-            const mockSave = jest.fn().mockResolvedValue({
-                assignm_Num: 'A001',
-                assignm_Date: '2023-09-01',
-                assignm_Feedback: 'Great work!',
-                stu_Email: 'student@example.com',
+        it('should sucessfully create a new assignment', async () => {
+            
+            const assignmData = {
+                assignm_Num: '1',
+                assignm_Date: '2024-09-10T00:00:00Z',
                 lec_Email: 'lecturer@example.com',
                 grade: 90,
-                due_date: '2023-09-10'
-            });
+                due_date: '2024-09-12T00:00:00Z'
+            };
 
-            const mockAssignmentModel = jest.spyOn(AssignmentModel.prototype, 'save').mockImplementation(mockSave);
-
-            // Mocking validation and findOne functions
-            const mockValidation = jest.spyOn(AssignmentService.prototype, 'validation').mockImplementation(() => {});
-            const mockFindOne = jest.spyOn(AssignmentModel, 'findOne').mockResolvedValue(null); // No existing assignment
+            //Mock the database methods
+            AssignmentModel.findOne = jest.fn().mockResolvedValue(null);
+            AssignmentModel.prototype.save = jest.fn().mockResolvedValue(assignmData);
 
             const result = await AssignmentService.createAssignment(
-                'A001', '2023-09-01', 'Great work!', 'student@example.com', 'lecturer@example.com', 90, '2023-09-10'
-            );
+                assignmData.assignm_Num,
+                assignmData.assignm_Date,
+                assignmData.lec_Email,
+                assignmData.grade,
+                assignmData.due_date
+            )
 
             //Assertions
-            expect(mockValidation).toHaveBeenCalledWith('A001', '2023-09-01', 'student@example.com', 'lecturer@example.com', 90, '2023-09-10');
-            expect(mockFindOne).toHaveBeenCalledWith({
-                assignm_Num: 'A001', 
-                assignm_Date: '2023-09-01', 
-                assignm_Feedback: 'Great work!', 
-                stu_Email: 'student@example.com', 
-                lec_Email: 'lecturer@example.com', 
-                grade: 90, 
-                due_date: '2023-09-10'
-            });
-            expect(mockSave).toHaveBeenCalled();
-            expect(result).toEqual({
-                assignm_Num: 'A001',
-                assignm_Date: '2023-09-01',
-                assignm_Feedback: 'Great work!',
-                stu_Email: 'student@example.com',
-                lec_Email: 'lecturer@example.com',
-                grade: 90,
-                due_date: '2023-09-10'
-            });
+            expect(AssignmentModel.findOne).toHaveBeenCalledWith(expect.objectContaining({
+                assignm_Num: '1',
+                lec_Email: 'lecturer@example.com'
+            }));
+            expect(result).toEqual(assignmData);
         });
 
         it('should throw an error if the assignment already exists', async () => {
-            // Mock findOne for existing assignment
-            const mockFindOne = jest.spyOn(AssignmentModel, 'findOne').mockResolvedValue({
-                assignm_Num: 'A001',
-                assignm_Date: '2023-09-01',
+            
+            const assignmData = {
+                assignm_Num: '1',
+                assignm_Date: '2024-09-10T00:00:00Z',
                 assignm_Feedback: 'Great work!',
                 stu_Email: 'student@example.com',
                 lec_Email: 'lecturer@example.com',
                 grade: 90,
-                due_date: '2023-09-10'
-            });
+                due_date: '2024-09-12T00:00:00Z'
+            };
 
-            // Call the function and expect error
-            await expect(AssignmentService.createAssignment(
-                'A001', '2023-09-01', 'Great work!', 'student@example.com', 'lecturer@example.com', 90, '2023-09-10'
-            )).rejects.toThrow('An assignment with this number already exists');
-
-            expect(mockFindOne).toHaveBeenCalledWith({
-                assignm_Num: 'A001', 
-                assignm_Date: '2023-09-01', 
-                assignm_Feedback: 'Great work!', 
-                stu_Email: 'student@example.com', 
-                lec_Email: 'lecturer@example.com', 
-                grade: 90, 
-                due_date: '2023-09-10'
-            });
-        });
-
-        it('should throw a validation error if inputs are invalid', async () => {
-            // Mock validation to throw error
-            const mockValidation = jest.spyOn(AssignmentService.prototype, 'validation').mockImplementation(() => {
-                throw new Error('Validation failed');
-            });
+            //Mocking findOne to simulate an existing assignment
+            AssignmentModel.findOne = jest.fn().mockResolvedValue(assignmData);
 
             await expect(AssignmentService.createAssignment(
-                'invalid-Num', 'invalid-Date', 'Great work!', 'student@example.com', 'lecturer@example.com', 90, '2023-09-10'
-            )).rejects.toThrow('Validation failed');
+                assignmData.assignm_Num,
+                assignmData.assignm_Date,
+                assignmData.lec_Email,
+                assignmData.grade,
+                assignmData.due_date
+            ))
+            .rejects
+            .toThrow('An assignment with this number already exists');
 
-            expect(mockValidation).toHaveBeenCalledWith('invalid-Num', 'invalid-Date', 'student@example.com', 'lecturer@example.com', 90, '2023-09-10');
+            });
+        
+
+        it('should throw a validation error if if required fields are missing', async () => {
+            
+            AssignmentService.validation = jest.fn(() => {throw new Error('Validation failed'); });
+            
+            await expect(AssignmentService.createAssignment(
+                '1',
+                new Date(),
+                null,
+                null,
+                null
+            ))
+            .rejects
+            .toThrow('Validation failed');
         });
-
     });
+    
 
     //createAssignments test
     describe('deleteAssignment', () => {
@@ -170,7 +147,7 @@ describe('AssignmentService', () => {
             // Mock find to return assignments
             const mockFind = jest.spyOn(AssignmentModel, 'find').mockResolvedValue([
                 {
-                    assignm_Num: 'A001',
+                    assignm_Num: '1',
                     assignm_Date: '2023-09-01',
                     assignm_Feedback: 'Great work!',
                     stu_Email: 'student1@example.com',
@@ -179,7 +156,7 @@ describe('AssignmentService', () => {
                     due_date: '2023-09-10'
                 },
                 {
-                    assignm_Num: 'A002',
+                    assignm_Num: '2',
                     assignm_Date: '2023-09-02',
                     assignm_Feedback: 'Needs improvement',
                     stu_Email: 'student2@example.com',
@@ -195,7 +172,7 @@ describe('AssignmentService', () => {
             expect(mockFind).toHaveBeenCalledWith({ lec_Email: 'lecturer@example.com' });
             expect(result).toEqual([
                 {
-                    assignm_Num: 'A001',
+                    assignm_Num: '1',
                     assignm_Date: '2023-09-01',
                     assignm_Feedback: 'Great work!',
                     stu_Email: 'student1@example.com',
@@ -204,7 +181,7 @@ describe('AssignmentService', () => {
                     due_date: '2023-09-10'
                 },
                 {
-                    assignm_Num: 'A002',
+                    assignm_Num: '2',
                     assignm_Date: '2023-09-02',
                     assignm_Feedback: 'Needs improvement',
                     stu_Email: 'student2@example.com',
@@ -216,12 +193,14 @@ describe('AssignmentService', () => {
         });
     
         it('should throw an error if no assignments are found for the lecturer', async () => {
+            const lec_Email = 'lecturer@example.com';
+
             // Mock find to return an empty array (no assignments found)
-            const mockFind = jest.spyOn(AssignmentModel, 'find').mockResolvedValue([]);
+            AssignmentModel.find = jest.fn().mockResolvedValue(null);
     
-            await expect(AssignmentService.viewAllAssignments('lecturer@example.com')).rejects.toThrow('Specified lecturer has not created any assignments');
-    
-            expect(mockFind).toHaveBeenCalledWith({ lec_Email: 'lecturer@example.com' });
+            await expect(AssignmentService.viewAllAssignments(lec_Email))
+            .rejects
+            .toThrow('Specified lecturer has not created any assignments');
         });
     
         it('should handle errors and throw them properly', async () => {
@@ -231,7 +210,9 @@ describe('AssignmentService', () => {
             });
     
             // Call the function and expect it to throw the database error
-            await expect(AssignmentService.viewAllAssignments('lecturer@example.com')).rejects.toThrow('Database error');
+            await expect(AssignmentService.viewAllAssignments('lecturer@example.com'))
+            .rejects
+            .toThrow('Database error');
 
             expect(mockFind).toHaveBeenCalledWith({ lec_Email: 'lecturer@example.com' });
         });

@@ -1,14 +1,19 @@
 const router = require('express').Router();
 const AssignmentController = require('../controller/assignment.controller');
+const authenticateToken = require('../middleware/auth'); 
+const accessControl = require('../middleware/accessControl');
+
 
 /**
  * @swagger
- * /assignment:
+ * /api/assignment:
  *   post:
  *     summary: Upload an assignment
  *     description: This endpoint allows authorized users(e.g. admin, lecturer) to create a new assignment.
  *     tags:
  *       - Assignments
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -22,18 +27,9 @@ const AssignmentController = require('../controller/assignment.controller');
  *                 example: "123456"
  *               assignm_Date:
  *                 type: string
- *                 format: date
+ *                 format: date-time
  *                 description: The date the assignment opens for the students.
- *                 example: "2024-08-24"
- *               assignm_Feedback:
- *                 type: string
- *                 description: Feedback from the lecturer or in rare occassions the admin, to the student.
- *                 example: "Well done!"
- *               stu_Email:
- *                 type: string
- *                 format: email
- *                 description: The student's email address.
- *                 example: "student@example.com"
+ *                 example: "2024-09-08T14:30:00.000Z"
  *               lec_Email:
  *                 type: string
  *                 format: email
@@ -45,9 +41,9 @@ const AssignmentController = require('../controller/assignment.controller');
  *                 example: 85
  *               due_date:
  *                 type: string
- *                 format: date
+ *                 format: date-time
  *                 description: The date the assignment is due.
- *                 example: "2024-08-31"
+ *                 example: "2024-09-08T14:30:00.000Z"
  *     responses:
  *       200:
  *         description: Assignment uploaded successfully
@@ -94,14 +90,16 @@ const AssignmentController = require('../controller/assignment.controller');
  */
 
 //When the assign API is called
-router.post('/assignment', AssignmentController.assign);
+router.post('/assignment', authenticateToken , accessControl.isLecturer, AssignmentController.assign);
 
 /**
  * @swagger
- * /assignment:
+ * /api/assignment:
  *   delete:
  *     summary: Delete Assignment
  *     description: Delete an assignment by using unique assignment number as identifier.
+ *     security:
+ *       - bearerAuth: []
  *     tags:
  *       - Assignments
  *     requestBody:
@@ -162,14 +160,16 @@ router.post('/assignment', AssignmentController.assign);
  */
 
 //When the delete API is called
-router.delete('/assignment', AssignmentController.delete);
+router.delete('/assignment', authenticateToken, accessControl.isLecturer ,AssignmentController.delete);
 
 /**
  * @swagger
- * /assignment:
+ * /api/assignment:
  *   get:
  *     summary: Show all lecturer assignments.
  *     description: Retrieve all assignments for a specific lecturer by using their email.
+ *     security:
+ *       - bearerAuth: []
  *     tags:
  *       - Assignments
  *     parameters:
@@ -204,8 +204,8 @@ router.delete('/assignment', AssignmentController.delete);
  *                         example: "Assignment Title"
  *                       dueDate:
  *                         type: string
- *                         format: date
- *                         example: "2024-09-15"
+ *                         format: date-time
+ *                         example: "2024-09-08T14:30:00.000Z"
  *                       description:
  *                         type: string
  *                         example: "Description of individual assignment"
@@ -225,7 +225,7 @@ router.delete('/assignment', AssignmentController.delete);
  */
 
 //When the viewAll API is called
-router.get('/assignment', AssignmentController.viewAll);
+router.get('/assignment', authenticateToken, accessControl.isLecturer ,AssignmentController.viewAll);
 
 //Export the router so it accessible by the main application
 module.exports = router;

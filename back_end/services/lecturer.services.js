@@ -11,10 +11,9 @@ class LecturerService {
             this.validation(lec_Email, lec_Name, lec_Surname, title, degree);
 
             //Check if the lecturer already exists within the database
-            const status = await this.verifyLecturer(lec_Email); //True or false
-
+            const existingLecturer = await Lecturer_Model.findOne({lec_Email});
             //If the lecturer exists, the server throws an error
-            if (status) {
+            if (existingLecturer) {
                 throw new Error('A lecturer with these credentials already exists');
             }
 

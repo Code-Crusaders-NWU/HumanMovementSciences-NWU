@@ -1,10 +1,13 @@
 
 const router = require('express').Router();
 const UserController = require("../controller/user.controller")
+const authenticateToken = require('../middleware/auth'); 
+const isAdmin = require('../middleware/accessControl');
+
 
 /**
  * @swagger
- * /signup:
+ * /api/signup:
  *   post:
  *     summary: Register a new user
  *     description: Registers new users with an email, password and user_type(admin, student, lecturer). There is various validation ensuring correct data is entered and there is no conflict by registering up an existing email.
@@ -69,7 +72,7 @@ router.post('/signup',UserController.register);
 
 /**
  * @swagger
- * /login:
+ * /api/login:
  *   post:
  *     summary: User Login 
  *     description: Existing users can sign in using email and password. 
@@ -118,11 +121,13 @@ router.post('/login',UserController.login);
 
 /**
  * @swagger
- * /user:
+ * /api/user:
  *   delete:
  *     tags: [User]
  *     summary: Delete a using a user's email
  *     description: This Delete Endpoint removes a user's account from the system by using email.
+ *     security:
+ *      - bearerAuth: []
  *     operationId: deleteUser
  *     requestBody:
  *       description: User email, must be a user
@@ -178,10 +183,6 @@ router.post('/login',UserController.login);
  *                   example: "An error has occurred during user deletion"
  */
 //When the Delete API is called
-router.delete('/user', UserController.delete);
-
-//Work in progress
-//router.post('/login',UserController.register);
-//Work in progress
+router.delete('/user',authenticateToken, isAdmin.isAdmin ,UserController.delete);    //Only admin users can delete accounts
 
 module.exports = router; //Export router so it can be used by the main application file
