@@ -1,5 +1,5 @@
 const StudentService = require('../back_end/services/student.services');
-const StudentModel = require('../back_end/models/student.model'); //Mock the model of student
+const StudentModel = require('../back_end/models/student.model');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 

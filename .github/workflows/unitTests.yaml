@@ -1,5 +1,5 @@
 name: Run Unit Tests
-'on':
+on:
   push:
     branches:
       - BackEnd
@@ -8,19 +8,24 @@ name: Run Unit Tests
     branches:
       - BackEnd
       - main
+
 jobs:
   test:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout HMS
         uses: actions/checkout@v3
+
       - name: Node.js Setup
         uses: actions/setup-node@v3
         with:
           node-version: 22.5.1
+          
       - name: Install dependencies
         run: npm install
+
       - name: Run unit tests
         env:
-          URI: ${{secrets.URI}}
+          URI: ${{ secrets.URI }}
         run: npm test
