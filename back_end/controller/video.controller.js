@@ -36,13 +36,16 @@ exports.delete = async(req, res, next) => {
         if (success) {
             res.json({status: true, success: 'Video deleted successfully'});
             logger.videoLogger.log('info', 'Video deleted successfully');           
-        } else {
-            res.status(404).json({success: false, message: 'Specified video not found'});
         } 
+
     } catch (error) {
-        //Respond with server error (Status code: 500)
+        if (error.message === 'Specified video not found') {
+            return res.status(404).json({ success: false, message: 'Specified video not found' });
+        }
+
+        //Respond with server error (Status code: 500) for all other errors
         logger.videoLogger.log('error', error.message);
-        res.status(500).json({success: false, message: 'An error has occurred during video deletion'});
+        res.status(500).json({success: false, message: 'An error has occurred during video deletion', error: error.message});
         next(error);
     }
 }
