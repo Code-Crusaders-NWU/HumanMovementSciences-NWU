@@ -29,15 +29,17 @@ exports.delete = async(req, res, next) => {
         //Await confirmation of successful user deletion
         const success = await UserService.deleteUser(email);
 
-        if (success) {
-            logger.userLogger.log('info','User deleted successfully');
-            res.json({status: true, message: 'User deleted successfully'});
-        } else {
-            logger.userLogger.log('info','User not found');
-            res.status(404).json({success: false, message: 'Specified user not found'});
-        }
+        //If successful
+        logger.userLogger.log('info','User deleted successfully');
+        res.json({status: true, message: 'User deleted successfully'});
+        
     } catch (error) {
-        //Respond with server error (Status code: 500)
+        // Check if the error is a 'user not found' error
+        if (error.message === 'Specified user not found') {
+            return res.status(404).json({ success: false, error: error.message });
+        }
+
+        //Respond with server error (Status code: 500) for all other errors
         logger.userLogger.log('error',error.message);
         res.status(500).json({success: false, message: 'An error has occurred during user deletion'});
         next(error);
