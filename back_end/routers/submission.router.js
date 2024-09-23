@@ -235,7 +235,7 @@ router.get('/submission/download_marks', authenticateToken, accessControl.isLect
  */
 
 //Route for downloading assignment spesific marks
-router.get('/download_marks/:assignmentNumber',authenticateToken, accessControl.isLecturer ,SubmissionController.downloadSpesificMarks);
+router.get('/download_marks/:assignmentNumber', authenticateToken, accessControl.isLecturer, SubmissionController.downloadSpesificMarks);
 
 /**
  * @swagger
