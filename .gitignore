@@ -1,3 +1,4 @@
 # Depenency directories
 node_modules
 .env
+logs
