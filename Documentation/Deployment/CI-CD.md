@@ -1,8 +1,9 @@
 # CI/CD PIPELINE DOCUMENTATION:
 
+![cloud-computing-storage-data-network](https://github.com/user-attachments/assets/f2f71668-7170-4056-a75c-4a42c4c1d263)
+
 ## Continious Integration:
 
-![docker=gcloud](https://github.com/user-attachments/assets/7432f9eb-a11f-4bea-bfc5-29ab390ae498)
 
 ## Continious Deployment:
 

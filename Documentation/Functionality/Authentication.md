@@ -1,4 +1,7 @@
 # Authentication
+
+![device-protected-by-cyber-security](https://github.com/user-attachments/assets/f58c7feb-1b3f-4944-9813-f67d24a129e6)
+
 Authentication is implemented so that only certain type of users can access or interact with certain parts of the system. This is done by using JWT (JSON Web Tokens) for secure access to all protected routes and endpoints.
 
 ## How The Authentication Works

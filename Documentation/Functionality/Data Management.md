@@ -1,3 +1,6 @@
+![2150169861](https://github.com/user-attachments/assets/6ba68d42-d089-47fc-8d73-6a91387d886d)
+
+
 ## Data Storage
 The application makes use of a MongoDB database with Mongoose as the Object Data Modeling library. The models define schemas for each entity, including validation and relationships between data fields.
 
