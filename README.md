@@ -7,7 +7,7 @@ The NWU Human Movement Sciences Digital Platform is an integrated solution desig
 
 ## Backend integration on local devices
 
-If you wish to replicate the work done by Code Crusaders or have a possible use case for this code base you can simply follow these commands to replicate this almost exact work environment on your local windows computer. 
+If you wish to replicate the work done by Code Crusaders or have anpther possible use case for this code base you can simply follow these commands to replicate this almost exact work environment on your local windows computer. 
 
 ### Clone HMS Repo with Git:
 - Navigate to a directory of your choosing using a CLI (Command Line Interface):
@@ -32,7 +32,7 @@ Now that you've cloned our repo you can start by setting up the development envi
 
 #### Install NodeJS:latest
 
-Please follow the following instructions via the official Node documentation: 
+Please follow these instructions via the official Node documentation: 
 
 [Node Installer Docs](https://nodejs.org/en/download/package-manager)
 
@@ -76,9 +76,9 @@ TOKEN_KEY = 'INSERT SECURE PRIVATE KEY HERE'
 
  ![Node js_logo](https://github.com/user-attachments/assets/2856c612-40a7-4e6f-bac9-7d4fb35fd24a)
 
+Copy one of the following commands into CLI:
+- Note: Using the first option allows an environment to be setup in which each save restarts the Node server automatically, I personally found this option to be much more convenient.
 
-Copy one of the following command:
-- Note: Using the first option allows an environment to be setup in which each save restarts the Node server automatically, I personally found this option to be much more confenient 
 <pre>
 <code>npm run dev</code>
 </pre>
@@ -101,7 +101,9 @@ After starting a server instance of the NodeJS backend navigate to the server on
 <code>http://localhost:8001/api-docs/</code>
 </pre>
 
-- Note the localhost:8001 part, the 8001 could be different depending on what PORT the user assigned.
+- Please note in this URL the :8001 section.
+- This section is indicating which port the server was assigned. 
+- Thus if you provided port 8080 to the .env file, the port would reflect :8080 inside the URL. 
 
 
 
