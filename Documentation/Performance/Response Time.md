@@ -1,6 +1,6 @@
 # Response times
 
-## Optimisations for response times for CRUD Operation.
+## Optimisations for response times for CRUD Operations.
 
  Efficient coding practices followed to keep response times low.
 
