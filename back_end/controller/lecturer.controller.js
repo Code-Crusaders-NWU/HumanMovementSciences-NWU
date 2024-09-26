@@ -29,13 +29,15 @@ exports.delete = async(req, res, next) => {
         //Await confirmation of successful lecturer deletion
         const success = await LecturerService.deleteLecturer(lec_Email);
 
-        if (success) {
-            res.json({status: true, success: 'Lecturer deleted successfully'});            
+        
+            res.json({status: true, success: success.message});            
             logger.lecturerLogger.log('info', 'Lecturer deleted successfully');
-        } else {
-            res.status(404).json({success: false, message: 'Specified lecturer not found'});
-        } 
+        
     } catch (error) {
+        if (error.message === 'Specified lecturer not found') {
+            return res.status(404).json({success: false, message: 'Specified lecturer not found'});
+        }
+
         //Respond with server error (Status code: 500)
         logger.lecturerLogger.log('error', error.message);
         res.status(500).json({success: false, message: 'An error has occurred during lecturer deletion'});

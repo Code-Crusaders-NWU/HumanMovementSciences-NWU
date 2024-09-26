@@ -49,7 +49,6 @@ class StudentService {
     static async verifyStudent(stu_Email) {
         try {
             const existingStudent = await Student_Model.findOne({stu_Email});
-            console.log(!!existingStudent);
             return !!existingStudent;
         } catch (error) {
             throw error;
