@@ -50,7 +50,6 @@ class LecturerService {
     static async verifyLecturer(lec_Email){
         try {
             const existingLecturer = await Lecturer_Model.findOne({lec_Email});
-            console.log(!!existingLecturer);
             return !!existingLecturer; //Return true or false
         } catch (error) {
             throw error;

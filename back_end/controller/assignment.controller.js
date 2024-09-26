@@ -31,14 +31,16 @@ exports.delete = async(req, res, next) => {
         //Await confirmation of successful assignment deletion
         const success = await AssignmentService.deleteAssignment(assignm_Num);
 
-        if (success) {
-            logger.assignmentLogger.log('info','Assignment deleted successfully');
-            res.json({status: true, success: 'Assignment deleted successfully'});            
-        } else {
-            logger.assignmentLogger.log('info','Specified assignment not found')
-            res.status(404).json({success: false, message: 'Specified assignment not found'});
-        } 
+        
+        logger.assignmentLogger.log('info',success.message);
+        res.json({status: true, success: 'Assignment deleted successfully'});            
+        
     } catch (error) {
+        if(error.message === "Specified assignment not found") {
+            logger.assignmentLogger.log('info','Specified assignment not found')
+            return res.status(404).json({success: false, message: 'Specified assignment not found'});
+        }
+
         logger.assignmentLogger.log('error',error.message)
         res.status(500).json({success: false, message: 'An error has occurred during assignment deletion', error: error.message});
         next(error);

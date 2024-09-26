@@ -29,16 +29,16 @@ exports.delete = async(req, res, next) => {
         //Await confirmation of successful student deletion
         const success = await StudentService.deleteStudent(stu_Email);
 
-        if (success) {
-            res.json({status: true, success: 'Student deleted successfully'});
-            logger.studentLogger.log('info', 'Student deleted successfully');         
-        } else {
-            res.status(404).json({success: false, message: 'Specified student not found'});
-        } 
+        res.json({status: true, success: success.message});
+        logger.studentLogger.log('info', 'Student deleted successfully');         
+        
     } catch (error) {
+        if (error.message === 'Specified student not found') {
+            return res.status(404).json({success: false, message: 'Specified student not found'});
+        }
+
         //Respond with server error (Status code: 500)
         logger.studentLogger.log('error', error.message);
-        res.status(500).json({success: false, message: 'An error has occurred during student deletion'});
-        next(error);
+        return res.status(500).json({success: false, message: 'An error has occurred during student deletion', error: error.message});
     }
 }
