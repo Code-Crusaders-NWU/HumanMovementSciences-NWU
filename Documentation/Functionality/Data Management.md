@@ -6,6 +6,8 @@ The application makes use of a MongoDB database with Mongoose as the Object Data
 
 The schemas ensure data consistency by enforcing types and constraints (unique id's, required fields, and format validation).
 
+an Amazon S3 bucket is used to store user uploads. It has its own seperate documentation.
+
 ## Data Handling and Processing
 The data is managed primarily on the service layer. It handles creating, reading, updating, and deleting data. Each service works with their corresponding model and makes sure the application rules are correctly followed.
 
