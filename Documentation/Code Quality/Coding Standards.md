@@ -1,5 +1,4 @@
 # Coding standards
-
 ## Naming
 Consistent naming standards used for variables and methods including camel casing and using _
 

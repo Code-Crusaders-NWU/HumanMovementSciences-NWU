@@ -38,5 +38,3 @@ The signUp method allows new users to register by providing their email, passwor
 
 ### Error Handling
    - Try catch is used for error handeling.
-
-## 3. Logout

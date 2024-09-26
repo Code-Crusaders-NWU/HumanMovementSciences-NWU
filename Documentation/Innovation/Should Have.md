@@ -8,7 +8,7 @@ Three types of users:
 - Student
 
 ### Admin
-- Administrative privilages
+- Administrative privileges
 - Can add lecturers and students
 - Can remove lecturers and students
 

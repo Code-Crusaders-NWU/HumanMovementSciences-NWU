@@ -221,7 +221,8 @@ class SubmissionService {
            Stream.write({
                assignm_Num: submission.assignm_Num,
                stu_Email: submission.stu_Email,
-               grade: submission.grade
+               grade: submission.grade,
+               feedback: submission.feedback
            })
        })
 
