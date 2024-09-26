@@ -28,4 +28,4 @@ jobs:
       - name: Run unit tests
         env:
           URI: ${{ secrets.URI }}
-        run: npm run test:unit
+        run: npm test
