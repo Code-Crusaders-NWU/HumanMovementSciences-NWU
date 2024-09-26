@@ -120,7 +120,7 @@ class AssignmentService {
                 //throw new Error('Due date must be the current date or a future date');
             //}
 
-            console.log(tempDueDate);
+            //console.log(tempDueDate);
             //Ensures the due date is in the current year
             
             if (tempDueDate.getFullYear() !== currentYear) {
