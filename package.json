@@ -4,7 +4,8 @@
   },
   "scripts": {
     "test:unit": "jest/unit",
-    "test:imp": "jest/implementation"
+    "test:imp": "jest/implementation",
+    "test": "jest"
   },
   "dependencies": {
     "@fast-csv/format": "^5.0.0",
