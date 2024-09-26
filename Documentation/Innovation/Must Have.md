@@ -27,4 +27,4 @@ Data store documentation is under Storage in backend branch.
 The particular assignment that is going to get feedback is found by using the assignment number and student email. There is validation to determine if such a submission exists. Feedback can be given to on assignment and is saved to the database.
 
 ## Assignment creation
-To create an assignment the assignment number, assigned date, due date, grade and lecturer email are all needed. Those inputs are all validated to ensure that they are either in the correct format or in the case of lecturer email that they exist. There is validation to ensure that the same assignment isnt created twice. If all validation criteria is passed the assignment is created and stored in the database.
+To create an assignment the assignment number, assigned date, due date, grade and lecturer email are all needed. Those inputs are all validated to ensure that they are either in the correct format or in the case of lecturer email that they exist. There is validation to ensure that the same assignment isn’t created twice. If all validation criteria is passed the assignment is created and stored in the database.

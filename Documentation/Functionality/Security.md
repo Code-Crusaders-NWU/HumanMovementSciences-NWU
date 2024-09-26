@@ -11,7 +11,7 @@ Upon user login a JWT token is generated from a secret value inside an environme
 Admin users have the most access to our API Endpoints. Admin users can act as both a student and lecturer and also have special privileges such as Lecturer creation and account deletion. 
 
 ### Lecturer
-Leturers can only be created by Admin users. 
+Lecturers can only be created by Admin users. 
 - Create assignments
 - View student submissions
 - Grade Submissions
