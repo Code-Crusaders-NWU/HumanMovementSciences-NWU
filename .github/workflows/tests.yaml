@@ -1,0 +1,31 @@
+name: Run Unit and Implementation Tests
+on:
+  push:
+    branches:
+      - BackEnd
+      - main
+  pull_request:
+    branches:
+      - BackEnd
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout HMS
+        uses: actions/checkout@v3
+
+      - name: Node.js Setup
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22.5.1
+          
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run unit and implementation tests
+        env:
+          URI: ${{ secrets.URI }}
+        run: npm run test

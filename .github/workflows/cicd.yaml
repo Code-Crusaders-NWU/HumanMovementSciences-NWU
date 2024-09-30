@@ -1,0 +1,46 @@
+name: CI/CD to Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Google Cloud Auth
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: '${{ secrets.GCP_SA_KEY }}'
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+    - name: Set up Google Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+
+    - name: Authenticate Docker to Google Cloud
+      run: |
+        gcloud auth configure-docker africa-south1-docker.pkg.dev --quiet
+
+    - name: Build Docker image
+      run: |
+        cd back_end
+        docker build -t africa-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/hms-docker/hms-docker-image:${{ github.sha }} .
+
+    - name: Push Docker image to Artifact Registry
+      run: |
+        docker push africa-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/hms-docker/hms-docker-image:${{ github.sha }}
+
+    - name: Deploy to Cloud Run
+      run: |
+        gcloud run deploy hms-docker-image \
+          --image africa-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/hms-docker/hms-docker-image:${{ github.sha }} \
+          --platform managed \
+          --region ${{ secrets.GCP_REGION }} \
+          --allow-unauthenticated \
+          --set-env-vars URI=${{ secrets.URI }},TOKEN_KEY=${{ secrets.TOKEN_KEY }}
+
