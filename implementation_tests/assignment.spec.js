@@ -16,7 +16,7 @@ jest.mock('../back_end/middleware/accessControl', () => ({
     isLecturer: (req, res, next) => {
         req.user = { user_type: 'lecturer' };
         next();
-    }, //Comment
+    },
 }));
 
 const app = express();
