@@ -8,11 +8,19 @@ import 'package:http/http.dart' as http;
 
 
 
-class LoginScreen extends StatelessWidget { 
+class LoginScreen extends StatefulWidget { 
   LoginScreen({super.key});
+
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+class _LoginScreenState extends State<LoginScreen>{
+
 
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
+  String? loginMessage;
+  
 
   //login function
   void login() async{
@@ -24,23 +32,39 @@ class LoginScreen extends StatelessWidget {
           "password": passwordController.text
         };
 
-try {
+  try {
           var res = await http.post(
             Uri.parse("$apiURL/api/login"),
             headers: {"Content-Type": "application/json"},
             body: jsonEncode(body),
           );
-
+         
           if (res.statusCode == 201) {
-            print('Login successful');
+            setState((){
+            loginMessage = "Login Sucessful";
+            });
           } else {
-            print('Login failed: ${res.body}');
+            var res_body = jsonDecode(res.body);
+            if (res_body['error'] != null) {
+              setState((){
+              loginMessage = res_body['error'];
+            });
+            }
+            else{
+              setState((){
+              loginMessage = "login failed";
+            });
+            }
           }
         } catch (error) {
-          print('Error: $error');
+           setState((){
+            loginMessage = "$error";
+            });
         }
       } else {
-        print('Passwords do not match');
+        setState((){
+            loginMessage = "Login Failed";
+            });
       }
   }
 
@@ -63,16 +87,31 @@ try {
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            
             children: <Widget>[
+              if (loginMessage != null)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Text(
+                    loginMessage!,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: loginMessage == 'Login successful'
+                        ? Colors.green
+                        : Colors.red,
+            ),
+          ),
+        ),
+
+              
               //Text wdiget to display nice message
-              const Card(elevation: 20 ,
+            const Card(elevation: 20 ,
               color: Colors.lightBlueAccent,
               child: Padding(
                 padding: EdgeInsets.all(15.0),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
+                    
                     SizedBox(height: 8),
                     Text('HMS NWU',
                     style: TextStyle(fontSize: 19,
@@ -106,10 +145,7 @@ try {
               //Login Button
               MyButton(
                 text: 'Login',
-                onPressed: ()
-                {
-                  print('logged in');
-                },
+                onPressed: ()=>{login()},
               ),
 
               const SizedBox(height: 10),
@@ -126,4 +162,4 @@ try {
       ),
     );
   }
-}//class
+}
