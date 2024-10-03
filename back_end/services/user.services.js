@@ -79,6 +79,30 @@ class UserService {
             throw error;
         }
     }
+
+    //Function to search for users
+    static async searchUser(email) {
+        try {
+            const regex = new RegExp(email, 'i');
+
+            //Find users based on the email being searched
+            const users = await User_Model.find({email: {$regex: regex}});
+
+            //If no users found, throw an error
+            //If no users found, throw an error
+            if(!users || users.length === 0) {
+                throw new Error('No users found');
+            }
+
+            //Return search user details
+            return users.map(user => ({
+                email: users.email,
+                user_type: user.user_type
+            }));
+        } catch (error) {
+            throw error;
+        }
+    }
     
 
     //Validation

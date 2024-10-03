@@ -106,3 +106,14 @@ exports.getAllUsers = async (req, res, next) => {
         next(error);
     }
 }
+
+exports.searchUser = async (req, res, next) => {
+    try {
+        const {email} = req.query;
+        const users = await UserService.searchUser(email);
+        res.status(200).json({status: true, users});
+    } catch (error) {
+        res.status(500).json({status: false, message: error.message});
+        next(error);
+    }
+}
