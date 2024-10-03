@@ -19,7 +19,8 @@ class _SignupScreenState extends State<SignupScreen> {
   String? signupMessage; // To display signup status
 
   void signUp() async {
-    if (usernameController.text.isNotEmpty && passwordController.text.isNotEmpty) {
+    if (usernameController.text.isNotEmpty &&
+        passwordController.text.isNotEmpty) {
       if (passwordController.text == confirmPasswordController.text) {
         // API statement in JSON format
         var regBody = {
@@ -45,7 +46,8 @@ class _SignupScreenState extends State<SignupScreen> {
             });
           } else {
             setState(() {
-              signupMessage = 'Registration failed: ${res.body}'; // Update message
+              signupMessage =
+                  'Registration failed: ${res.body}'; // Update message
             });
           }
         } catch (error) {
@@ -60,7 +62,8 @@ class _SignupScreenState extends State<SignupScreen> {
       }
     } else {
       setState(() {
-        signupMessage = 'Username and password cannot be empty'; // Handle empty fields
+        signupMessage =
+            'Username and password cannot be empty'; // Handle empty fields
       });
     }
   }
@@ -99,7 +102,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                   ),
                 ),
-              
+
               const Card(
                 elevation: 20,
                 color: Colors.lightBlueAccent,

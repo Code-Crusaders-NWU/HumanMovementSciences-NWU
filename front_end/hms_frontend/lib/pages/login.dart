@@ -6,66 +6,61 @@ import 'package:hms_frontend/pages/signup.dart';
 import 'package:hms_frontend/constants.dart';
 import 'package:http/http.dart' as http;
 
-
-
-class LoginScreen extends StatefulWidget { 
+class LoginScreen extends StatefulWidget {
   LoginScreen({super.key});
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
-class _LoginScreenState extends State<LoginScreen>{
 
-
+class _LoginScreenState extends State<LoginScreen> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
   String? loginMessage;
-  
 
   //login function
-  void login() async{
-    if (usernameController.text.isNotEmpty && passwordController.text.isNotEmpty){
-      
+  void login() async {
+    if (usernameController.text.isNotEmpty &&
+        passwordController.text.isNotEmpty) {
       //API request's body in json format
       var body = {
-          "email": usernameController.text,
-          "password": passwordController.text
-        };
+        "email": usernameController.text,
+        "password": passwordController.text
+      };
 
-  try {
-          var res = await http.post(
-            Uri.parse("$apiURL/api/login"),
-            headers: {"Content-Type": "application/json"},
-            body: jsonEncode(body),
-          );
-         
-          if (res.statusCode == 201) {
-            setState((){
+      try {
+        var res = await http.post(
+          Uri.parse("$apiURL/api/login"),
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode(body),
+        );
+
+        if (res.statusCode == 201) {
+          setState(() {
             loginMessage = "Login Sucessful";
-            });
-          } else {
-            var res_body = jsonDecode(res.body);
-            if (res_body['error'] != null) {
-              setState((){
+          });
+        } else {
+          var res_body = jsonDecode(res.body);
+          if (res_body['error'] != null) {
+            setState(() {
               loginMessage = res_body['error'];
             });
-            }
-            else{
-              setState((){
+          } else {
+            setState(() {
               loginMessage = "login failed";
             });
-            }
           }
-        } catch (error) {
-           setState((){
-            loginMessage = "$error";
-            });
         }
-      } else {
-        setState((){
-            loginMessage = "Login Failed";
-            });
+      } catch (error) {
+        setState(() {
+          loginMessage = "$error";
+        });
       }
+    } else {
+      setState(() {
+        loginMessage = "Login Failed";
+      });
+    }
   }
 
   @override
@@ -96,34 +91,37 @@ class _LoginScreenState extends State<LoginScreen>{
                     style: TextStyle(
                       fontSize: 16,
                       color: loginMessage == 'Login successful'
-                        ? Colors.green
-                        : Colors.red,
-            ),
-          ),
-        ),
+                          ? Colors.green
+                          : Colors.red,
+                    ),
+                  ),
+                ),
 
-              
               //Text wdiget to display nice message
-            const Card(elevation: 20 ,
-              color: Colors.lightBlueAccent,
-              child: Padding(
-                padding: EdgeInsets.all(15.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    
-                    SizedBox(height: 8),
-                    Text('HMS NWU',
-                    style: TextStyle(fontSize: 19,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,),)
-                  ],
+              const Card(
+                elevation: 20,
+                color: Colors.lightBlueAccent,
+                child: Padding(
+                  padding: EdgeInsets.all(15.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      SizedBox(height: 8),
+                      Text(
+                        'HMS NWU',
+                        style: TextStyle(
+                          fontSize: 19,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                    ],
                   ),
-                  ),
+                ),
               ),
 
               const SizedBox(height: 20),
-              
+
               //Username TextBox
               TextBox(
                 controller: usernameController,
@@ -141,20 +139,21 @@ class _LoginScreenState extends State<LoginScreen>{
               ),
 
               const SizedBox(height: 20),
-              
+
               //Login Button
               MyButton(
                 text: 'Login',
-                onPressed: ()=>{login()},
+                onPressed: () => {login()},
               ),
 
               const SizedBox(height: 10),
               //SignUp Button
               MyButton(
                 text: 'SignUp',
-                onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => SignupScreen()));
-                  },
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => SignupScreen()));
+                },
               )
             ],
           ),
