@@ -185,4 +185,7 @@ router.post('/login',UserController.login);
 //When the Delete API is called
 router.delete('/user',authenticateToken, isAdmin.isAdmin ,UserController.delete);    //Only admin users can delete accounts
 
+//When the getAllUsers API is called
+router.get('/getAllUsers', authenticateToken, isAdmin.isAdmin, UserController.getAllUsers)
+
 module.exports = router; //Export router so it can be used by the main application file
