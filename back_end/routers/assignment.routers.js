@@ -227,6 +227,61 @@ router.delete('/assignment', authenticateToken, accessControl.isLecturer ,Assign
 //When the viewAll API is called
 router.get('/assignment', authenticateToken, accessControl.isLecturer ,AssignmentController.viewAll);
 
+/**
+ * @swagger
+ * /api/dueAssignments:
+ *   get:
+ *     summary: Retreive assignments which is due after TODAY
+ *     description: This endpoint allows students to view all assignments which is due after today. 
+ *     tags:
+ *       - Assignments
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved due assignments.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: true
+ *                 assignments:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       assignmentId:
+ *                         type: string
+ *                         example: "12345"
+ *                       title:
+ *                         type: string
+ *                         example: "Bio Kinetics H1"
+ *                       dueDate:
+ *                         type: string
+ *                         format: date
+ *                         example: "2024-12-31"
+ *                       description:
+ *                         type: string
+ *                         example: "Excersise 1 in textbook"
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "An error has occurred while fetching due assignments."
+ */
+
+
 //When the dueAssignments API is called
 router.get('/dueAssignments', authenticateToken, accessControl.isStudent, AssignmentController.getDueAssignments);
 
