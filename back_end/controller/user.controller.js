@@ -91,3 +91,29 @@ exports.login = async(req,res,next)=>{
         next(error);    
     }
 };
+
+exports.getAllUsers = async (req, res, next) => {
+    try {
+        //Call the service to get all users
+        const users = await UserService.getAllUsers();
+
+        //Log and return the user list
+        logger.userLogger.log('info', 'Fetched all users successfully');
+        res.status(200).json({status: true, users})
+    } catch (error) {
+        logger.userLogger.log('error', error.message);
+        res.status(500).json({success: false, message: 'Failed to get users', error: error.message});
+        next(error);
+    }
+}
+
+exports.searchUser = async (req, res, next) => {
+    try {
+        const {email} = req.query;
+        const users = await UserService.searchUser(email);
+        res.status(200).json({status: true, users});
+    } catch (error) {
+        res.status(500).json({status: false, message: error.message});
+        next(error);
+    }
+}

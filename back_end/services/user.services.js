@@ -62,6 +62,47 @@ class UserService {
     static async createToken(payload, secretKey, jwt_expire) {
         return jwt.sign(payload, secretKey, { expiresIn: jwt_expire });
     }
+
+    //Function to get a list of users with their roles
+    static async getAllUsers() {
+        try {
+            const users = await User_Model.find({}, 'email user_type');
+
+            //If no users found, throw an error
+            if(!users || users.length === 0) {
+                throw new Error('No users found');
+            }
+
+            //Return the list of users with their roles
+            return users;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    //Function to search for users
+    static async searchUser(email) {
+        try {
+            const regex = new RegExp(email, 'i');
+
+            //Find users based on the email being searched
+            const users = await User_Model.find({email: {$regex: regex}});
+
+            //If no users found, throw an error
+            //If no users found, throw an error
+            if(!users || users.length === 0) {
+                throw new Error('No users found');
+            }
+
+            //Return search user details
+            return users.map(user => ({
+                email: users.email,
+                user_type: user.user_type
+            }));
+        } catch (error) {
+            throw error;
+        }
+    }
     
 
     //Validation
