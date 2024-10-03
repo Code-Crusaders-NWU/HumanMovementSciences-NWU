@@ -227,5 +227,8 @@ router.delete('/assignment', authenticateToken, accessControl.isLecturer ,Assign
 //When the viewAll API is called
 router.get('/assignment', authenticateToken, accessControl.isLecturer ,AssignmentController.viewAll);
 
+//When the dueAssignments API is called
+router.get('/dueAssignments', authenticateToken, accessControl.isStudent, AssignmentController.getDueAssignments);
+
 //Export the router so it accessible by the main application
 module.exports = router;
