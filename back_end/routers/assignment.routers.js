@@ -3,7 +3,6 @@ const AssignmentController = require('../controller/assignment.controller');
 const authenticateToken = require('../middleware/auth'); 
 const accessControl = require('../middleware/accessControl');
 
-
 /**
  * @swagger
  * /api/assignment:
@@ -283,7 +282,7 @@ router.get('/assignment', authenticateToken, accessControl.isLecturer ,Assignmen
 
 
 //When the dueAssignments API is called
-router.get('/dueAssignments', authenticateToken, accessControl.isStudent, AssignmentController.getDueAssignments);
+router.get('/dueAssignments', authenticateToken, accessControl.isStudent, AssignmentController.dueAssignments);
 
 //Export the router so it accessible by the main application
 module.exports = router;

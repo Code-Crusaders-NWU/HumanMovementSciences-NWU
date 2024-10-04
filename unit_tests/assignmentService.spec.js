@@ -217,4 +217,47 @@ describe('AssignmentService', () => {
             expect(mockFind).toHaveBeenCalledWith({ lec_Email: 'lecturer@example.com' });
         });
     });
+
+    describe('getDueAssignments', () => {
+
+        it('should return all due assignments for a student', async () => {
+            const mockAssignments = [
+                {assignm_Num: 1, due_date: '2024-11-01T14:30:00.000Z', students: ['student@example.com']},
+                {assignm_Num: 2, due_date: '2024-11-10T14:30:00.000Z', students: ['student@example.com']}
+            ];
+
+            AssignmentModel.find.mockResolvedValue(mockAssignments);
+
+            const stu_Email = 'student@example.com';
+            const result = await AssignmentService.getDueAssignments(stu_Email);
+
+            //Assertions
+            expect(result).toEqual(mockAssignments);
+            expect(AssignmentModel.find).toHaveBeenCalledWith({
+                due_date: {$gte: expect.any(Date)},
+                students: {$in: [stu_Email]}
+            });
+        });
+
+        it('should throw an error if no due assignments are found', async () => {
+            AssignmentModel.find.mockResolvedValue([]);
+    
+            const stu_Email = 'student@example.com';
+    
+            await expect(AssignmentService.getDueAssignments(stu_Email))
+                .rejects
+                .toThrow('No due assignments found');
+        });
+
+        it('should handle errors in the function', async () => {
+            AssignmentModel.find.mockRejectedValue(new Error('Database Error'));
+    
+            const stu_Email = 'student@example.com';
+    
+            await expect(AssignmentService.getDueAssignments(stu_Email))
+                .rejects
+                .toThrow('Database Error');
+        });
+
+    });
 });

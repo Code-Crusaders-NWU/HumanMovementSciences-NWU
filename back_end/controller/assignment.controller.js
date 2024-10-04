@@ -71,9 +71,8 @@ exports.viewAll = async(req, res, next) => {
     }
   }
 
-  exports.getDueAssignments = async(req, res, next) => {
+  exports.dueAssignments = async(req, res, next) => {
     try {
-        console.log('User:', req.user);
         const {stu_Email} = req.user;
         const assignments = await AssignmentService.getDueAssignments(stu_Email);
 
