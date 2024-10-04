@@ -23,7 +23,7 @@ class MyButton extends StatelessWidget {
         onPressed: onPressed, //Changeable functionallity
         child: Text(
           text,
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
     );
