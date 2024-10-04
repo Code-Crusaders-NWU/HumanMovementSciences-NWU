@@ -69,6 +69,28 @@ class AssignmentService {
         }
     }
 
+    //Function that lets a student view all the assignments they still have to do
+    static async getDueAssignments(stu_Email) {
+        try {
+            const currentDate = new Date();
+
+            //Find assignments with a due date in the future or today
+            const dueAssignments = await Assignment_Model.find({
+                due_date: {$gte: currentDate},
+                students: {$in: [stu_Email]}
+            })
+
+            //If no due assignments, throw an error
+            if (!dueAssignments || dueAssignments.length === 0) {
+                throw new Error('No due assignments found');
+            }
+
+            return dueAssignments
+        } catch (error) {
+            throw error;
+        }
+    }
+
     //Validation
     static async validation(assignm_Num, assignm_Date, lec_Email, grade, due_date){
         try {
@@ -134,8 +156,6 @@ class AssignmentService {
             if (tempAssignDate.getFullYear() !== currentYear) {
                 throw new Error('Due date has to be in the current year');
             }
-            
-           
 
             //Use validation from the validator NodeJS library to check if lec email is in the correct format.   
             if(!validator.isEmail(lec_Email)){
