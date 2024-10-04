@@ -91,6 +91,33 @@ class AssignmentService {
         }
     }
 
+    //Function that lets a student view all assignments due today
+    static async getAssignmentsDueToday(stu_Email) {
+        try {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); //Set to start of day
+            const tomorrow = new Date(today);
+            tomorrow.setDate(today.getDate() + 1); //Set to start of next day
+
+            const assignmentsDueToday = await Assignment_Model.find({
+                due_date: {
+                    $gte: today,
+                    $lt: tomorrow
+                },
+                students: {$in: [stu_Email]}
+            });
+
+            // If no assignments are found
+            if (!assignmentsDueToday || assignmentsDueToday.length === 0) {
+                throw new Error('No assignments due today found');
+            }
+
+            return assignmentsDueToday;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     //Validation
     static async validation(assignm_Num, assignm_Date, lec_Email, grade, due_date){
         try {

@@ -84,3 +84,22 @@ exports.viewAll = async(req, res, next) => {
         next(error);
     }
   }
+
+  exports.dueToday = async (req, res, next) => {
+    try {
+        const {stu_Email} = req.user;
+
+        // Get the assignments due today
+        const assignments = await AssignmentService.getAssignmentsDueToday(stu_Email);
+
+        // Log success and return the assignments
+        logger.assignmentLogger.log('info', 'Assignments due today fetched successfully');
+        return res.json({ status: true, assignments });
+
+    } catch (error) {
+        // Log error and return server error
+        logger.assignmentLogger.log('error', error.message);
+        res.status(500).json({ status: false, message: 'An error occurred while fetching assignments due today' });
+        next(error);
+    }
+};

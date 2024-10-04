@@ -284,5 +284,86 @@ router.get('/assignment', authenticateToken, accessControl.isLecturer ,Assignmen
 //When the dueAssignments API is called
 router.get('/dueAssignments', authenticateToken, accessControl.isStudent, AssignmentController.dueAssignments);
 
+/**
+ * @swagger
+ * /api/dueToday:
+ *   get:
+ *     summary: Get assignments for a student that is due today.
+ *     description: Retrieves all assignments that are due today for a specific student.
+ *     security:
+ *       - bearerAuth: []
+ *     tags:
+ *       - Assignments
+ *     responses:
+ *       '200':
+ *         description: A list of assignments due today for the authenticated student.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: true
+ *                 assignments:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       assignm_Num:
+ *                         type: integer
+ *                         example: 101
+ *                       assignm_Date:
+ *                         type: string
+ *                         format: date-time
+ *                         example: "2024-09-01T14:30:00.000Z"
+ *                       due_date:
+ *                         type: string
+ *                         format: date-time
+ *                         example: "2024-10-03T23:59:59Z"
+ *                       lec_Email:
+ *                         type: string
+ *                         format: email
+ *                         example: "lecturer@example.com"
+ *                       grade:
+ *                         type: integer
+ *                         example: 85
+ *                       students:
+ *                         type: array
+ *                         items:
+ *                           type: string
+ *                         example:
+ *                           - "student@example.com"
+ *       '404':
+ *         description: No assignments due today.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "No assignments found that are due today."
+ *       '500':
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "An error occurred while fetching assignments due today"
+ */
+
+//When the dueToday API is called
+router.get('/dueToday', authenticateToken, accessControl.isStudent, AssignmentController.dueToday);
+
 //Export the router so it accessible by the main application
 module.exports = router;
