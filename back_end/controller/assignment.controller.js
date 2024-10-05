@@ -8,10 +8,10 @@ const logger = require('../config/logger')
 exports.assign = async(req, res, next) => {
     try{
         //Extracts assignment information from the API request body
-        const{assignm_Num, assignm_Date,  lec_Email, grade, due_date} = req.body;
+        const{assignm_Num, assignm_Date,  lec_Email, grade, due_date, title, description} = req.body;
 
         //Await confirmation of successful assignment upload
-        const success = await AssignmentService.createAssignment(assignm_Num, assignm_Date, lec_Email, grade, due_date);
+        const success = await AssignmentService.createAssignment(assignm_Num, assignm_Date, lec_Email, grade, due_date, title, description);
         logger.assignmentLogger.log('info','Assignment uploaded successfully');
         res.json({status: true, success: 'Assignment uploaded successfully'});
     } catch (error) {
@@ -71,9 +71,8 @@ exports.viewAll = async(req, res, next) => {
     }
   }
 
-  exports.getDueAssignments = async(req, res, next) => {
+  exports.dueAssignments = async(req, res, next) => {
     try {
-        console.log('User:', req.user);
         const {stu_Email} = req.user;
         const assignments = await AssignmentService.getDueAssignments(stu_Email);
 
@@ -85,3 +84,22 @@ exports.viewAll = async(req, res, next) => {
         next(error);
     }
   }
+
+  exports.dueToday = async (req, res, next) => {
+    try {
+        const {stu_Email} = req.user;
+
+        // Get the assignments due today
+        const assignments = await AssignmentService.getAssignmentsDueToday(stu_Email);
+
+        // Log success and return the assignments
+        logger.assignmentLogger.log('info', 'Assignments due today fetched successfully');
+        return res.json({ status: true, assignments });
+
+    } catch (error) {
+        // Log error and return server error
+        logger.assignmentLogger.log('error', error.message);
+        res.status(500).json({ status: false, message: 'An error occurred while fetching assignments due today' });
+        next(error);
+    }
+};

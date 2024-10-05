@@ -8,15 +8,18 @@ jest.mock('../back_end/services/assignment.services');
 
 //Mock authentication
 jest.mock('../back_end/middleware/auth', () => (req, res, next) => {
-    req.user = { user_type: 'lecturer' }; 
+    req.user = { user_type: 'student', stu_Email: 'student@example.com' }; 
     next();
 });
 
 jest.mock('../back_end/middleware/accessControl', () => ({
-    isLecturer: (req, res, next) => {
-        req.user = { user_type: 'lecturer' };
+    isStudent: (req, res, next) => {
         next();
     },
+    isLecturer: (req, res, next) => {
+        req.user = { user_type: 'lecturer', lec_Email: 'lecturer@example.com' };
+        next();
+    }
 }));
 
 const app = express();
@@ -162,6 +165,69 @@ describe('Assignment API Implementation Tests', () => {
             // Assertions
             expect(response.statusCode).toBe(500);
             expect(response.body.message).toBe('An error has occurred during assignment retrieval');
+        });
+    });
+
+
+    //View due assignments tests
+    describe('GET /api/dueAssignments', () => {
+        
+        //Mock authentication
+        jest.mock('../back_end/middleware/auth', () => (req, res, next) => {
+            req.user = { user_type: 'student' }; 
+            next();
+        });
+
+        jest.mock('../back_end/middleware/accessControl', () => ({
+            isStudent: (req, res, next) => {
+                req.user = { user_type: 'student' };
+                next();
+            },
+        }));        
+
+        it('should return due assignments for a student and return 200', async () => {
+            const mockAssignments = [
+                { assignm_Num: 1, due_date: '2024-09-10T14:30:00.000Z', students: ['student@example.com'] },
+                { assignm_Num: 2, due_date: '2024-09-15T14:30:00.000Z', students: ['student@example.com'] }
+            ];
+
+            AssignmentService.getDueAssignments.mockResolvedValue(mockAssignments); // Mock service
+
+            const response = await request(app)
+                .get('/api/dueAssignments')
+                .set('Authorization', 'Bearer token') //Mock authentication
+                .send();
+
+            //Assertions
+            expect(response.statusCode).toBe(200);
+            expect(response.body.status).toBe(true);
+            expect(response.body.assignments).toEqual(mockAssignments);
+        });
+
+        it('should return 404 if no due assignments are found', async () => {
+            AssignmentService.getDueAssignments.mockRejectedValue(new Error('No due assignments found'));
+
+            const response = await request(app)
+                .get('/api/dueAssignments')
+                .set('Authorization', 'Bearer token')
+                .send();
+
+            // Assertions
+            expect(response.statusCode).toBe(500);
+            expect(response.body.message).toBe('An error has occurred while fetching due assignments');
+        });
+
+        it('should handle errors and return 500', async () => {
+            AssignmentService.getDueAssignments.mockRejectedValue(new Error('Database Error'));
+
+            const response = await request(app)
+                .get('/api/dueAssignments')
+                .set('Authorization', 'Bearer token')
+                .send();
+
+            // Assertions
+            expect(response.statusCode).toBe(500);
+            expect(response.body.message).toBe('An error has occurred while fetching due assignments');
         });
     });
 });
