@@ -1,13 +1,14 @@
 import 'dart:convert';
-import 'package:hms_frontend/pages/admin.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:hms_frontend/navigator.dart';
+import 'package:hms_frontend/pages/admins/admin.dart';
 import 'package:flutter/material.dart';
 import 'package:hms_frontend/components/myButton.dart';
 import 'package:hms_frontend/components/textBox.dart';
 import 'package:hms_frontend/pages/signup.dart';
 import 'package:hms_frontend/constants.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:hms_frontend/services/token.services.dart';
+import 'package:hms_frontend/services/auth.services.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({super.key});
@@ -17,24 +18,15 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  
+  final TokenService tokenService = TokenService();
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
   String? loginMessage;
   bool isLoading = false;
-  final storage = FlutterSecureStorage();
+
   
-  //Securely Store JWT token
-  Future<void> storeToken(String token) async {
-  await storage.write(key: 'jwt_token', value: token);
-}
-  //Securely Retreive JWT token
-Future<String?> getToken() async {
-  return await storage.read(key: 'jwt_token');
-}
-  //Check if Token is expired
-bool isTokenExpired(String token) {
-  return JwtDecoder.isExpired(token);
-}
+
   //login function
   Future<String> login() async {
     setState(() {
@@ -56,7 +48,8 @@ bool isTokenExpired(String token) {
         setState(() {
           loginMessage = 'Login successful';
         });
-
+        String token = jsonDecode(response.body)['token'];
+         await tokenService.storeToken(token);
         return jsonDecode(response.body)['token'];
 
       } 
@@ -163,13 +156,21 @@ bool isTokenExpired(String token) {
                   text: 'Login',
                   onPressed: () async{
                         String token = await login() ;
-                        if (token.isNotEmpty){  //Ensure there is a token before proceding
-                          await storeToken(token); //Stores the token
+                        String role = await AuthServices.getRole(token);
+                        if (role =="admin"){  //Ensure there is a token before proceding
                           Navigator.pushReplacement(
                             context, 
                             MaterialPageRoute(builder: (context) => const AdminPage(),
                             ),
                           );
+                        }
+                        else if (role == "lecturer")
+                        {}
+                        else{
+                          Navigator.pushReplacement(
+                            context, 
+                            MaterialPageRoute(builder: (context) => const ScreenNavigator()));
+                          
                         }
                       },
                 ),

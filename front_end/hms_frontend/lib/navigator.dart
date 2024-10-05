@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hms_frontend/pages/home.dart';
-import 'package:hms_frontend/pages/media.dart';
-import 'package:hms_frontend/pages/studentsAssignment.dart';
+import 'package:hms_frontend/pages/students/media.dart';
+import 'package:hms_frontend/pages/students/studentsAssignment.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hms_frontend/pages/submissions.dart';
 

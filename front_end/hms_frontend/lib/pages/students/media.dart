@@ -37,7 +37,7 @@ class _MediaPageState extends State<MediaPage> {
                   final inputFile = await FilePicker.platform.pickFiles();
                   if (inputFile ==null) {
                     return;
-                  }
+                  } 
 
                   final file = inputFile.files.first;
                 },

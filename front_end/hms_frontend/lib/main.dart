@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hms_frontend/navigator.dart';
 import 'package:hms_frontend/pages/home.dart';
 import 'package:hms_frontend/pages/login.dart';
-import 'package:hms_frontend/pages/admin.dart';
-import 'package:hms_frontend/pages/lecturrersAssign.dart';
+import 'package:hms_frontend/pages/admins/admin.dart';
+import 'package:hms_frontend/pages/lecturers/lecturrersAssign.dart';
 import 'package:hms_frontend/pages/landing.dart';
 import 'package:hms_frontend/pages/users.dart';
 void main() {
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlue),
         useMaterial3: true,
       ),
-      home:  const ScreenNavigator(),
+      home: LoginScreen(),
     );
   }
 }
