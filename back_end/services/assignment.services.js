@@ -5,14 +5,14 @@ const validator = require('validator');
 
 class AssignmentService {
     //Create assignment function
-    static async createAssignment(assignm_Num, assignm_Date, lec_Email, grade, due_date) {
+    static async createAssignment(assignm_Num, assignm_Date, lec_Email, grade, due_date, title, description) {
         try {
 
-            await this.validation(assignm_Num, assignm_Date, lec_Email, grade, due_date);
+            await this.validation(assignm_Num, assignm_Date, lec_Email, grade, due_date, title, description);
 
             
             //Check if the assignment already exists within the database.
-            const existingAssignment = await Assignment_Model.findOne({assignm_Num, assignm_Date, lec_Email, grade, due_date});
+            const existingAssignment = await Assignment_Model.findOne({assignm_Num, assignm_Date, lec_Email, grade, due_date, title, description});
 
             //If the assignment exists, the server throws an error
             if (existingAssignment) {
@@ -20,7 +20,7 @@ class AssignmentService {
             }
 
             //If no assignment with the specified number exists, the function can proceed
-            const newAssignment = new Assignment_Model({assignm_Num, assignm_Date, lec_Email, grade, due_date});
+            const newAssignment = new Assignment_Model({assignm_Num, assignm_Date, lec_Email, grade, due_date, title, description});
 
             //Store the new assignment in the database and return the saved object
             return await newAssignment.save();
@@ -119,7 +119,7 @@ class AssignmentService {
     }
 
     //Validation
-    static async validation(assignm_Num, assignm_Date, lec_Email, grade, due_date){
+    static async validation(assignm_Num, assignm_Date, lec_Email, grade, due_date, title, description){
         try {
 
             //Check that the assignment number is valid 
@@ -163,14 +163,6 @@ class AssignmentService {
 
             //Had to create this variable because the .getFullYear does not work without the variable being a date object.
             const tempDueDate = new Date(due_date);
-
-            //Checks to ensure the due date is either current date or in the future
-            //if (tempDueDate < currentDate) {
-                //throw new Error('Due date must be the current date or a future date');
-            //}
-
-            //console.log(tempDueDate);
-            //Ensures the due date is in the current year
             
             if (tempDueDate.getFullYear() !== currentYear) {
                 throw new Error('Due date has to be in the current year');
@@ -197,6 +189,16 @@ class AssignmentService {
             //Check that the grade is valid 
             if(grade < 0 || grade > 100 ){
                 throw new Error('Invalid grade');
+            }
+
+            //Check if title is between a character limit
+            if (!title || title.length < 3 || title.length > 50) {
+                throw new Error('Assignment title must be between 3 and 50 characters long.')
+            }
+
+            //Check if description is within a character limit
+            if (!description || description.length > 250) {
+                throw new Error('Assignment description cannot be more than 250 characters.')
             }
 
         } catch (error) {

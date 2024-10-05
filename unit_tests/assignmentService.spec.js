@@ -24,7 +24,9 @@ describe('AssignmentService', () => {
                 assignm_Date: '2024-09-10T00:00:00Z',
                 lec_Email: 'lecturer@example.com',
                 grade: 90,
-                due_date: '2024-09-12T00:00:00Z'
+                due_date: '2024-09-12T00:00:00Z',
+                title: "Assignment 1",
+                description: "Assignment 1 Description"
             };
 
             //Mock the database methods
@@ -36,7 +38,9 @@ describe('AssignmentService', () => {
                 assignmData.assignm_Date,
                 assignmData.lec_Email,
                 assignmData.grade,
-                assignmData.due_date
+                assignmData.due_date,
+                assignmData.title,
+                assignmData.description
             )
 
             //Assertions
@@ -56,7 +60,9 @@ describe('AssignmentService', () => {
                 stu_Email: 'student@example.com',
                 lec_Email: 'lecturer@example.com',
                 grade: 90,
-                due_date: '2024-09-12T00:00:00Z'
+                due_date: '2024-09-12T00:00:00Z',
+                title: "Assignment 1",
+                description: "Assignment 1 Description"
             };
 
             //Mocking findOne to simulate an existing assignment
@@ -67,7 +73,9 @@ describe('AssignmentService', () => {
                 assignmData.assignm_Date,
                 assignmData.lec_Email,
                 assignmData.grade,
-                assignmData.due_date
+                assignmData.due_date,
+                assignmData.title,
+                assignmData.description
             ))
             .rejects
             .toThrow('An assignment with this number already exists');
@@ -104,7 +112,9 @@ describe('AssignmentService', () => {
                 stu_Email: 'student@example.com',
                 lec_Email: 'lecturer@example.com',
                 grade: 85,
-                due_date: '2023-09-10'
+                due_date: '2023-09-10',
+                title: "Assignment 1",
+                description: "Assignment 1 Description"
             });
 
             // Mock deleteOne to simulate deletion
@@ -153,7 +163,9 @@ describe('AssignmentService', () => {
                     stu_Email: 'student1@example.com',
                     lec_Email: 'lecturer@example.com',
                     grade: 85,
-                    due_date: '2023-09-10'
+                    due_date: '2023-09-10',
+                    title: "Assignment 1",
+                    description: "Assignment 1 Description"
                 },
                 {
                     assignm_Num: '2',
@@ -162,7 +174,9 @@ describe('AssignmentService', () => {
                     stu_Email: 'student2@example.com',
                     lec_Email: 'lecturer@example.com',
                     grade: 70,
-                    due_date: '2023-09-15'
+                    due_date: '2023-09-15',
+                    title: "Assignment 2",
+                    description: "Assignment 2 Description"
                 }
             ]);
 
@@ -178,7 +192,9 @@ describe('AssignmentService', () => {
                     stu_Email: 'student1@example.com',
                     lec_Email: 'lecturer@example.com',
                     grade: 85,
-                    due_date: '2023-09-10'
+                    due_date: '2023-09-10',
+                    title: "Assignment 1",
+                    description: "Assignment 1 Description"
                 },
                 {
                     assignm_Num: '2',
@@ -187,7 +203,9 @@ describe('AssignmentService', () => {
                     stu_Email: 'student2@example.com',
                     lec_Email: 'lecturer@example.com',
                     grade: 70,
-                    due_date: '2023-09-15'
+                    due_date: '2023-09-15',
+                    title: "Assignment 2",
+                    description: "Assignment 2 Description"
                 }
             ]);
         });

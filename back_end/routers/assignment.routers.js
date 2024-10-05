@@ -23,7 +23,7 @@ const accessControl = require('../middleware/accessControl');
  *               assignm_Num:
  *                 type: string
  *                 description: Identifier for each assignment, must be unique.
- *                 example: "123456"
+ *                 example: "1"
  *               assignm_Date:
  *                 type: string
  *                 format: date-time
@@ -36,13 +36,22 @@ const accessControl = require('../middleware/accessControl');
  *                 example: "lecturer@example.com"
  *               grade:
  *                 type: number
- *                 description: The grade received for the assignment.
- *                 example: 85
+ *                 description: The mark allocation for the assignment.
+ *                 example: 30
  *               due_date:
  *                 type: string
  *                 format: date-time
  *                 description: The date the assignment is due.
  *                 example: "2024-09-08T14:30:00.000Z"
+ *               title:
+ *                 type: string
+ *                 description: The title of the assignment.
+ *                 example: "Assignment 1: Practical Assignment"
+ *               description:
+ *                 type: string
+ *                 description: A short description of the assignment.
+ *                 example: "This practical assignment consists of 3 parts. Complete each one and submit."
+ *      
  *     responses:
  *       200:
  *         description: Assignment uploaded successfully
@@ -264,7 +273,7 @@ router.get('/assignment', authenticateToken, accessControl.isLecturer ,Assignmen
  *                         example: "2024-12-31"
  *                       description:
  *                         type: string
- *                         example: "Excersise 1 in textbook"
+ *                         example: "Exercise 1 in textbook"
  *       500:
  *         description: Internal server error.
  *         content:
@@ -312,7 +321,13 @@ router.get('/dueAssignments', authenticateToken, accessControl.isStudent, Assign
  *                     properties:
  *                       assignm_Num:
  *                         type: integer
- *                         example: 101
+ *                         example: 2
+ *                       title:
+ *                         type: string
+ *                         example: "Video assignment 3"
+ *                       description:
+ *                         type: string
+ *                         example: "Complete Video Assignment 3 and submit it in a ZIP file."
  *                       assignm_Date:
  *                         type: string
  *                         format: date-time

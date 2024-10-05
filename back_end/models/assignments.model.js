@@ -25,6 +25,17 @@ const assignment_schema = new Schema({
     due_date : {
         type : Date,
     },
+
+    title : {
+        type : String,
+        required : true,
+        unique : true,
+    },
+
+    description : {
+        type : String,
+        required : true,
+    }
     
 });
 
