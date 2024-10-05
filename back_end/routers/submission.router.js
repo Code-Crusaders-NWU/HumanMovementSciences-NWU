@@ -367,5 +367,144 @@ router.patch('/submission/grade_submission', authenticateToken, accessControl.is
 //When the provide_feedback API is called
 router.patch('/submission/provide_feedback', authenticateToken, accessControl.isLecturer,SubmissionController.feedback);
 
+/**
+ * @swagger
+ * /api/submission/count:
+ *   get:
+ *     summary: Get the number of submissions for a student.
+ *     description: Retrieves the total count of submissions made by a student.
+ *     security:
+ *       - bearerAuth: []
+ *     tags:
+ *       - Submissions
+ *     responses:
+ *       '200':
+ *         description: Submission count retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: true
+ *                 submissionCount:
+ *                   type: integer
+ *                   example: 5
+ *       '401':
+ *         description: Unauthorized - Token missing or invalid.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "Authorization token is missing or invalid"
+ *       '404':
+ *         description: No submissions found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "No submissions found"
+ *       '500':
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "An error occurred while retrieving submission count"
+ */
+
+router.get('/submission/count', authenticateToken, accessControl.isStudent, SubmissionController.submissionCount);
+
+/**
+ * @swagger
+ * /api/submission/ungraded:
+ *   get:
+ *     summary: Get ungraded submissions for assignments by a specific lecturer.
+ *     description: Retrieves all submissions that have not yet been graded for assignments assigned by a specific lecturer.
+ *     security:
+ *       - bearerAuth: []
+ *     tags:
+ *       - Submissions
+ *     responses:
+ *       '200':
+ *         description: Ungraded submissions retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: true
+ *                 ungradedSubmissions:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       assignm_Num:
+ *                         type: integer
+ *                         example: 101
+ *                       stu_Email:
+ *                         type: string
+ *                         example: "student@example.com"
+ *                       submission_Date:
+ *                         type: string
+ *                         format: date-time
+ *                         example: "2024-09-08T14:30:00.000Z"
+ *                       content:
+ *                         type: string
+ *                         example: "Assignment content"
+ *                       grade:
+ *                         type: number
+ *                         example: null
+ *       '404':
+ *         description: No ungraded submissions found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "No ungraded submissions found for this lecturer has been found"
+ *       '500':
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "An error occurred while retrieving ungraded submissions"
+ */
+
+router.get('/submission/ungraded', authenticateToken, accessControl.isLecturer, SubmissionController.getUngradedSubmissions);
+
 //Export the router
 module.exports = router;

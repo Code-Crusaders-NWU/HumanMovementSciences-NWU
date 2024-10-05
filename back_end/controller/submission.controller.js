@@ -130,3 +130,48 @@ exports.viewAll = async(req, res, next) => {
         res.status(500).json({success: false, message: 'An error has occurred during the assignment feedback process', error: error.message});
     }
   }
+
+  exports.submissionCount = async (req, res, next) => {
+    try {
+
+        //Extract student's email from the request
+        const stu_Email = req.user.email;
+
+        if (!stu_Email) {
+            return res.status(400).json({ status: false, message: 'Student email not found in request' });
+        }
+
+        //Get the count of submissions from getSubmissionCount
+        const submissionCount = await SubmissionService.getSubmissionCount(stu_Email);
+
+        //Log and return the count
+        logger.submissionLogger.log('info', 'Submission count retrieved successfully');
+        return res.json({ status: true, submissionCount });
+    } catch (error) {
+        //Log error and return server error response
+        logger.submissionLogger.log('error', error.message);
+        res.status(500).json({ status: false, message: 'An error occurred while retrieving submission count' });
+        next(error);
+    }
+};
+
+
+exports.getUngradedSubmissions = async (req, res, next) => {
+    try {
+        //Extract lecturer's email from the request
+        const { lec_Email } = req.user;
+
+        //Call the service to get ungraded submissions
+        const ungradedSubmissions = await SubmissionService.getUngradedSubmissions(lec_Email);
+
+        //Log and return the ungraded submissions
+        logger.submissionLogger.log('info', 'Ungraded submissions retrieved successfully');
+        return res.json({ status: true, ungradedSubmissions });
+    } catch (error) {
+        //Log the error and return a server error response
+        logger.submissionLogger.log('error', error.message);
+        res.status(500).json({ status: false, message: 'An error occurred while retrieving ungraded submissions' });
+        next(error);
+    }
+};
+

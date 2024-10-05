@@ -96,6 +96,41 @@ class SubmissionService {
         }
     }
 
+
+    //Function to count a specified student's submissions
+    static async getSubmissionCount(stu_Email) {
+        try {
+            //Count the number of submissions of a student
+            const submissionCount = await Submission_Model.countDocuments({stu_Email});
+            
+            //Return the count
+            return submissionCount;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+
+    //Function to get the submission not yet graded by a lecturer
+    static async getUngradedSubmissions(lec_Email) {
+        try {
+            //Find all assignments by the lecturer
+            const ungradedSubmissions = await Submission_Model.find({
+                grade: null,  
+                lec_Email: lec_Email
+            });
+
+            //If no ungraded submissions are found, throw an error
+            if (ungradedSubmissions.length === 0) {
+                throw new Error('No ungraded submissions found for this lecturer');
+            }
+
+            return ungradedSubmissions;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     
     //Validation
     static validation(assignm_Num, stu_Email, submission_Date, content, grade, feedback){
