@@ -12,4 +12,15 @@ class AuthServices{
   }
   return "none";
 }
+
+static Future getEmail(String token) async{
+  Map<String, dynamic> decodeToken = JwtDecoder.decode(token);
+  String email = decodeToken['email'];
+
+  if (decodeToken.isNotEmpty){
+    return email;
+  }
+  
+  return "none";
+}
 }

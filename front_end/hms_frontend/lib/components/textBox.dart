@@ -24,7 +24,7 @@ class TextBox extends StatelessWidget {
         decoration: InputDecoration(
           hintText: hintText,
           enabledBorder:
-              OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+              const OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
         ),
       ),
     );

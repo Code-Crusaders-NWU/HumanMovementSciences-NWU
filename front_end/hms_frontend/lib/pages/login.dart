@@ -1,11 +1,12 @@
 import 'dart:convert';
-import 'package:hms_frontend/navigator.dart';
-import 'package:hms_frontend/pages/admins/admin.dart';
+import 'package:hms_frontend/pages/lecturers/lecturers.navigation.dart';
+import 'package:hms_frontend/pages/students/students.navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:hms_frontend/components/myButton.dart';
 import 'package:hms_frontend/components/textBox.dart';
 import 'package:hms_frontend/pages/signup.dart';
 import 'package:hms_frontend/constants.dart';
+import 'package:hms_frontend/pages/users.dart';
 import 'package:http/http.dart' as http;
 import 'package:hms_frontend/services/token.services.dart';
 import 'package:hms_frontend/services/auth.services.dart';
@@ -160,12 +161,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         if (role =="admin"){  //Ensure there is a token before proceding
                           Navigator.pushReplacement(
                             context, 
-                            MaterialPageRoute(builder: (context) => const AdminPage(),
+                            MaterialPageRoute(builder: (context) => const UsersPage(),
                             ),
                           );
                         }
                         else if (role == "lecturer")
-                        {}
+                        {
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LecturerScreenNavigator()));
+                        }
                         else{
                           Navigator.pushReplacement(
                             context, 
