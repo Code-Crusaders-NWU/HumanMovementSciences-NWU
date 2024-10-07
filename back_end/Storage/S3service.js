@@ -11,7 +11,9 @@ exports.s3UploadV2 = async(files) => {
         return {
          Bucket: process.env.AWS_BUCKET_NAME,                //gets info from env file
          Key: `Uploads/${uuid()}-${file.originalname}`,      //name of file to be uploaded
-         Body: file.buffer
+         Body: file.buffer,
+         ContentDisposition: 'inline',
+         ContentType: file.mimetype 
         };
     });
 
