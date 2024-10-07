@@ -6,46 +6,6 @@ const uuid = require("uuid").v4;                                //imported uuid 
 const app = express();
 
 
-//Simple test of uploading single file.
-
-    //const upload = multer({dest: "Uploads/"});                        uploads the files to destination file Uploads
-    //app.post("/upload", upload.single("file"), (req, res) => {        uploads single file
-    //    res.json({status: "success"});                                returns if successfully uploaded
-    //});
-
-
-//Test for uploading multiple files at once.
-
-    //const upload = multer({dest: "Uploads/"});
-    //app.post("/upload", upload.arry65ay("file"), (req, res) => {      added array to handel multiple files.
-    //    res.json({status: "success"});                                returns if successfully uploaded
-    //});
-
-
-//Test for multiple fields uploading
-
-    //const upload = multer({dest: "Uploads/"});            
-
-//added 3 types : video, image and files           |                            |                               |
-    //const multiUpload = upload.fields([{name: "Video", maxCount: 1}, {name: "Image", maxCount: 1}, {name: "Document", maxCount: 1} ])
-    //app.post("/upload", multiUpload , (req, res) => {
-    //   console.log(req.files);
-    //  res.json({status: "success"});
-    //});
-
-
-//Test for custom file names
-
-    //const storage = multer.diskStorage({                          used diskstorage to uplaod to local server
-    //   destination: (req, file, cb) => {
-    //      cb(null, "uploads/");
-    //},
-    // filename: (req,file,cb) => {                                 customizes filename
-    //      const {originalname} = file;                            made filename original name 
-    //      cb(null, `${uuid()}-${originalname}`)                   
-    // }
-    //});
-
 const storage = multer.memoryStorage();
 
 
@@ -60,12 +20,14 @@ const filefilter = (req, file, cb) => {
 
 //uploads multiple files with array.
 const upload = multer({storage, filefilter, limits: {fileSize: 1000000000}});      //file size limit set in bytes
+
+
 app.post("/upload", upload.array("file"), async (req, res) => {
     try{                                        //try catch for error handeling
 
         const results = await s3UploadV2(req.files);
         console.log(results);                   
-        res.json({status: "success"});          // send back "success" if uploaded successfully
+        res.json({status: "success", fileLinks: results});          // send back "success" if uploaded successfully
 
     } catch (err) {                             //catches error that was thrown and displays it in console
         console.log(err);

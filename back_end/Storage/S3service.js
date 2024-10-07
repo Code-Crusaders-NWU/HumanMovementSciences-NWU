@@ -11,18 +11,19 @@ exports.s3UploadV2 = async(files) => {
         return {
          Bucket: process.env.AWS_BUCKET_NAME,                //gets info from env file
          Key: `Uploads/${uuid()}-${file.originalname}`,      //name of file to be uploaded
-         Body: file.buffer,
-         ACL: 'public-read'
+         Body: file.buffer
         };
     });
 
-    const upRes = await promise.all(
+    const upRes = await Promise.all(
         params.map(param => s3.upload(param).promise())
     );
 
     //return URL to uploaded object
     const fileLinks = upRes.map(result =>{
-        return `https://${result.Bucket}.s3.${process.env.AWS_REGION}.amazonaws.com/${result.Key}`
+        //takes into account that names can have spaces which will not work with a link and fixes that
+        const encodeKey = encodeURIComponent(result.Key)
+        return `https://${result.Bucket}.s3.${process.env.AWS_REGION}.amazonaws.com/${encodeKey}`
     });
     
 
