@@ -92,6 +92,11 @@ exports.viewAll = async(req, res, next) => {
         // Get the assignments due today
         const assignments = await AssignmentService.getAssignmentsDueToday(stu_Email);
 
+        // Check if there are no assignments due today
+        if (!assignments || assignments.length === 0) {
+            return res.status(404).json({ status: false, message: 'No assignments due today found' });
+        }
+
         // Log success and return the assignments
         logger.assignmentLogger.log('info', 'Assignments due today fetched successfully');
         return res.json({ status: true, assignments });

@@ -162,4 +162,38 @@ describe('UserService', () => {
         });
     });
 
+
+    //getAllUsers Tests
+    describe('getAllUsers', () => {
+
+        it('should return a list of users with their roles', async () => {
+            const mockUsers = [
+                { email: 'user1@example.com', user_type: 'lecturer' },
+                { email: 'user2@example.com', user_type: 'student' }
+            ];
+    
+            UserModel.find.mockResolvedValue(mockUsers);
+    
+            const result = await UserService.getAllUsers();
+    
+            //Assertions
+            expect(UserModel.find).toHaveBeenCalledWith({}, 'email user_type');
+            expect(result).toEqual(mockUsers);
+        });
+    
+        it('should throw an error if no users are found', async () => {
+            UserModel.find.mockResolvedValue([]);
+    
+            await expect(UserService.getAllUsers()).rejects.toThrow('No users found');
+            expect(UserModel.find).toHaveBeenCalledWith({}, 'email user_type');
+        });
+    
+        it('should throw an error if the database query fails', async () => {
+            UserModel.find.mockRejectedValue(new Error('Database Error'));
+    
+            await expect(UserService.getAllUsers()).rejects.toThrow('Database Error');
+        });
+        
+    });
+
 }); //Class descibe

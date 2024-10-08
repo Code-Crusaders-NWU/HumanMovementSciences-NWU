@@ -278,4 +278,65 @@ describe('AssignmentService', () => {
         });
 
     });
+
+
+    //dueToday Tests
+    describe('getDueToday', () => {
+
+        it('should return assignments due today for the student', async () => {
+            const stu_Email = 'student@example.com';
+            const mockAssignments = [
+                {
+                    assignm_Num: 1,
+                    due_date: '2024-10-09T14:30:00.000Z',
+                    students: [stu_Email]
+                },
+                {
+                    assignm_Num: 2,
+                    due_date: '2024-10-09T16:00:00.000Z',
+                    students: [stu_Email]
+                }
+            ];
+    
+            //Mock AssignmentModel to return assignments due today
+            AssignmentModel.find.mockResolvedValue(mockAssignments);
+    
+            const result = await AssignmentService.getAssignmentsDueToday(stu_Email);
+    
+            //Assertions
+            expect(AssignmentModel.find).toHaveBeenCalledWith({
+                due_date: {
+                    $gte: expect.any(Date),
+                    $lt: expect.any(Date)
+                },
+                students: { $in: [stu_Email] }
+            });
+            expect(result).toEqual(mockAssignments);
+        });
+    
+        it('should throw an error if no assignments are due today', async () => {
+            const stu_Email = 'student@example.com';
+    
+            //Mock AssignmentModel to return an empty array
+            AssignmentModel.find.mockResolvedValue([]);
+    
+            //Assertions
+            await expect(AssignmentService.getAssignmentsDueToday(stu_Email))
+                .rejects
+                .toThrow('No assignments due today found');
+        });
+    
+        it('should handle errors properly', async () => {
+            const stu_Email = 'student@example.com';
+    
+            //Mock AssignmentModel to throw an error
+            AssignmentModel.find.mockRejectedValue(new Error('Database error'));
+    
+            //Assertions
+            await expect(AssignmentService.getAssignmentsDueToday(stu_Email))
+                .rejects
+                .toThrow('Database error');
+        });
+
+    });
 });

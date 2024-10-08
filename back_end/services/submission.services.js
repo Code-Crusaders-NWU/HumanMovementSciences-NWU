@@ -106,7 +106,7 @@ class SubmissionService {
             //Return the count
             return submissionCount;
         } catch (error) {
-            throw error;
+            throw new Error('Database Error');
         }
     }
 

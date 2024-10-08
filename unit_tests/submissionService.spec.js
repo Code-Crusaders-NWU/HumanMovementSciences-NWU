@@ -248,4 +248,100 @@ describe('SubmissionService', () => {
             .toThrow('No submissions available');
         });
     }); 
+
+    
+    //getSubmissionCount Tests
+    describe('getSubmissionCount', () => {
+
+        it('should return the correct number of submissions for a student', async () => {
+            const stu_Email = 'student@example.com';
+
+            //Mock countDocuments to return 3 submissions
+            SubmissionModel.countDocuments = jest.fn().mockResolvedValue(3);
+
+            const result = await SubmissionService.getSubmissionCount(stu_Email);
+
+            // Assertions
+            expect(SubmissionModel.countDocuments).toHaveBeenCalledWith({ stu_Email });
+            expect(result).toBe(3);
+        });
+
+        it('should return 0 if no submissions are found for the student', async () => {
+            const stu_Email = 'student@example.com';
+
+            //Mock countDocuments to return 0
+            SubmissionModel.countDocuments = jest.fn().mockResolvedValue(0);
+
+            const result = await SubmissionService.getSubmissionCount(stu_Email);
+
+            // Assertions
+            expect(SubmissionModel.countDocuments).toHaveBeenCalledWith({stu_Email});
+            expect(result).toBe(0);
+        });
+
+        it('should throw an error if the database query fails', async () => {
+            const stu_Email = 'student@example.com';
+
+            //Mock countDocuments to throw an error
+            SubmissionModel.countDocuments = jest.fn().mockRejectedValue(new Error('Database Error'));
+
+            //Assertions
+            await expect(SubmissionService.getSubmissionCount(stu_Email))
+            .rejects
+            .toThrow('Database Error');
+        });
+    });
+
+
+    //getUngradedSubmissions
+    describe('getUngradedSubmissions', () => {
+        
+        it('should return ungraded submissions for a lecturer', async () => {
+
+            //Mock data
+            const lec_Email = 'lecturer@example.com';
+            const mockUngradedSubmissions = [
+                {assignm_Num: 1, grade: null, stu_Email: 'student1@example.com', lec_Email},
+                {assignm_Num: 2, grade: null, stu_Email: 'student2@example.com', lec_Email}
+            ];
+
+            //Mock find to return ungraded submissions
+            SubmissionModel.find.mockResolvedValue(mockUngradedSubmissions);
+
+            //Call the function
+            const result = await SubmissionService.getUngradedSubmissions(lec_Email);
+
+            //Assertions
+            expect(SubmissionModel.find).toHaveBeenCalledWith({
+                grade: null,
+                lec_Email
+            });
+            expect(result).toEqual(mockUngradedSubmissions);
+        });
+
+        it('should throw an error if no ungraded submissions are found', async () => {
+            
+            const lec_Email = 'lecturer@example.com';
+
+            //Mock find to return an empty array
+            SubmissionModel.find.mockResolvedValue([]);
+
+            await expect(SubmissionService.getUngradedSubmissions(lec_Email))
+                .rejects
+                .toThrow('No ungraded submissions found for this lecturer');
+        });
+
+        it('should throw an error if the database query fails', async () => {
+            
+            const lec_Email = 'lecturer@example.com';
+
+            //Mock find to throw a database error
+            SubmissionModel.find.mockRejectedValue(new Error('Database error'));
+
+            await expect(SubmissionService.getUngradedSubmissions(lec_Email))
+                .rejects
+                .toThrow('Database error');
+        });
+
+    });
 });
