@@ -35,7 +35,7 @@ List<Map<String, dynamic>> users= []; //List of json objects (MAP) which will be
           ),
           textAlign: TextAlign.center,
         ),
-        backgroundColor: Colors.lightBlue,
+        backgroundColor: Colors.deepPurple,
       ),
       body: Container(
         padding: EdgeInsets.all(16.0),

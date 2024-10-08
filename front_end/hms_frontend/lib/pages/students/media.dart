@@ -25,7 +25,7 @@ class _MediaPageState extends State<MediaPage> {
             ),
           ),
         ),
-        backgroundColor: Colors.lightBlue,
+        backgroundColor: Colors.deepPurple,
       ),
       body: SafeArea(
         child: Center(

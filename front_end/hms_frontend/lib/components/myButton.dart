@@ -17,7 +17,7 @@ class MyButton extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 25.0),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          foregroundColor: Colors.lightBlueAccent,
+          foregroundColor: Colors.deepPurple,
           backgroundColor: Colors.white,
         ),
         onPressed: onPressed, //Changeable functionallity

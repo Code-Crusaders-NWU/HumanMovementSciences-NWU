@@ -4,6 +4,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class AssignmentService {
+
+  //Function which receives all due assignments
   Future<List<Map<String, dynamic>>> fetchAssignments() async {
     try {
       final uri = Uri.parse("$apiURL/api/dueAssignments");
@@ -31,6 +33,7 @@ class AssignmentService {
     }
   }
 
+  //Function which returns lecturer Assignments
   Future<List<Map<String, dynamic>>> fetchLecturerAssignments(
       String lecturerEmail) async {
     try {
@@ -57,6 +60,45 @@ class AssignmentService {
     } catch (e) {
       print('Error fetching assignments: $e');
       return [];
+    }
+  }
+
+  Future<bool> createAssignment(int assignmentNumber, String assignDateTime, String lecturerEmail,
+   int total, String dueDateTime, String title, String description) async {
+    try {
+
+      print(assignDateTime);
+      print(dueDateTime);
+
+      
+      final uri = Uri.parse("$apiURL/api/assignment");
+      String? token = await TokenService().getToken();
+
+      final response = await http.post(uri, 
+      headers: <String, String>{
+        'Authorization': 'bearer $token',
+        'Content-Type': 'application/json; charset=UTF-8'
+      },
+      body: jsonEncode(<String, dynamic>{
+          "assignm_Num": assignmentNumber,
+          "assignm_Date": assignDateTime,
+          "lec_Email": lecturerEmail,
+          "grade" : total,
+          "due_date" : dueDateTime,
+          "title" : title,
+          "description" : description,
+        }));
+
+        if (response.statusCode == 200){
+          return true;
+        }
+        else{
+          var resBody = jsonDecode(response.body);
+          print(resBody['error']);
+        }
+      return false;
+    } catch (e) {
+      return false;
     }
   }
 }

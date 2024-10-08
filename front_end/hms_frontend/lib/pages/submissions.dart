@@ -20,7 +20,7 @@ class _SubmissionsPageState extends State<SubmissionsPage> {
           ),
           textAlign: TextAlign.center,
         ),
-        backgroundColor: Colors.lightBlue,
+        backgroundColor: Colors.deepPurple,
       ),
       body: const Padding(
         

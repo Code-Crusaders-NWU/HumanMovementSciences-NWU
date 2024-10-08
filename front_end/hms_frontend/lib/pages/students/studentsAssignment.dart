@@ -45,7 +45,7 @@ class _StudentAssignmentsPageState extends State<StudentsAssignmentsPage> {
           ),
           textAlign: TextAlign.center,
         ),
-        backgroundColor: Colors.lightBlue,
+        backgroundColor: Colors.deepPurple,
       ),
       body: Container(
         child: Center(

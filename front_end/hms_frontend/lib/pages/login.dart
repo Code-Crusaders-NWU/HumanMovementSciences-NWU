@@ -6,7 +6,7 @@ import 'package:hms_frontend/components/myButton.dart';
 import 'package:hms_frontend/components/textBox.dart';
 import 'package:hms_frontend/pages/signup.dart';
 import 'package:hms_frontend/constants.dart';
-import 'package:hms_frontend/pages/users.dart';
+import 'package:hms_frontend/pages/admins/users.dart';
 import 'package:http/http.dart' as http;
 import 'package:hms_frontend/services/token.services.dart';
 import 'package:hms_frontend/services/auth.services.dart';
@@ -87,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           textAlign: TextAlign.center,
         ),
-        backgroundColor: Colors.lightBlue,
+        backgroundColor: Colors.deepPurple,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -112,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
               //Text wdiget to display nice message
               const Card(
                 elevation: 20,
-                color: Colors.lightBlueAccent,
+                color: Colors.deepPurple,
                 child: Padding(
                   padding: EdgeInsets.all(15.0),
                   child: Column(
