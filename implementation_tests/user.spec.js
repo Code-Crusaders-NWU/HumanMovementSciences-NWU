@@ -113,7 +113,7 @@ describe('User API Implementation Tests', () => {
 
         it('should return 500 if login fails', async () => {
 
-            //Mock the service to return `null`, meaning no user found
+            //Mock the service to return null
             UserService.verifyUser = jest.fn().mockResolvedValue(null); //Simulate no user found
         
             const res = await request(app)
@@ -228,6 +228,60 @@ describe('User API Implementation Tests', () => {
             expect(response.body.error).toBe('Database Error');
         });
 
+    });
+
+    //searchUser Test
+    describe('GET /api/searchUser', () => {
+
+        it('should return a list of users matching the search term and status 200', async () => {
+            const mockUsers = [
+                { email: 'user1@example.com', user_type: 'admin' },
+                { email: 'user2@example.com', user_type: 'student' }
+            ];
+
+            //Mock service to return the search results
+            UserService.searchUser.mockResolvedValue(mockUsers);
+
+            const response = await request(app)
+                .get('/api/searchUser')
+                .query({ email: 'user' })
+                .set('Authorization', 'Bearer token');
+
+            //Assertions
+            expect(response.status).toBe(200);
+            expect(response.body.status).toBe(true);
+            expect(response.body.users).toEqual(mockUsers);
+        });
+
+        it('should return 404 if no users are found', async () => {
+            //Mock service to throw an error
+            UserService.searchUser.mockRejectedValue(new Error('No users found'));
+
+            const response = await request(app)
+                .get('/api/searchUser')
+                .query({ email: 'nonexistent' })
+                .set('Authorization', 'Bearer token');
+
+            //Assertions
+            expect(response.status).toBe(500);
+            expect(response.body.status).toBe(false);
+            expect(response.body.message).toBe('No users found');
+        });
+
+        it('should return 500 if there is a server error', async () => {
+            //Mock service to throw an error
+            UserService.searchUser.mockRejectedValue(new Error('Database Error'));
+
+            const response = await request(app)
+                .get('/api/searchUser')
+                .query({ email: 'user' })
+                .set('Authorization', 'Bearer token');
+
+            //Assertions
+            expect(response.status).toBe(500);
+            expect(response.body.status).toBe(false);
+            expect(response.body.message).toBe('Database Error');
+        });
     });
 
 }); //Class describe
