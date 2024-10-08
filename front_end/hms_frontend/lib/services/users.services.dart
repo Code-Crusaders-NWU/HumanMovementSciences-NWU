@@ -35,4 +35,31 @@ class UserService{
     }
    
    }
+
+  Future <bool> deleteUser(email) async {
+    try {
+      final uri = Uri.parse("$apiURL/api/user");
+      String? token = await TokenService().getToken();
+      final response = await http.delete(uri,
+      headers: <String, String>{
+        'Authorization' : 'bearer $token',
+        'content-type' : 'application/json; charset=UTF-8'
+      },
+      body: jsonEncode(<String, String>{
+        "email" : email
+      }));
+
+      if (response.statusCode == 200){
+        
+        return true;
+      }
+      else{
+        var resBody = jsonDecode(response.body);
+        print(resBody['error']);
+        return false;
+      }
+    } catch (e) {
+      throw e.toString();
+    }
+  }
 }

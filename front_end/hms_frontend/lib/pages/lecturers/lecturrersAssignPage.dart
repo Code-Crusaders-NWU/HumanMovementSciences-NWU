@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:hms_frontend/pages/lecturers/createAssignmentPage.dart';
@@ -125,7 +126,38 @@ class _AssignmentsPageState extends State<AssignmentsPage> {
                             Icons.delete_forever,
                             color: Colors.red[300],
                           ),
-                          onPressed: () {},
+                          onPressed: () async {
+
+                            showCupertinoDialog(context: context, 
+                            builder: (BuildContext context)=>CupertinoAlertDialog(
+                              title: const Text('Alert'),
+                              content: const Text('Are you sure you want to delete this assignment?'),
+                              actions: <CupertinoDialogAction>[
+                                CupertinoDialogAction(
+                                child: const Text('No'),
+                                isDestructiveAction: false,
+                                onPressed: (){
+                                  Navigator.pop(context);
+                                },
+                                
+                              ),
+                              CupertinoDialogAction(
+                                isDestructiveAction: true,
+                                onPressed: () async {
+                                   bool deleteState = await AssignmentService().deleteAssignment(a['assignm_Num']); 
+                                    if (deleteState){
+                                      setState(() {
+                                        assignments.removeAt(index);
+                                      });
+                                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Assignment deleted..')));
+                            }
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Yes'), 
+                              ),
+                              ]
+                            ),);
+                          },
                         ),
                         
                         IconButton(
@@ -133,7 +165,13 @@ class _AssignmentsPageState extends State<AssignmentsPage> {
                             Icons.download,
                             color: Colors.blue[200],
                           ),
-                          onPressed: () {},
+                          onPressed: () async {
+                            bool downloadStatus = await AssignmentService().downloadMarks(a['assignm_Num'], a['title']);
+
+                            if (!downloadStatus){
+                              print('No submissions');
+                            }
+                          },
                         ),
 
                         IconButton(

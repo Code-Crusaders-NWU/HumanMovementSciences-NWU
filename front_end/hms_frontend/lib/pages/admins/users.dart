@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hms_frontend/components/myButton.dart';
 import 'package:hms_frontend/constants.dart';
@@ -38,7 +39,7 @@ List<Map<String, dynamic>> users= []; //List of json objects (MAP) which will be
         backgroundColor: Colors.deepPurple,
       ),
       body: Container(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Center(child: ListView.builder(
           itemCount: users.length,
           itemBuilder: (context, index){ //Basically a for loop to populate the page with cards of users
@@ -67,8 +68,38 @@ List<Map<String, dynamic>> users= []; //List of json objects (MAP) which will be
               style: const TextStyle(fontSize: 12, color: Colors.black54),
               ),
               trailing: IconButton(icon: const Icon(Icons.delete),
-              color: Colors.redAccent,
-              onPressed: (){},),
+              color: Colors.red[300],
+              onPressed: ()async{
+                            showCupertinoDialog(context: context, 
+                            builder: (BuildContext context)=>CupertinoAlertDialog(
+                              title: const Text('Alert'),
+                              content: const Text('Are you sure you want to delete this user?'),
+                              actions: <CupertinoDialogAction>[
+                                CupertinoDialogAction(
+                                isDestructiveAction: false,
+                                onPressed: (){
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('No'),
+                                
+                              ),
+                              CupertinoDialogAction(
+                                isDestructiveAction: true,
+                                onPressed: () async {
+                                   bool deleteState = await UserService().deleteUser(u['email']); 
+                                    if (deleteState){
+                                      setState(() {
+                                        users.removeAt(index);
+                                      });
+                                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('User deleted..')));
+                            }
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Yes'), 
+                              ),
+                              ]
+                            ),);
+              },),
             ),
             )
             ;
@@ -83,7 +114,7 @@ List<Map<String, dynamic>> users= []; //List of json objects (MAP) which will be
   void getUsers() async{
     try{
         final fetchUsers = await UserService().fetchUsers();
-        setState(() async {
+        setState(() {
           users = fetchUsers;
         });
     }

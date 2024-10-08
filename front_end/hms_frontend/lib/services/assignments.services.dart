@@ -1,10 +1,12 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:hms_frontend/constants.dart';
 import 'package:hms_frontend/services/token.services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class AssignmentService {
-
   //Function which receives all due assignments
   Future<List<Map<String, dynamic>>> fetchAssignments() async {
     try {
@@ -32,7 +34,6 @@ class AssignmentService {
       return [];
     }
   }
-
   //Function which returns lecturer Assignments
   Future<List<Map<String, dynamic>>> fetchLecturerAssignments(
       String lecturerEmail) async {
@@ -62,15 +63,10 @@ class AssignmentService {
       return [];
     }
   }
-
+  //Function to create an assignment for an assignment
   Future<bool> createAssignment(int assignmentNumber, String assignDateTime, String lecturerEmail,
    int total, String dueDateTime, String title, String description) async {
     try {
-
-      print(assignDateTime);
-      print(dueDateTime);
-
-      
       final uri = Uri.parse("$apiURL/api/assignment");
       String? token = await TokenService().getToken();
 
@@ -99,6 +95,66 @@ class AssignmentService {
       return false;
     } catch (e) {
       return false;
+    }
+  }
+  //Function to download marks for an assignment
+  Future <bool> downloadMarks(int assignmentNumber, String title) async {
+    try {
+      final uri = Uri.parse("$apiURL/api/download_marks/$assignmentNumber");
+      String? token = await TokenService().getToken();
+      
+      final response =await http.get(uri,
+      headers: <String, String>{
+        'Authorization': 'bearer $token',
+        'Content-Type': 'application/json; charset=UTF-8'
+      },
+      );
+
+      if (response.statusCode==200){
+        String? outFile = await FilePicker.platform.saveFile(
+          dialogTitle: 'Store marks:',
+          fileName: '$title _marks',
+          type: FileType.custom,
+          allowedExtensions: ['csv'], //can only store csv files
+        );
+
+        if (outFile!=null){
+          File file = File(outFile);
+          await file.writeAsBytes(response.bodyBytes);
+        }
+
+        return true;
+      }
+
+      return false;      
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+  //Function to delete a student's assignment using their assignmentID
+  Future <bool> deleteAssignment(int assignmentID) async{
+    try {
+      final uri = Uri.parse("$apiURL/api/assignment");
+      String? token = await TokenService().getToken();
+
+      final response = await http.delete(uri,
+      headers: <String, String>{
+        'Authorization': 'bearer $token',
+        'Content-Type': 'application/json; charset=UTF-8'
+      },
+      body: jsonEncode(<String,dynamic>{
+        "assignm_Num" : assignmentID
+      })
+      );
+      if (response.statusCode == 200){
+        return true;
+      }
+      else{
+        return false;
+      }
+      
+    } catch (e) {
+      throw e.toString();
     }
   }
 }
