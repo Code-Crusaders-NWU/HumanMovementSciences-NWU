@@ -1,10 +1,12 @@
 require("dotenv").config();                                     //imported dotenv and created .env file with key and secret key
 const express = require("express");                             //imported express to manage routes and servers
 const multer = require("multer");                               //imported multer lib for handeling the uploading of files. 
-const { s3UploadV2 } = require("./S3service");                  //used AWS s3 for online storage
+const { s3UploadV2, deleteFromBucket } = require("./S3service");                  //used AWS s3 for online storage
 const uuid = require("uuid").v4;                                //imported uuid library to handle and rename files
 const app = express();
 
+// parse json bodies
+app.use(express.json());
 
 const storage = multer.memoryStorage();
 
@@ -36,6 +38,19 @@ app.post("/upload", upload.array("file"), async (req, res) => {
     
     
     
+});
+
+app.delete("/delete-file", async (req, res) => {
+    const {fileUrl} = req.body;
+
+    try{
+        //call delete
+        await deleteFromBucket(fileUrl);
+        res.status(200).json({message: "File deleted!"});
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({error: "a Problem occured: ", details: error.message})
+    }
 });
 
 //added error handeling for smooth operation

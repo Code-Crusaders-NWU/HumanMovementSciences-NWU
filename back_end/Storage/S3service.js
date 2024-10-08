@@ -34,3 +34,32 @@ exports.s3UploadV2 = async(files) => {
 
 
 };
+
+exports.deleteFromBucket = async (fileUrl) => {
+    try {
+        //get bucket name
+        const bucketName = process.env.AWS_BUCKET_NAME;
+
+        //decode link
+        const fileKey = decodeURIComponent(fileUrl.split('.amazonaws.com/')[1]); // Extract the S3 key
+        
+
+        //needed parameters
+        const params = {
+            Bucket: bucketName,
+            Key: fileKey,
+        }
+
+        //actual deletion
+        const del = await s3.deleteObject(params).promise();
+
+        console.log("Success")
+        return del
+
+
+    } catch(err){
+        console.error("Something went wrong:",err);
+        throw err;
+
+    }
+};
