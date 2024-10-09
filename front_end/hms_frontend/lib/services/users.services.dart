@@ -7,7 +7,6 @@ import 'package:http/http.dart';
 
 
 class UserService{
-
   //function for admins to view all assignments only callable in admin page and will also be tested in backend with the JWT token
    Future<List<Map<String, dynamic>>> fetchUsers() async {
     try {
@@ -35,7 +34,7 @@ class UserService{
     }
    
    }
-
+  //Delete a user's access from the system
   Future <bool> deleteUser(email) async {
     try {
       final uri = Uri.parse("$apiURL/api/user");
@@ -58,6 +57,65 @@ class UserService{
         print(resBody['error']);
         return false;
       }
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+  //create a lecturer's login information
+  Future <bool> createLecturerUser(email, password) async{
+    try {
+      final uri = Uri.parse("$apiURL/api/signup");
+      String? token = await TokenService().getToken();
+      final response = await http.post(uri,
+      headers: <String, String>{
+        'Authorization' : 'bearer $token',
+        'content-type' : 'application/json; charset=UTF-8'
+      },
+      body: jsonEncode(<String, dynamic>{
+        "email" : email,
+        "password" : password,
+        "user_type" : "lecturer"
+      }));
+
+     if (response.statusCode == 201){
+      return true;
+     }
+     else{
+      var resBody = jsonDecode(response.body);
+      print(resBody['error']);
+     }
+    } catch (e) {
+      throw e.toString();
+    }
+    
+    return true;
+  }
+  //Store lecturer's personal details 
+  Future <bool> createLecturer(email, name, surname, title, degree) async{
+    try {
+      final uri = Uri.parse("$apiURL/api/lecturer");
+      String? token = await TokenService().getToken();
+      final response = await http.post(uri,
+      headers: <String, String>{
+        'Authorization' : 'bearer $token',
+        'content-type' : 'application/json; charset=UTF-8'
+      },
+      body: jsonEncode(<String, dynamic>{
+        "lec_Email": email,
+        "lec_Name": name,
+        "lec_Surname": surname,
+        "title": title,
+        "degree": degree,
+      }));
+
+      if (response.statusCode == 200){
+        return true;
+      }
+      else{
+      var resBody = jsonDecode(response.body);
+      print(resBody['error']);
+     }
+      return false;
     } catch (e) {
       throw e.toString();
     }

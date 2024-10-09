@@ -29,9 +29,9 @@ class _LecturerScreenNavigatorState extends State<LecturerScreenNavigator> {
       child: Scaffold(
         body: pages[selectedIndex],
         bottomNavigationBar: GNav(
-          backgroundColor: Colors.black,
-          color: Colors.white,
-          activeColor: Colors.purpleAccent[200],
+          backgroundColor: Colors.transparent,
+          color: Colors.black87,
+          activeColor: Colors.deepPurple,
           gap: 5,
           tabs: const [
             GButton(

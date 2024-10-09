@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:hms_frontend/pages/admins/admin.dart';
 import 'package:hms_frontend/pages/lecturers/lecturers.navigation.dart';
 import 'package:hms_frontend/pages/students/students.navigator.dart';
 import 'package:flutter/material.dart';
@@ -161,7 +162,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         if (role =="admin"){  //Ensure there is a token before proceding
                           Navigator.pushReplacement(
                             context, 
-                            MaterialPageRoute(builder: (context) => const UsersPage(),
+                            MaterialPageRoute(builder: (context) => const AdminPage(),
                             ),
                           );
                         }

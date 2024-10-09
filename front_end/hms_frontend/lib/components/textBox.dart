@@ -22,9 +22,11 @@ class TextBox extends StatelessWidget {
         textAlign: TextAlign.center, // Centers the hintText and user input
 
         decoration: InputDecoration(
-          hintText: hintText,
-          enabledBorder:
-              const OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+          labelText: hintText,
+          hoverColor: Colors.blue.shade100,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
         ),
       ),
     );

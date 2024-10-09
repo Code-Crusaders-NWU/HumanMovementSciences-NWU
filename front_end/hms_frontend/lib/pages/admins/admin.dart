@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hms_frontend/components/myButton.dart';
 import 'package:hms_frontend/components/textBox.dart';
+import 'package:hms_frontend/pages/lecturers/createLecturersPage.dart';
 
 class AdminPage extends StatefulWidget {
   const AdminPage({super.key});
@@ -40,9 +41,9 @@ class _AdminPageState extends State<AdminPage> {
 
               const SizedBox(height: 10),
 
-              MyButton(text: 'Lecturers', 
+              MyButton(text: 'Create Lecturer', 
               onPressed: (){
-                print('Lecturers button pressed');
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateLecturersPage()));
                 }),
               
               const SizedBox(height: 10),
