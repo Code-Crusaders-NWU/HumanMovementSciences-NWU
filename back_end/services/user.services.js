@@ -89,14 +89,13 @@ class UserService {
             const users = await User_Model.find({email: {$regex: regex}});
 
             //If no users found, throw an error
-            //If no users found, throw an error
             if(!users || users.length === 0) {
                 throw new Error('No users found');
             }
 
             //Return search user details
             return users.map(user => ({
-                email: users.email,
+                email: user.email,
                 user_type: user.user_type
             }));
         } catch (error) {

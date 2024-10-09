@@ -135,10 +135,10 @@ exports.viewAll = async(req, res, next) => {
     try {
 
         //Extract student's email from the request
-        const stu_Email = req.user.email;
+        const stu_Email = req.user;
 
         if (!stu_Email) {
-            return res.status(400).json({ status: false, message: 'Student email not found in request' });
+            return res.status(400).json({ status: false, message: 'Student email not found in request'});
         }
 
         //Get the count of submissions from getSubmissionCount
@@ -146,7 +146,7 @@ exports.viewAll = async(req, res, next) => {
 
         //Log and return the count
         logger.submissionLogger.log('info', 'Submission count retrieved successfully');
-        return res.json({ status: true, submissionCount });
+        return res.status(200).json({ status: true, submissionCount });
     } catch (error) {
         //Log error and return server error response
         logger.submissionLogger.log('error', error.message);
@@ -157,6 +157,7 @@ exports.viewAll = async(req, res, next) => {
 
 
 exports.getUngradedSubmissions = async (req, res, next) => {
+
     try {
         //Extract lecturer's email from the request
         const { lec_Email } = req.user;
@@ -164,9 +165,13 @@ exports.getUngradedSubmissions = async (req, res, next) => {
         //Call the service to get ungraded submissions
         const ungradedSubmissions = await SubmissionService.getUngradedSubmissions(lec_Email);
 
+        if (!ungradedSubmissions || ungradedSubmissions.length === 0) {
+            return res.status(404).json({ status: false, message: 'No ungraded submissions found for this lecturer' });
+        }
+
         //Log and return the ungraded submissions
         logger.submissionLogger.log('info', 'Ungraded submissions retrieved successfully');
-        return res.json({ status: true, ungradedSubmissions });
+        return res.status(200).json({ status: true, ungradedSubmissions });
     } catch (error) {
         //Log the error and return a server error response
         logger.submissionLogger.log('error', error.message);
