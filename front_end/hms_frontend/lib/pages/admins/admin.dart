@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hms_frontend/components/myButton.dart';
 import 'package:hms_frontend/components/textBox.dart';
 import 'package:hms_frontend/pages/lecturers/createLecturersPage.dart';
+import 'package:hms_frontend/components/navbar.dart';
 
 class AdminPage extends StatefulWidget {
   const AdminPage({super.key});
@@ -11,9 +12,11 @@ class AdminPage extends StatefulWidget {
 }
 
 class _AdminPageState extends State<AdminPage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Navbar(),
       appBar: AppBar(
         title: const Text(
           'Admin Page',
@@ -21,42 +24,12 @@ class _AdminPageState extends State<AdminPage> {
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
-        ),
-        backgroundColor: Colors.lightBlue,
+        ),  
+        backgroundColor: Colors.lightBlue[100]
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            
-            //List of children in Body of App
-            children: <Widget>[
-              
-              MyButton(
-                text: 'View Users',
-                onPressed: (){
-                  print('Delete users pressed....');},
-              ),
-
-              const SizedBox(height: 10),
-
-              MyButton(text: 'Create Lecturer', 
-              onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateLecturersPage()));
-                }),
-              
-              const SizedBox(height: 10),
-
-              MyButton(text: 'Reserved Button', onPressed: (){
-                print('Reserved Button pressed');
-              })
-
-
-            ],
-          ),
+      body: const SafeArea(
+        child: Text('Admin Page'),
         ),
-      ),
-    );
+      );
   }
 }

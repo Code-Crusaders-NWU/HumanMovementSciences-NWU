@@ -27,8 +27,6 @@ class _LoginScreenState extends State<LoginScreen> {
   String? loginMessage;
   bool isLoading = false;
 
-  
-
   //login function
   Future<String> login() async {
     setState(() {
