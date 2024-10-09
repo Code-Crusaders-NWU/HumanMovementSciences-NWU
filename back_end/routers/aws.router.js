@@ -1,16 +1,18 @@
 const express = require('express');
 const multer = require('multer');
-const S3Controller = require('../controllers/s3Controller');
+const awsController = require('../controller/aws.controller.js');
 const router = express.Router();
+const accessControl = require('../middleware/accessControl');
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
+const authenticateToken = require('../middleware/auth'); 
 
 // Swagger documentation added for each route
 
 /**
  * @swagger
- * /api/s3/upload:
+ * /api/upload:
  *   post:
  *     summary: Upload files to S3
  *     description: Upload multiple files to AWS S3 and get their URLs in response.
@@ -47,11 +49,11 @@ const upload = multer({ storage });
  *       500:
  *         description: Server error
  */
-router.post('/upload', upload.array('file'), S3Controller.uploadFiles);
+router.post('/upload', authenticateToken, accessControl.isStudent ,upload.array('file'), awsController.uploadFiles);
 
 /**
  * @swagger
- * /api/s3/delete:
+ * /api/delete:
  *   delete:
  *     summary: Delete a file from S3.
  *     description: Deletes a file from AWS S3 using the file URL.
@@ -86,6 +88,6 @@ router.post('/upload', upload.array('file'), S3Controller.uploadFiles);
  *         description: Server error
  */
 
-router.delete('/delete', S3Controller.deleteFile);
+router.delete('/delete',  authenticateToken, accessControl.isAdmin ,awsController.deleteFile);
 
 module.exports = router;
