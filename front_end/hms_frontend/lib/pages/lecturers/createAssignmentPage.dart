@@ -135,13 +135,11 @@ class _AssignmentsPageState extends State<AssignmentCreatePage> {
         lastDate: DateTime(2100),
         initialDate: DateTime.now());
 
-    if (pickedDate != null) {
-      setState(() {
-        dueDate = pickedDate;
-        _dateController.text = pickedDate.toString().split(" ")[0];
-      });
+    setState(() {
+      dueDate = pickedDate!;
+      _dateController.text = pickedDate.toString().split(" ")[0];
+    });
     }
-  }
 
   Future<void> _selectTime() async {
     final TimeOfDay? timeOfDay = await showTimePicker(

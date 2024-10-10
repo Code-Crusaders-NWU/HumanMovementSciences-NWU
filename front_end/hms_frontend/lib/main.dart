@@ -3,6 +3,7 @@ import 'package:hms_frontend/pages/admins/admin.dart';
 import 'package:hms_frontend/pages/landing.dart';
 import 'package:hms_frontend/pages/lecturers/createLecturersPage.dart';
 import 'package:hms_frontend/pages/login.dart';
+import 'package:hms_frontend/pages/students/studentSubmissionPage.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.purple),
         useMaterial3: true,
       ),
-      home: LoginScreen(),
+      home: const StudentSubmissionPage(studentEmail: "stephan",),
     );
   }
 }

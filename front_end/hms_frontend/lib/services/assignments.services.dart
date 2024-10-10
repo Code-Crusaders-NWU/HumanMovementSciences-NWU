@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:hms_frontend/constants.dart';
 import 'package:hms_frontend/services/token.services.dart';
@@ -13,9 +12,6 @@ class AssignmentService {
       final uri = Uri.parse("$apiURL/api/dueAssignments");
 
       String? token = await TokenService().getToken();
-      if (token == null) {
-        throw Exception('Token is empty');
-      }
       final response = await http.get(uri, headers: <String, String>{
         'Authorization': 'bearer $token',
         'Content-Type': 'application/json; charset=UTF-8'
@@ -42,9 +38,6 @@ class AssignmentService {
           Uri.parse("$apiURL/api/assignment?lec_Email=$lecturerEmail");
 
       String? token = await TokenService().getToken();
-      if (token == null) {
-        throw Exception('Token is empty');
-      }
       final response = await http.get(uri, headers: <String, String>{
         'Authorization': 'bearer $token',
         'Content-Type': 'application/json; charset=UTF-8'
@@ -118,11 +111,9 @@ class AssignmentService {
           allowedExtensions: ['csv'], //can only store csv files
         );
 
-        if (outFile!=null){
-          File file = File(outFile);
-          await file.writeAsBytes(response.bodyBytes);
-        }
-
+        File file = File(outFile!);
+        await file.writeAsBytes(response.bodyBytes);
+      
         return true;
       }
 

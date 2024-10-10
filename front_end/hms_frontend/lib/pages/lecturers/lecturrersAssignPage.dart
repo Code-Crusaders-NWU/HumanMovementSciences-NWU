@@ -20,20 +20,15 @@ class _AssignmentsPageState extends State<AssignmentsPage> {
   Future<void> setLecturerAssignments() async {
     String? token = await TokenService().getToken();
     
-    if (token!=null){
-      String email = await AuthServices.getEmail(token);
+    String email = await AuthServices.getEmail(token!);
 
-      final List<Map<String, dynamic>> fetchedAssignments =
-        await AssignmentService().fetchLecturerAssignments(email);
+    final List<Map<String, dynamic>> fetchedAssignments =
+      await AssignmentService().fetchLecturerAssignments(email);
 
-      setState(() {
-        assignments = fetchedAssignments;
-    });
+    setState(() {
+      assignments = fetchedAssignments;
+  });
     }
-      else {
-        throw Exception("Token is null");
-    }
-  }
 
   @override
   void initState() {
