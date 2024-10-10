@@ -13,10 +13,10 @@ class AssignmentService {
             while (assignmentExists) {
                 assignm_Num = Math.floor(10000 + Math.random() * 90000); // Generate random 5-digit number
 
-                // Check if the assignment number already exists
+                //Check if the assignment number already exists
                 const existingAssignment = await Assignment_Model.findOne({ assignm_Num });
                 if (!existingAssignment) {
-                    assignmentExists = false; // Exit loop if unique number is found
+                    assignmentExists = false; //Exit loop if unique number is found
                 }
             }   
 
