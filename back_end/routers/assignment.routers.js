@@ -21,9 +21,9 @@ const accessControl = require('../middleware/accessControl');
  *             type: object
  *             properties:
  *               assignm_Num:
- *                 type: string
- *                 description: Identifier for each assignment, must be unique.
- *                 example: "1"
+ *                 type: number
+ *                 description: Random identifier for each assignment, must be unique.
+ *                 example: 12345
  *               assignm_Date:
  *                 type: string
  *                 format: date-time
