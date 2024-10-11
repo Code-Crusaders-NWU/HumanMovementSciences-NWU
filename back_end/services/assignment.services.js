@@ -8,21 +8,27 @@ class AssignmentService {
     static async createAssignment(assignm_Num, assignm_Date, lec_Email, grade, due_date, title, description) {
         try {
 
-            //Generate a unique 5-digit assignment number
-            let assignmentExists = true;    
-            while (assignmentExists) {
-                assignm_Num = Math.floor(10000 + Math.random() * 90000); // Generate random 5-digit number
+            //Generate a unique 5-digit assignment number with a maximum attempt limit
+            let assignmentExists = true;
+            let attempts = 0; //Counter to avoid infinite loops
+            const maxAttempts = 10; //Limit the number of attempts to 10
 
+            while (assignmentExists && attempts < maxAttempts) {
+                assignm_Num = Math.floor(10000 + Math.random() * 90000); //Generate random 5-digit number
+                
                 //Check if the assignment number already exists
-                const existingAssignment = await Assignment_Model.findOne({ assignm_Num });
+                const existingAssignment = await Assignment_Model.findOne({assignm_Num});
                 if (!existingAssignment) {
                     assignmentExists = false; //Exit loop if unique number is found
                 }
-            }   
+                attempts++; //Increment
+            }
 
-            await this.validation(assignm_Num, assignm_Date, lec_Email, grade, due_date, title, description);
+            //If maxAttempts is reached, throw an error
+            if (attempts >= maxAttempts) {
+                throw new Error('Unable to generate a unique assignment number after multiple attempts');
+            }
 
-            
             //Check if the assignment already exists within the database.
             const existingAssignment = await Assignment_Model.findOne({assignm_Num, assignm_Date, lec_Email, grade, due_date, title, description});
 
@@ -30,6 +36,8 @@ class AssignmentService {
             if (existingAssignment) {
                 throw new Error('An assignment with this number already exists');
             }
+
+            await this.validation(assignm_Num, assignm_Date, lec_Email, grade, due_date, title, description);
 
             //If no assignment with the specified number exists, the function can proceed
             const newAssignment = new Assignment_Model({assignm_Num, assignm_Date, lec_Email, grade, due_date, title, description});
