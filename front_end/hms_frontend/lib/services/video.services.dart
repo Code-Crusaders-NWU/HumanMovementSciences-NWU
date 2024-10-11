@@ -4,13 +4,16 @@ import 'package:hms_frontend/constants.dart';
 import 'package:hms_frontend/services/token.services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
+import 'package:dio/dio.dart';
 
 class VideoServices {
+  final Dio _dio = Dio();
+  
   Future <bool> postVideo(stuEmail, vURI, uDate, assignNumb) async {
     try {
       final uri = Uri.parse("$apiURL/api/assignment");
       String? token = await TokenService().getToken();
+      
 
       final response = await http.post(uri, 
       headers: <String, String>{
@@ -37,40 +40,40 @@ class VideoServices {
     }
   }
   
-  Future <dynamic> uploadVideo(File videoFile) async {
+  Future<dynamic> uploadVideo(File videoFile, Function(int, int)? onSendProgress) async{
      try {
-      final uri = Uri.parse("$apiURL/api/upload");
+      final uri = "$apiURL/api/upload";
       String? token = await TokenService().getToken();
 
-      var request = http.MultipartRequest('POST', uri);
-
-      request.headers.addAll({
-        'Authorization': 'bearer $token',
-        'Content-Type': 'application/json; charset=UTF-8'
+      FormData formData = FormData.fromMap({
+        'file': await MultipartFile.fromFile(videoFile.path, filename: basename(videoFile.path)),
       });
-      request.files.add(
-        await http.MultipartFile.fromPath('file',
-        videoFile.path,
-        filename: basename(videoFile.path),)
+
+      Response response = await _dio.post(
+        uri,
+        data: formData,
+        options: Options(
+          headers: {
+            'Authorization': 'bearer $token',
+            'Content-Type': 'multipart/form-data',
+          },
+        ),
+        onSendProgress: onSendProgress, // Pass the progress callback
       );
 
-      var sResponse = await request.send();
 
-      var response = await http.Response.fromStream(sResponse);
-
-      if (response.statusCode ==200){
-        var resBody = jsonDecode(response.body);
-
+       if (response.statusCode == 200) {
+        var resBody = response.data;
         if (resBody['fileLinks'] != null && resBody['fileLinks'].isNotEmpty) {
           return resBody['fileLinks'][0]; // Return the first link
         }
-      return null; // No file links found in the response
-      }
-      else{
+        return null; // No file links found in the response
+      } else {
         throw Exception('Failed to upload video. Status code: ${response.statusCode}');
       }
     } catch (e) {
-      throw Exception('VUE: $e');
+      throw Exception('Error uploading video: $e');
     }
   }
 }
+

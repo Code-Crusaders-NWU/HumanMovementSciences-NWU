@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:hms_frontend/services/video.services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -13,9 +12,10 @@ class MediaPage extends StatefulWidget {
 }
 
 class _MediaPageState extends State<MediaPage> {
-
   File? _videoFile;
   final ImagePicker _picker = ImagePicker();
+  double _uploadProgress = 0.0;
+  bool _isUploading = false;
 
   Future<void> pickVideo() async {
     final inputFile = await _picker.pickVideo(source: ImageSource.gallery);
@@ -29,14 +29,29 @@ class _MediaPageState extends State<MediaPage> {
     }
   }
 
-    // Call the uploadVideo function
   Future<void> uploadSelectedVideo() async {
     if (_videoFile != null) {
       try {
-        String? videoLink = await VideoServices().uploadVideo(_videoFile!);
+        setState(() {
+          _isUploading = true;
+          _uploadProgress = 0.0;
+        });
+
+        String? videoLink = await VideoServices().uploadVideo(
+          _videoFile!,
+          (int sentBytes, int totalBytes) {
+            setState(() {
+              _uploadProgress = sentBytes / totalBytes;
+            });
+          },
+        );
+
+        setState(() {
+          _isUploading = false;
+        });
+
         if (videoLink != null) {
           print('Video uploaded successfully: $videoLink');
-          // Display success message or use the video link as needed
         } else {
           print('Failed to upload video.');
         }
@@ -47,59 +62,127 @@ class _MediaPageState extends State<MediaPage> {
       print('No video file to upload.');
     }
   }
+
+  void removeAttachedFile() {
+    setState(() {
+      _videoFile = null;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Title(
-          color: Colors.blue,
-          child: const Text(
-            'Media',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
+        title: const Text(
+          'Media Upload',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Colors.deepPurpleAccent,
+        elevation: 4.0,
       ),
       body: SafeArea(
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              ElevatedButton(
-                onPressed: pickVideo ,
-                style:
-                    ElevatedButton.styleFrom(backgroundColor: Colors.lightBlue),
-                child: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Text(
-                      'Open Media',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                // Show selected video file or 'No file attached'
+                _videoFile != null
+                    ? Column(
+                        children: [
+                          Text(
+                            basename(_videoFile!.path),
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w500),
+                          ),
+                          const SizedBox(height: 10),
+                          ElevatedButton.icon(
+                            onPressed: removeAttachedFile,
+                            icon: const Icon(Icons.delete, color: Colors.white),
+                            label: const Text(
+                              'Remove File',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 15),
+                              backgroundColor: Colors.redAccent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                        ],
+                      )
+                    : const Text(
+                        'No file attached',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey,
+                        ),
                       ),
+                const SizedBox(height: 20),
+                // Attach file button, disabled if file is attached
+                ElevatedButton.icon(
+                  onPressed: _videoFile != null ? null : pickVideo,
+                  icon: const Icon(Icons.file_open_rounded, color: Colors.white),
+                  label: const Text(
+                    'Attach File',
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                    backgroundColor:
+                        _videoFile != null ? Colors.grey : Colors.lightBlue,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
                     ),
-                    Icon(Icons.file_open_rounded),
-                  ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      floatingActionButton: ElevatedButton(
-        onPressed: uploadSelectedVideo,
-        child: Row(
-          children: [
-            Text('Upload video'),
-            const Icon(
-              Icons.add,
-              color: Colors.blue,
+                const SizedBox(height: 30),
+                if (_isUploading) ...[
+                  const Text('Uploading...'),
+                  const SizedBox(height: 10),
+                  LinearProgressIndicator(
+                    value: _uploadProgress,
+                    backgroundColor: Colors.grey[300],
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.deepPurpleAccent),
+                    minHeight: 8,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    '${(_uploadProgress * 100).toStringAsFixed(1)}%',
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                ],
+                const SizedBox(height: 40),
+                // Upload button, disabled if file is uploading or no file is attached
+                ElevatedButton.icon(
+                  onPressed: _isUploading || _videoFile == null ? null : uploadSelectedVideo,
+                  icon: const Icon(Icons.cloud_upload, color: Colors.white),
+                  label: const Text(
+                    'Upload Video',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                    backgroundColor: _isUploading || _videoFile == null
+                        ? Colors.grey
+                        : Colors.deepPurpleAccent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    elevation: _isUploading ? 0 : 5,
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

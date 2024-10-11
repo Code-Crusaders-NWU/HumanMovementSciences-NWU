@@ -51,6 +51,7 @@ dependencies:
   #For video playback
   video_player: ^2.4.0
   chewie: ^1.8.5
+  dio: ^5.0.0 
   
 
 dev_dependencies:
