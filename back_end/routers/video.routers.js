@@ -21,10 +21,6 @@ const accessControl = require('../middleware/accessControl');
  *           schema:
  *             type: object
  *             properties:
- *               vid_Num:
- *                 type: integer
- *                 example: "123456789"
- *                 description: "Unique video IDENTIFIER"
  *               stu_Email:
  *                 type: string
  *                 example: "student@example.com"

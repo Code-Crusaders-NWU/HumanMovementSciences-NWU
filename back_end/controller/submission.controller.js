@@ -180,3 +180,15 @@ exports.getUngradedSubmissions = async (req, res, next) => {
     }
 };
 
+
+exports.getSubmissionsByAssignmNum = async (req, res, next) => {
+    try {
+        const {assign_Num} = req.params;
+        const submissions = await SubmissionService.getSubmissionsByAssignmNum(assign_Num);
+        res.status(200).json({ status: true, submissions });
+    } catch (error) {
+        res.status(500).json({ status: false, message: error.message });
+        next(error);
+    }
+};
+

@@ -506,5 +506,69 @@ router.get('/submission/count', authenticateToken, accessControl.isStudent, Subm
 
 router.get('/submission/ungraded', authenticateToken, accessControl.isLecturer, SubmissionController.getUngradedSubmissions);
 
+
+/**
+ * @swagger
+ * /api/submission/assignment/{assign_Num}:
+ *   get:
+ *     summary: Get submissions for a specific assignment.
+ *     description: Fetches all submissions for a specific assignment based on assign_Num
+ *     tags:
+ *       - Submissions
+ *     security:
+ *       - bearerAuth: [] 
+ *     parameters:
+ *       - in: path
+ *         name: assign_Num
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The assignment number to fetch submissions for
+ *     responses:
+ *       200:
+ *         description: Successful retrieval of submissions
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: true
+ *                 submissions:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       assignm_Num:
+ *                         type: integer
+ *                         example: 23524
+ *                       stu_Email:
+ *                         type: string
+ *                         example: "student@example.com"
+ *                       content:
+ *                         type: string
+ *                         example: "Assignment content"
+ *                       submission_Date:
+ *                         type: string
+ *                         format: date-time
+ *                         example: "2024-09-08T14:30:00.000Z"
+ *       500:
+ *         description: Server error occurred
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "An error occurred"
+ */
+
+router.get('/submission/assignment/:assign_Num', authenticateToken, accessControl.isLecturer, SubmissionController.getSubmissionsByAssignmNum);
+
 //Export the router
 module.exports = router;

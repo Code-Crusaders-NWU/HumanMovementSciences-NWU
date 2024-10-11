@@ -277,6 +277,22 @@ class SubmissionService {
    }
 
   }
+
+
+  //Get submissions for a sepcific assignment
+  static async getSubmissionsByAssignmNum(assign_Num) {
+    try {
+        const submissions = await Submission_Model.find({assignm_Num: assign_Num});
+
+        if (!submissions || submissions.length === 0) {
+            throw new Error('No submissions found for the specified assignment');
+        }
+
+        return submissions;
+    } catch (error) {
+        throw error;
+    }
+  }
  
 }
 
