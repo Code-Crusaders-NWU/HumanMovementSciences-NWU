@@ -25,16 +25,16 @@ jobs:
     - name: Authenticate Docker to Google Cloud
       run: |
         gcloud auth configure-docker africa-south1-docker.pkg.dev --quiet
-
+    #Build the docker image
     - name: Build Docker image
       run: |
         cd back_end
         docker build -t africa-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/hms-docker/hms-docker-image:${{ github.sha }} .
-
+    # Push container to cloud
     - name: Push Docker image to Artifact Registry
       run: |
         docker push africa-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/hms-docker/hms-docker-image:${{ github.sha }}
-
+    # Run container After Build
     - name: Deploy to Cloud Run
       run: |
         gcloud run deploy hms-docker-image \
