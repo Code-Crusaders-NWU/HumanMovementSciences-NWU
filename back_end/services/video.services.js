@@ -5,7 +5,17 @@ class VideoService {
     static async createVideo(vid_Num, stu_Email, vid_Link, upload_Date, assignm_Num) {
         try {
 
-            this.validation(vid_Num, stu_Email, upload_Date, assignm_Num);
+            //Generate a unique 7-digit video number
+            let videoExists = true;    
+            while (videoExists) {
+                vid_Num = Math.floor(1000000 + Math.random() * 9000000);
+
+                //Check if the video number already exists
+                const existingVideo = await Video_Model.findOne({vid_Num});
+                if (!existingVideo) {
+                    videoExists = false; //Exit loop if unique number is found
+                }
+            }
 
             //Check if the video already exists within the database
             const existingVideo = await Video_Model.findOne({vid_Num, stu_Email, vid_Link, upload_Date, assignm_Num});
@@ -14,6 +24,8 @@ class VideoService {
             if (existingVideo) {
                 throw new Error('A video with this number already exists');
             }
+
+            this.validation(vid_Num, stu_Email, upload_Date, assignm_Num);
 
             //If no video with the specified number exists, the function can continue
             const newVideo = new Video_Model({vid_Num, stu_Email, vid_Link, upload_Date, assignm_Num});

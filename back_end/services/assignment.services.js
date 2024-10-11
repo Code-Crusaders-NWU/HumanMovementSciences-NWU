@@ -8,12 +8,12 @@ class AssignmentService {
     static async createAssignment(assignm_Num, assignm_Date, lec_Email, grade, due_date, title, description) {
         try {
 
-            //Generate a unique 5-digit assignment number with a maximum attempt limit
+            //Generate a unique 5-digit assignment number
             let assignmentExists = true;    
             while (assignmentExists) {
                 assignm_Num = Math.floor(10000 + Math.random() * 90000);
 
-                // Check if the assignment number already exists
+                //Check if the assignment number already exists
                 const existingAssignment = await Assignment_Model.findOne({ assignm_Num });
                 if (!existingAssignment) {
                     assignmentExists = false; //Exit loop if unique number is found

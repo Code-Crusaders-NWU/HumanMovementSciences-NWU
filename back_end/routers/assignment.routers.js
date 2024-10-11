@@ -117,7 +117,7 @@ router.post('/assignment', authenticateToken , accessControl.isLecturer, Assignm
  *               assignm_Num:
  *                 type: integer
  *                 description: The assignment number to be deleted.
- *                 example: 987654
+ *                 example: 98765
  *     responses:
  *       '200':
  *         description: Assignment deleted successfully

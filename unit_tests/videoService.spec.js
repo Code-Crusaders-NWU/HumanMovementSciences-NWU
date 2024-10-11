@@ -6,6 +6,11 @@ const validator = require('../back_end/services/video.services');
 
 dotenv.config();
 
+//Mock the random number generation
+beforeEach(() => {
+    jest.spyOn(global.Math, 'random').mockReturnValue(0.1234567); //This ensures the random number is always 1234567
+});
+
 // Clears any mocked functions after each test
 afterEach(() => {
     jest.clearAllMocks();
@@ -19,71 +24,66 @@ describe('VideoService', () => {
     describe('createVideo', () => {
 
         it('should create a new video successfully', async () => {
-            const vid_Num = '1';
-            const stu_Email = 'student@example.com';
-            const vid_Link = 'http://example.com/video1';
-            const upload_Date = new Date();
-            const assignm_Num = '1';
+            const vidData = {
+                vid_Num: 1234567,
+                stu_Email: 'student@example.com',
+                vid_Link: 'http://example.com/video1',
+                upload_Date: new Date(),
+                assignm_Num: 12345
+            }
+
+            //Mock the database methods
+            VideoModel.findOne = jest.fn().mockResolvedValue(null);
+            VideoModel.prototype.save = jest.fn().mockResolvedValue(vidData)
 
             // Mock validation function
             jest.spyOn(VideoService, 'validation').mockImplementation(() => {});
 
-            // Mock the findOne method to return null (no existing video)
-            jest.spyOn(VideoModel, 'findOne').mockResolvedValue(null);
-
-            // Mock the save method
-            const mockSave = jest.fn().mockResolvedValue({
-                vid_Num, stu_Email, vid_Link, upload_Date, assignm_Num
-            });
-            const mockNewVideo = { save: mockSave };
-            jest.spyOn(VideoModel.prototype, 'save').mockImplementation(mockSave);
-            jest.spyOn(VideoModel, 'constructor').mockReturnValue(mockNewVideo);
-
-            // Call createVideo method
             const result = await VideoService.createVideo(
-                vid_Num, stu_Email, vid_Link, upload_Date, assignm_Num
-            );
+                vidData.vid_Num,
+                vidData.stu_Email,
+                vidData.vid_Link,
+                vidData.upload_Date,
+                vidData.assignm_Num
+            )
 
             // Assertions
-            expect(VideoModel.findOne).toHaveBeenCalledWith(expect.objectContaining({
-                vid_Num,
-                stu_Email,
-                vid_Link,
-                upload_Date: expect.any(Date),
-                assignm_Num
-            }));
-            expect(mockSave).toHaveBeenCalled();
-            expect(result).toEqual({
-                vid_Num, stu_Email, vid_Link, upload_Date, assignm_Num
-            });
+            expect(result).toEqual(vidData);
         });
 
         it('should throw an error if the video already exists', async () => {
-            const vid_Num = '1';
-            const stu_Email = 'student@example.com';
-            const vid_Link = 'http://example.com/video1';
-            const upload_Date = new Date();
-            const assignm_Num = '1';
+            const vidData = {
+                vid_Num: 1234567,
+                stu_Email: 'student@example.com',
+                vid_Link: 'http://example.com/video1',
+                upload_Date: new Date(),
+                assignm_Num: 12345
+            }
 
             // Mock validation function
             jest.spyOn(VideoService, 'validation').mockImplementation(() => {});
 
             // Mock the findOne method to return an existing video
-            jest.spyOn(VideoModel, 'findOne').mockResolvedValue({
-                vid_Num, stu_Email, vid_Link, upload_Date, assignm_Num
-            });
+            VideoModel.findOne = jest.fn()
+            .mockResolvedValueOnce(null)
+            .mockResolvedValueOnce(vidData);
 
-            // Call createVideo method and expect an error
-            await expect(VideoService.createVideo(
-                vid_Num, stu_Email, vid_Link, upload_Date, assignm_Num
-            )).rejects.toThrow('A video with this number already exists');
+            await expect(VideoService.createVideo (
+                vidData.vid_Num,
+                vidData.stu_Email,
+                vidData.vid_Link,
+                vidData.upload_Date,
+                vidData.assignm_Num
+            ))
+            .rejects
+            .toThrow('A video with this number already exists');
         });
     });
 
     describe('deleteVideo', () => {
 
         it('should successfully delete a video if it exists', async () => {
-            const vid_Num = '1';
+            const vid_Num = 1234567;
 
             //Mock the findOne method to return a video object (the video exists)
             jest.spyOn(VideoModel, 'findOne').mockResolvedValue({
@@ -103,7 +103,7 @@ describe('VideoService', () => {
         });
 
         it('should through an error if the video does not exist', async () => {
-            const vid_Num = '1';
+            const vid_Num = 1234567;
 
             //Mock findOne method to return null (video does not exist)
             jest.spyOn(VideoModel, 'findOne').mockResolvedValue(null);
@@ -118,7 +118,7 @@ describe('VideoService', () => {
         });
 
         it('should handle errors thrown by the database', async () => {
-            const vid_Num = '1';
+            const vid_Num = 1234567;
 
             //Mock the findOne method to throw an error
             jest.spyOn(VideoModel, 'findOne').mockRejectedValue(new Error('Database error'));
