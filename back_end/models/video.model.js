@@ -8,10 +8,12 @@ const video_schema = new Schema({
     vid_Num : {
         type : Number,
         unique : true,
+        index: true
     },
 
     stu_Email : {
-        type : String
+        type : String,
+        index: true
     },
 
     vid_Link : {
@@ -23,7 +25,8 @@ const video_schema = new Schema({
     },
 
     assignm_Num : {
-        type : Number
+        type : Number,
+        index: true
     },
 });
 
