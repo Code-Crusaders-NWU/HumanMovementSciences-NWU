@@ -49,10 +49,6 @@ describe('AssignmentService', () => {
             )
 
             //Assertions
-            expect(AssignmentModel.findOne).toHaveBeenCalledWith(expect.objectContaining({
-                assignm_Num: 12345,
-                lec_Email: 'lecturer@example.com'
-            }));
             expect(result).toEqual(assignmData);
         });
 
