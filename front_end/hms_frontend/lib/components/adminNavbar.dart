@@ -5,8 +5,8 @@ import 'package:hms_frontend/pages/lecturers/createLecturersPage.dart';
 import 'package:hms_frontend/pages/lecturers/lecturrersAssignPage.dart';
 import 'package:hms_frontend/pages/submissions.dart';
 
-class Navbar extends StatelessWidget {
-  const Navbar({super.key});
+class AdminNavbar extends StatelessWidget {
+  const AdminNavbar({super.key});
 
   @override
   Widget build(BuildContext context) {

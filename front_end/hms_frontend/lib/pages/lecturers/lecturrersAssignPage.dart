@@ -171,7 +171,7 @@ class _AssignmentsPageState extends State<AssignmentsPage> {
 
                         IconButton(
                           icon:  const Icon(
-                            Icons.assignment,
+                            Icons.remove_red_eye,
                             color: Colors.black54,
                           ),
                           onPressed: () {},

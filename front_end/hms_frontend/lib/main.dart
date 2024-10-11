@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hms_frontend/pages/admins/admin.dart';
-import 'package:hms_frontend/pages/landing.dart';
-import 'package:hms_frontend/pages/lecturers/createLecturersPage.dart';
 import 'package:hms_frontend/pages/login.dart';
 import 'package:hms_frontend/pages/students/studentSubmissionPage.dart';
 void main() {

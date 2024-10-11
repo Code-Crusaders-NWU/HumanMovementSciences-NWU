@@ -20,8 +20,8 @@ class _SubmissionsPageState extends State<StudentSubmissionsPage> {
         padding: const EdgeInsets.all(20),
         children: [
           VideoPlayerWidget(
-          url: 'assets/tractor.mp4', 
-          dataSourceType: DataSourceType.asset
+          url: 'https://humanmovement-bucket.s3.eu-north-1.amazonaws.com/Uploads%2F479a9175-8dbf-4119-81fd-ec79b420fad3-VID-20230903-WA0051.mp4', 
+          dataSourceType: DataSourceType.network
           ),
           SizedBox(height: 24,
           ),
