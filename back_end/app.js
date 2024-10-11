@@ -10,6 +10,8 @@ const aws_router = require('./routers/aws.router.js');
 const morgan = require('morgan');
 const winston = require('winston');
 const logAPI = require('./config/APILogger');
+const cors = require('cors');
+require("dotenv").config();
 
 const app = express();
 
@@ -41,6 +43,8 @@ app.use((err, req, res, next) => {
 // Swagger
 const swaggerUI = require('swagger-ui-express');
 const swaggerSpec = require('./swagger');
+
+app.use(cors()); //Allows all routes to use backend
 
 app.use(bodyParser.json());
 
