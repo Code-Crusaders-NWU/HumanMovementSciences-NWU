@@ -9,6 +9,7 @@ const lecturer_schema = new Schema({
         type : String,
         unique : true,
         required : true,
+        index: true,
     },
 
     lec_Name : {
