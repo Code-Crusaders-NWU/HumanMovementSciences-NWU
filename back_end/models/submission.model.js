@@ -8,10 +8,12 @@ const submission_schema = new Schema({
     assignm_Num : {
         type : Number,
         unique : true,
+        index: true,
     },
 
     stu_Email : {
         type : String,
+        index: true
     },
 
     submission_Date : {

@@ -9,6 +9,7 @@ const student_schema = new Schema({
         type : String,
         unique : true,
         required : true,
+        index: true
     },
 
     stu_Name : {
