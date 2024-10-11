@@ -8,6 +8,7 @@ const assignment_schema = new Schema({
     assignm_Num : {
         type : Number,
         unique : true,
+        index: true
     },
     
     assignm_Date : {
@@ -16,6 +17,7 @@ const assignment_schema = new Schema({
 
     lec_Email : {
         type : String,
+        index: true
     },
 
     grade : {

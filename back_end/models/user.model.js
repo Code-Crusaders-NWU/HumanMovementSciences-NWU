@@ -11,13 +11,14 @@ const user_schema = new Schema({
         type: String,
         lowercase: true,
         unique : true,
-        required : true
+        required : true,
+        index: true
     },
     password : {
         type : String,
         required : true
     },
-    user_type : {               //Property of user to manage access control. D
+    user_type : {
         type : String,
         lowercase: true,    
         required : true
