@@ -17,7 +17,7 @@ const authenticateToken = require('../middleware/auth');
  *     summary: Upload files to S3
  *     description: Upload multiple files to AWS S3 and get their URLs in response.
  *     tags:
- *       - S3
+ *       - AWS S3
  *     requestBody:
  *       required: true
  *       content:
@@ -58,7 +58,7 @@ router.post('/upload', authenticateToken, accessControl.isStudent ,upload.array(
  *     summary: Delete a file from S3.
  *     description: Deletes a file from AWS S3 using the file URL.
  *     tags:
- *       - S3
+ *       - AWS S3
  *     requestBody:
  *       required: true
  *       content:

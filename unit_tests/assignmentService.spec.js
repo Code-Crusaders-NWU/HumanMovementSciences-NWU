@@ -4,6 +4,11 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
+//Mock the random number generation
+beforeEach(() => {
+    jest.spyOn(global.Math, 'random').mockReturnValue(0.12345); //This ensures the random number is always 12345
+});
+
 // Clears any mocked functions after each test
 afterEach(() => {
     jest.clearAllMocks();
@@ -20,7 +25,7 @@ describe('AssignmentService', () => {
         it('should sucessfully create a new assignment', async () => {
             
             const assignmData = {
-                assignm_Num: '1',
+                assignm_Num: 12345,
                 assignm_Date: '2024-09-10T00:00:00Z',
                 lec_Email: 'lecturer@example.com',
                 grade: 90,
@@ -45,7 +50,7 @@ describe('AssignmentService', () => {
 
             //Assertions
             expect(AssignmentModel.findOne).toHaveBeenCalledWith(expect.objectContaining({
-                assignm_Num: '1',
+                assignm_Num: 12345,
                 lec_Email: 'lecturer@example.com'
             }));
             expect(result).toEqual(assignmData);
@@ -54,7 +59,7 @@ describe('AssignmentService', () => {
         it('should throw an error if the assignment already exists', async () => {
             
             const assignmData = {
-                assignm_Num: '1',
+                assignm_Num: 12345,
                 assignm_Date: '2024-09-10T00:00:00Z',
                 assignm_Feedback: 'Great work!',
                 stu_Email: 'student@example.com',
@@ -66,7 +71,9 @@ describe('AssignmentService', () => {
             };
 
             //Mocking findOne to simulate an existing assignment
-            AssignmentModel.findOne = jest.fn().mockResolvedValue(assignmData);
+            AssignmentModel.findOne = jest.fn()
+            .mockResolvedValueOnce(null)
+            .mockResolvedValueOnce(assignmData);
 
             await expect(AssignmentService.createAssignment(
                 assignmData.assignm_Num,
@@ -88,7 +95,7 @@ describe('AssignmentService', () => {
             AssignmentService.validation = jest.fn(() => {throw new Error('Validation failed'); });
             
             await expect(AssignmentService.createAssignment(
-                '1',
+                12345,
                 new Date(),
                 null,
                 null,
@@ -106,7 +113,7 @@ describe('AssignmentService', () => {
         it('should delete the assignment if it exists', async () => {
             // Mock findOne for an existing assignment
             const mockFindOne = jest.spyOn(AssignmentModel, 'findOne').mockResolvedValue({
-                assignm_Num: 'A001',
+                assignm_Num: 12345,
                 assignm_Date: '2023-09-01',
                 assignm_Feedback: 'Good work!',
                 stu_Email: 'student@example.com',
@@ -157,7 +164,7 @@ describe('AssignmentService', () => {
             // Mock find to return assignments
             const mockFind = jest.spyOn(AssignmentModel, 'find').mockResolvedValue([
                 {
-                    assignm_Num: '1',
+                    assignm_Num: 12345,
                     assignm_Date: '2023-09-01',
                     assignm_Feedback: 'Great work!',
                     stu_Email: 'student1@example.com',
@@ -168,7 +175,7 @@ describe('AssignmentService', () => {
                     description: "Assignment 1 Description"
                 },
                 {
-                    assignm_Num: '2',
+                    assignm_Num: 22345,
                     assignm_Date: '2023-09-02',
                     assignm_Feedback: 'Needs improvement',
                     stu_Email: 'student2@example.com',
@@ -186,7 +193,7 @@ describe('AssignmentService', () => {
             expect(mockFind).toHaveBeenCalledWith({ lec_Email: 'lecturer@example.com' });
             expect(result).toEqual([
                 {
-                    assignm_Num: '1',
+                    assignm_Num: 12345,
                     assignm_Date: '2023-09-01',
                     assignm_Feedback: 'Great work!',
                     stu_Email: 'student1@example.com',
@@ -197,7 +204,7 @@ describe('AssignmentService', () => {
                     description: "Assignment 1 Description"
                 },
                 {
-                    assignm_Num: '2',
+                    assignm_Num: 22345,
                     assignm_Date: '2023-09-02',
                     assignm_Feedback: 'Needs improvement',
                     stu_Email: 'student2@example.com',
@@ -240,8 +247,8 @@ describe('AssignmentService', () => {
 
         it('should return all due assignments for a student', async () => {
             const mockAssignments = [
-                {assignm_Num: 1, due_date: '2024-11-01T14:30:00.000Z', students: ['student@example.com']},
-                {assignm_Num: 2, due_date: '2024-11-10T14:30:00.000Z', students: ['student@example.com']}
+                {assignm_Num: 12345, due_date: '2024-11-01T14:30:00.000Z', students: ['student@example.com']},
+                {assignm_Num: 22345, due_date: '2024-11-10T14:30:00.000Z', students: ['student@example.com']}
             ];
 
             AssignmentModel.find.mockResolvedValue(mockAssignments);
@@ -287,12 +294,12 @@ describe('AssignmentService', () => {
             const stu_Email = 'student@example.com';
             const mockAssignments = [
                 {
-                    assignm_Num: 1,
+                    assignm_Num: 12345,
                     due_date: '2024-10-09T14:30:00.000Z',
                     students: [stu_Email]
                 },
                 {
-                    assignm_Num: 2,
+                    assignm_Num: 22345,
                     due_date: '2024-10-09T16:00:00.000Z',
                     students: [stu_Email]
                 }

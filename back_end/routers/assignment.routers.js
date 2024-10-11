@@ -20,10 +20,6 @@ const accessControl = require('../middleware/accessControl');
  *           schema:
  *             type: object
  *             properties:
- *               assignm_Num:
- *                 type: string
- *                 description: Identifier for each assignment, must be unique.
- *                 example: "1"
  *               assignm_Date:
  *                 type: string
  *                 format: date-time
