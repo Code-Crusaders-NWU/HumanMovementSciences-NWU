@@ -57,7 +57,7 @@ class AssignmentService {
     }
   }
   //Function to create an assignment for an assignment
-  Future<bool> createAssignment(int assignmentNumber, String assignDateTime, String lecturerEmail,
+  Future<bool> createAssignment( String assignDateTime, String lecturerEmail,
    int total, String dueDateTime, String title, String description) async {
     try {
       final uri = Uri.parse("$apiURL/api/assignment");
@@ -69,7 +69,6 @@ class AssignmentService {
         'Content-Type': 'application/json; charset=UTF-8'
       },
       body: jsonEncode(<String, dynamic>{
-          "assignm_Num": assignmentNumber,
           "assignm_Date": assignDateTime,
           "lec_Email": lecturerEmail,
           "grade" : total,

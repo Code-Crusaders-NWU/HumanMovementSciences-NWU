@@ -118,7 +118,7 @@ class _AssignmentsPageState extends State<AssignmentCreatePage> {
 
 
               MyButton(text: 'Create Assignment', onPressed: () {
-                _createAssignment(8, lecturerController.text, 100, titleController.text, descriptionController.text);
+                _createAssignment( lecturerController.text, 100, titleController.text, descriptionController.text);
 
               })
             ],
@@ -154,7 +154,7 @@ class _AssignmentsPageState extends State<AssignmentCreatePage> {
     }
   }
 
-  Future <void> _createAssignment(int assignmentNumber, String lecturerEmail,
+  Future <void> _createAssignment(String lecturerEmail,
    int total, String title, String description) async{
       try {
         if (_validator()){
@@ -164,7 +164,7 @@ class _AssignmentsPageState extends State<AssignmentCreatePage> {
 
         String dueDateFinal = formatDate(dDate); // Format dates correctly
           
-        bool aStatus = await AssignmentService().createAssignment(assignmentNumber, formattedDate, 
+        bool aStatus = await AssignmentService().createAssignment(formattedDate, 
                                                 lecturerEmail, total, dueDateFinal,
                                                   title, description);
 
