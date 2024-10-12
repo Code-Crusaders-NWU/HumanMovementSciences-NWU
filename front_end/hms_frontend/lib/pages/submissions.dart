@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hms_frontend/pages/students/studentSubmissionPage.dart';
-import 'package:hms_frontend/services/assignments.services.dart'; // Ensure this is correctly imported
 import 'package:intl/intl.dart';
-import 'package:hms_frontend/services/submissions.services.dart'; // Import the video submission page
+import 'package:hms_frontend/services/submissions.services.dart'; 
 
 class SubmissionsPage extends StatefulWidget {
   const SubmissionsPage({super.key,
@@ -99,7 +98,11 @@ class _SubmissionsPageState extends State<SubmissionsPage> {
                       Navigator.push(
                               context,
                               MaterialPageRoute(
-                              builder: (context) => StudentSubmissionsPage(),                  
+                              builder: (context) => StudentSubmissionsPage(stuEmail: sub['stu_Email'],
+                              assignmNumb: sub['assignm_Num'],
+                              //videoNumb: sub['vidNumb'],
+                              uri: sub['content'],
+                              ),                  
                                 ));
                     }
                   ),

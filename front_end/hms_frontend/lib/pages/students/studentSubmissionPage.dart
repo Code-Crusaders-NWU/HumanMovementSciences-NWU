@@ -8,12 +8,14 @@ class StudentSubmissionsPage extends StatefulWidget {
     super.key,
     required this.stuEmail,
     required this.assignmNumb,
-    required this.videoNumb,
+    //required this.videoNumb,
+    required this.uri
     });
   
   final String stuEmail;
   final int assignmNumb;
-  final int videoNumb;
+  //final int videoNumb;
+  final String uri;
   @override
   State<StudentSubmissionsPage> createState() => _SubmissionsPageState();
 }
@@ -125,7 +127,7 @@ class _SubmissionsPageState extends State<StudentSubmissionsPage> {
           // Show the video player only if the button was pressed
           _showVideoPlayer
               ? VideoPlayerWidget(
-                  url: 'https://humanmovement-bucket.s3.eu-north-1.amazonaws.com/Uploads%2F479a9175-8dbf-4119-81fd-ec79b420fad3-VID-20230903-WA0051.mp4',
+                  url: widget.uri,
                   dataSourceType: DataSourceType.network,
                 )
               : const SizedBox(), // Empty container when video player is not shown

@@ -102,6 +102,7 @@ class SubmissionServices {
 
   Future<bool> postSubmission(assignNumb, stuEmail, submissionDate, videoURL) async {
      try {
+      print('$assignNumb $stuEmail $submissionDate $videoURL');
       final uri = Uri.parse("$apiURL/api/submission");
       String? token = await TokenService().getToken();
       final response  =await http.post(uri,
@@ -111,19 +112,25 @@ class SubmissionServices {
       },
       body: jsonEncode(<String, dynamic>{
         "assignm_Num" : assignNumb,
-        "stu_email" : stuEmail,
-        "submission_Date" : DateTime.now().toIso8601String(),
+        "stu_Email" : stuEmail,
+        "submission_Date" : submissionDate,
         "content" : videoURL,
-        "grade" : 0,
-        "feedback" : ""
+        "grade" : null,
+        "feedback" : "None"
       }));
 
       if (response.statusCode == 200){
         return true;
       }
-      return false;
+      else{
+        var resBody = jsonDecode(response.body);
+        String error = resBody['error'];
+        print('POST SUB ERROR: $error');
+        return false;
+      }
     } catch (e) {
-      throw Exception('Unable to grading student submission, please try again.....');
+      print("POST SUB ERROR: $e");  
+      return false;  
     }
   }
 

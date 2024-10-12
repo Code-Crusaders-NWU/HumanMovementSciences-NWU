@@ -1,11 +1,22 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:hms_frontend/services/submissions.services.dart';
 import 'package:hms_frontend/services/video.services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:path/path.dart'; // For file basename
 
 class MediaPage extends StatefulWidget {
-  const MediaPage({super.key});
+  const MediaPage(
+    {
+    super.key,
+    required this.assignmNumb,
+    required this.stuEmail,
+    }
+    );
+
+  final String stuEmail;
+  final int assignmNumb;
 
   @override
   State<MediaPage> createState() => _MediaPageState();
@@ -46,9 +57,28 @@ class _MediaPageState extends State<MediaPage> {
           },
         );
 
+        DateTime now = DateTime.now().toLocal();
+        String formattedDate = DateFormat("yyyy-MM-ddTHH:mm:ss'Z'").format(now);
+
+        var postSubmission = await SubmissionServices().postSubmission(
+          widget.assignmNumb,
+          widget.stuEmail,
+          formattedDate,
+          videoLink);
+        
         setState(() {
           _isUploading = false;
         });
+
+        if (postSubmission){
+            print('Successfully uploaded submission');
+        }
+        else{
+          print('FAILED MISSERABLY');
+        }
+
+        
+        
 
         if (videoLink != null) {
           print('Video uploaded successfully: $videoLink');

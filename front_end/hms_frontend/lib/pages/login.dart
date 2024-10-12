@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:hms_frontend/pages/admins/admin.dart';
+import 'package:hms_frontend/pages/home.dart';
 import 'package:hms_frontend/pages/lecturers/lecturers.dart';
-import 'package:hms_frontend/pages/students/students.navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:hms_frontend/components/myButton.dart';
 import 'package:hms_frontend/components/textBox.dart';
@@ -172,7 +172,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         else{
                           Navigator.pushReplacement(
                             context, 
-                            MaterialPageRoute(builder: (context) => const ScreenNavigator()));
+                            MaterialPageRoute(builder: (context) => HomePage()));
                           
                         }
                       },
