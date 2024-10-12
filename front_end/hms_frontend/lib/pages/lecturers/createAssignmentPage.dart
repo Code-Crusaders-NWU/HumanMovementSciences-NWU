@@ -120,7 +120,9 @@ class _AssignmentsPageState extends State<AssignmentCreatePage> {
               MyButton(text: 'Create Assignment', onPressed: () {
                 _createAssignment( lecturerController.text, 100, titleController.text, descriptionController.text);
 
-              })
+              },
+              icon: Icon(Icons.add),
+              buttonColor: Colors.blue,)
             ],
           ),
         ),

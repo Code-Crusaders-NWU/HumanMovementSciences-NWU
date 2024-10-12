@@ -20,7 +20,6 @@ class _ScreenNavigatorState extends State<ScreenNavigator> {
   List<Widget> pages = const [
     HomePage(),
     StudentsAssignmentsPage(),
-    SubmissionsPage(),
     MediaPage(),
   ];
 
@@ -39,7 +38,6 @@ class _ScreenNavigatorState extends State<ScreenNavigator> {
               icon: Icons.home,
             ),
             GButton(icon: Icons.assignment),
-            GButton(icon: Icons.task),
             GButton(icon: Icons.photo_camera_back_rounded),
           ],
           onTabChange: (index){

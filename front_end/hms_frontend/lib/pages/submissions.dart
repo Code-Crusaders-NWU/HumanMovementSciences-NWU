@@ -1,34 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:hms_frontend/pages/students/studentSubmissionPage.dart';
 import 'package:hms_frontend/services/assignments.services.dart'; // Ensure this is correctly imported
 import 'package:intl/intl.dart';
 import 'package:hms_frontend/services/submissions.services.dart'; // Import the video submission page
 
 class SubmissionsPage extends StatefulWidget {
-  const SubmissionsPage({super.key});
+  const SubmissionsPage({super.key,
+  required this.assignNumb
+  }
+  );
+
+  final int assignNumb;
 
   @override
   State<SubmissionsPage> createState() => _SubmissionsPageState();
 }
 
 class _SubmissionsPageState extends State<SubmissionsPage> {
-  List<Map<String, dynamic>> assignments = []; // to store fetched assignments
-
+  List<Map<String, dynamic>> submissions = []; // to store submissions from an assignment
+   bool isLoading = true;
   @override
   void initState() {
     super.initState();
-    fetchAssignments(); // Populate assignments list
+    fetchSubmissions();
   }
 
-  void fetchAssignments() async {
+  void fetchSubmissions() async {
     try {
       final List<Map<String, dynamic>> fetchedAssignments =
-          await AssignmentService().fetchAssignments(); // Adjust this to fetch the appropriate assignments
+          await SubmissionServices().fetchAssignmentSubmissions(widget.assignNumb); 
       setState(() {
-        assignments = fetchedAssignments;
+        submissions = fetchedAssignments;
+        isLoading = false;
       });
     } catch (e) {
       print('Error fetching assignments: $e');
-      // Handle error appropriately
+     
     }
   }
 
@@ -49,20 +56,27 @@ class _SubmissionsPageState extends State<SubmissionsPage> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
-          child: ListView.builder(
-            itemCount: assignments.length,
+          
+          child: isLoading ? const CircularProgressIndicator()
+          : submissions.isEmpty
+            ? const Text(
+                      'No submissions available.',
+                      style: TextStyle(fontSize: 16, color: Colors.black54),
+                    ) 
+          : ListView.builder(
+            itemCount: submissions.length,
             itemBuilder: (context, index) {
-              final assignment = assignments[index];
+              final sub = submissions[index];
               String date = DateFormat('yMMMd')
                   .add_jm()
-                  .format(DateTime.parse(assignment['due_date']));
+                  .format(DateTime.parse(sub['submission_Date']));
 
               return Card(
                 color: Colors.blue[100], // Light blue card background
                 margin: const EdgeInsets.symmetric(vertical: 8.0),
                 child: ListTile(
                   title: Text(
-                    assignment['title'] ?? 'No Title',
+                    sub['stu_Email'],
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
@@ -70,7 +84,7 @@ class _SubmissionsPageState extends State<SubmissionsPage> {
                     ),
                   ),
                   subtitle: Text(
-                    'Due: $date',
+                    'Submission: $date',
                     style: const TextStyle(
                       fontSize: 12,
                       color: Colors.black54,
@@ -82,14 +96,12 @@ class _SubmissionsPageState extends State<SubmissionsPage> {
                       color: Colors.blue,
                     ),
                     onPressed: () {
-                      // Navigate to the videos submission page
                       Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SubmissionsPage()//assignmentId: assignment['id']), // Adjust based on your data structure
-                        ),
-                      );
-                    },
+                              context,
+                              MaterialPageRoute(
+                              builder: (context) => StudentSubmissionsPage(),                  
+                                ));
+                    }
                   ),
                 ),
               );

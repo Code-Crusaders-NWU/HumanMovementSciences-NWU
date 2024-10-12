@@ -80,7 +80,7 @@ class _MediaPageState extends State<MediaPage> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Colors.deepPurpleAccent,
+        backgroundColor: Colors.deepPurple,
         elevation: 4.0,
       ),
       body: SafeArea(

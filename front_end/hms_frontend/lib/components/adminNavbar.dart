@@ -34,15 +34,6 @@ class AdminNavbar extends StatelessWidget {
               Navigator.push(context, MaterialPageRoute(builder: (context) => const AssignmentsPage()));    
             },
           ),
-          ListTile(
-            leading: const Icon(Icons.video_camera_back),
-            title: const Text('Manage Submissions'),
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const SubmissionsPage()));
-            },
-          ),
-          
-
         ],
       ),
     );

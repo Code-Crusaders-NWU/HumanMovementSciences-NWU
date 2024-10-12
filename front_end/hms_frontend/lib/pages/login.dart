@@ -152,6 +152,8 @@ class _LoginScreenState extends State<LoginScreen> {
               isLoading? const CircularProgressIndicator() :
               //Login Button
                 MyButton(
+                  buttonColor: Colors.deepPurple,
+                  icon: Icon(Icons.login),
                   text: 'Login',
                   onPressed: () async{
                         String token = await login() ;
@@ -179,6 +181,8 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 10),
               //SignUp Button
               MyButton(
+                buttonColor: Colors.lightBlue,
+                icon: Icon(Icons.create),
                 text: 'SignUp',
                 onPressed: () {
                   Navigator.push(context,

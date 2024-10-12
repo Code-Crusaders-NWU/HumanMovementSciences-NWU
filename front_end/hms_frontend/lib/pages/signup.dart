@@ -155,6 +155,8 @@ class _SignupScreenState extends State<SignupScreen> {
 
               // SignUp Button
               MyButton(
+                buttonColor: Colors.lightBlue,
+                icon: Icon(Icons.add),
                 text: 'Sign Up',
                 onPressed: signUp,
               ),

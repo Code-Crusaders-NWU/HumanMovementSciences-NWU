@@ -28,20 +28,6 @@ class LecNavbar extends StatelessWidget {
               Navigator.push(context, MaterialPageRoute(builder: (context) =>  AssignmentCreatePage()));   
             },
           ),
-           ListTile(
-            leading: const Icon(Icons.assignment_add),
-            title: const Text('View Submissions'),
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const SubmissionsPage()));    
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.video_camera_back),
-            title: const Text('Manage Submissions'),
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const SubmissionsPage()));
-            },
-          ),
           ListTile(
             leading: const Icon(Icons.logout_rounded),
             title: const Text('Logout'),

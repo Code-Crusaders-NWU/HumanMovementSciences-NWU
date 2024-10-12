@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
+import 'package:hms_frontend/pages/students/studentSubmissionPage.dart';
+import 'package:hms_frontend/pages/submissions.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:hms_frontend/pages/lecturers/createAssignmentPage.dart';
@@ -174,7 +176,17 @@ class _AssignmentsPageState extends State<AssignmentsPage> {
                             Icons.remove_red_eye,
                             color: Colors.black54,
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            print(a['assignm_Num']);
+                             Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                              builder: (context) => SubmissionsPage(
+                                assignNumb: a['assignm_Num'],
+                                ),
+                                ),
+                                );
+                          },
                         ),
                       ],
                     ),

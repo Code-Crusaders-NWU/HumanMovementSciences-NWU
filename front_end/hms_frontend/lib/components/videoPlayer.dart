@@ -1,7 +1,4 @@
-
-
 import 'dart:io';
-
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
@@ -23,18 +20,23 @@ class _VideoPlayerState extends State<VideoPlayerWidget> {
   late VideoPlayerController _videoPlayerController;
   late ChewieController _chewieController;
 
+  @override
   void initState(){
     super.initState();
 
     switch (widget.dataSourceType){
       case DataSourceType.asset:
         _videoPlayerController = VideoPlayerController.asset(widget.url);
+        break;
       case DataSourceType.network:
         _videoPlayerController = VideoPlayerController.network(widget.url);
+         break;
       case DataSourceType.file:
         _videoPlayerController = VideoPlayerController.file(File(widget.url));
+         break;
       case DataSourceType.contentUri:
         _videoPlayerController = VideoPlayerController.contentUri(Uri.parse(widget.url));
+         break;
     }
 
 
