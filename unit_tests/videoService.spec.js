@@ -132,4 +132,54 @@ describe('VideoService', () => {
             expect(VideoModel.deleteOne).not.toHaveBeenCalled();
         });
     });
+
+
+    //getVideoByVidNum Tests
+    describe('getVideoByVidNum', () => {
+        
+        it('should return a video with the provided vid_Num', async () => {
+            const vid_Num = 1234567;
+            const mockVideo = {
+                vid_Num: vid_Num,
+                stu_Email: 'student@example.com',
+                vid_Link: 'http://example.com/video1',
+                upload_Date: new Date(),
+                assignm_Num: 12345
+            };
+
+            //Mock VideoModel to return a video
+            VideoModel.findOne.mockResolvedValue(mockVideo);
+
+            const result = await VideoService.getVideoByVidNum(vid_Num);
+
+            //Assertions
+            expect(VideoModel.findOne).toHaveBeenCalledWith({ vid_Num });
+            expect(result).toEqual(mockVideo);
+        });
+
+        it('should throw an error if no video is found with the provided vid_Num', async () => {
+            const vid_Num = 1234567;
+
+            //Mock VideoModel to return null (video not found)
+            VideoModel.findOne.mockResolvedValue(null);
+
+            //Assertions
+            await expect(VideoService.getVideoByVidNum(vid_Num))
+                .rejects
+                .toThrow(`No video found with video number: ${vid_Num}`);
+        });
+
+        it('should throw a server error if something goes wrong', async () => {
+            const vid_Num = 1234567;
+
+            //Mock VideoModel to throw an error
+            VideoModel.findOne.mockRejectedValue(new Error('Database error'));
+
+            //Assertions
+            await expect(VideoService.getVideoByVidNum(vid_Num))
+                .rejects
+                .toThrow('Database error');
+        });
+    });
+
 }); //Class describe

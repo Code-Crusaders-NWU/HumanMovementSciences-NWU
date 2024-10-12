@@ -144,4 +144,62 @@ describe('Video API Implementation Tests', () => {
         }); 
     });
 
+
+    describe('GET /api/video/:vid_Num', () => {
+
+        it('should return a video by vid_Num and status 200', async () => {
+            const vid_Num = 1234567;
+            const mockVideo = {
+                vid_Num: vid_Num,
+                stu_Email: 'student@example.com',
+                vid_Link: 'http://example.com/video1',
+                upload_Date: new Date().toISOString(),
+                assignm_Num: 12345
+            };
+
+            //Mock VideoService to return the video
+            VideoService.getVideoByVidNum.mockResolvedValue(mockVideo);
+
+            const response = await request(app)
+                .get(`/api/video/${vid_Num}`)
+                .set('Authorization', 'Bearer token'); //Mock authentication
+
+            //Assertions
+            expect(response.statusCode).toBe(200);
+            expect(response.body.status).toBe(true);
+            expect(response.body.video).toEqual(mockVideo);
+        });
+
+        it('should return an error if the video is not found', async () => {
+            const vid_Num = 1234567;
+
+            //Mock VideoService to throw a "not found" error
+            VideoService.getVideoByVidNum.mockRejectedValue(new Error('Video not found'));
+
+            const response = await request(app)
+                .get(`/api/video/${vid_Num}`)
+                .set('Authorization', 'Bearer token'); //Mock authentication
+
+            //Assertions
+            expect(response.body.status).toBe(false);
+            expect(response.body.message).toBe('An error occurred while retrieving the video');
+        });
+
+        it('should return 500 if there is a server error', async () => {
+            const vid_Num = 1234567;
+
+            //Mock VideoService to throw a server error
+            VideoService.getVideoByVidNum.mockRejectedValue(new Error('Database error'));
+
+            const response = await request(app)
+                .get(`/api/video/${vid_Num}`)
+                .set('Authorization', 'Bearer token'); //Mock authentication
+
+            //Assertions
+            expect(response.statusCode).toBe(500);
+            expect(response.body.status).toBe(false);
+            expect(response.body.message).toBe('An error occurred while retrieving the video');
+        });
+    });
+
 }); //Class describe

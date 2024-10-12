@@ -285,7 +285,7 @@ class SubmissionService {
         const submissions = await Submission_Model.find({assignm_Num: assign_Num});
 
         if (!submissions || submissions.length === 0) {
-            throw new Error('No submissions found for the specified assignment');
+            throw new Error('No submissions found for the given assignment number');
         }
 
         return submissions;
