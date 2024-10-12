@@ -58,6 +58,21 @@ class VideoService {
     }
 
 
+    //Get video by vidNum
+    static async getVideoByVidNum(vid_Num) {
+        try {
+            const video = await Video_Model.findOne({vid_Num});
+
+            if (!video) {
+                throw new Error(`No video found with vid_Num: ${vid_Num}`);
+            }
+            return video;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+
     static validation(vid_Num, stu_Email, upload_Date, assignm_Num){
         try {
 

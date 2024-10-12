@@ -7,10 +7,10 @@ const logger = require('../config/logger');
 exports.submit = async(req, res, next) => {
     try {
         //Extracts submission information from the API request body
-        const {assignm_Num, stu_Email, submission_Date, content, grade, feedback} = req.body;
+        const {assignm_Num, stu_Email, submission_Date, content, grade, feedback, vid_Num} = req.body;
 
         //Await confirmation of successful submission
-        const success = await SubmissionService.createSubmission(assignm_Num, stu_Email, submission_Date, content, grade, feedback);
+        const success = await SubmissionService.createSubmission(assignm_Num, stu_Email, submission_Date, content, grade, feedback, vid_Num);
         logger.submissionLogger.log('info', 'Submitted successfully');
         res.json({status: true, success: 'Submitted successfully'});
     } catch (error) {

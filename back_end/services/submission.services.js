@@ -8,13 +8,13 @@ const {format} = require('@fast-csv/format');
 
 class SubmissionService {
     //Create submission function
-    static async createSubmission(assignm_Num, stu_Email, submission_Date, content, grade, feedback) {
+    static async createSubmission(assignm_Num, stu_Email, submission_Date, content, grade, feedback, vid_Num) {
         try {
 
-            this.validation(assignm_Num, stu_Email, submission_Date, content, grade, feedback);
+            this.validation(assignm_Num, stu_Email, submission_Date, content, grade, feedback, vid_Num);
 
             //Check if the submission already exists within the database.
-            const existingSubmission = await Submission_Model.findOne({assignm_Num, stu_Email, submission_Date, content, grade, feedback});
+            const existingSubmission = await Submission_Model.findOne({assignm_Num, stu_Email, submission_Date, content, grade, feedback, vid_Num});
 
             //If the submission exists, the server throws an error
             if (existingSubmission) {
@@ -22,7 +22,7 @@ class SubmissionService {
             }
 
             //If no similar submission exists, the function can proceed
-            const newSubmission = new Submission_Model({assignm_Num, stu_Email, submission_Date, content, grade, feedback});
+            const newSubmission = new Submission_Model({assignm_Num, stu_Email, submission_Date, content, grade, feedback, vid_Num});
 
             //Store the new submission in the database and return the saved object
             return await newSubmission.save();

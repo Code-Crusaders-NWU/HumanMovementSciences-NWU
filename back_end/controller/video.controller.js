@@ -49,3 +49,14 @@ exports.delete = async(req, res, next) => {
         next(error);
     }
 }
+
+exports.getVideoByVidNum = async (req, res, next) => {
+    try {
+        const { vid_Num } = req.params;
+        const video = await VideoService.getVideoByVidNum(vid_Num);
+        res.status(200).json({ status: true, video });
+    } catch (error) {
+        res.status(404).json({ status: false, message: error.message });
+        next(error);
+    }
+}
