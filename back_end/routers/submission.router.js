@@ -23,7 +23,7 @@ const accessControl = require('../middleware/accessControl');
  *               assignm_Num:
  *                 type: integer
  *                 description: The unique number of the assignment being submitted.
- *                 example: 101
+ *                 example: 12345
  *               stu_Email:
  *                 type: string
  *                 description: The email address of the student who is posting the submission, must be a registered student.
@@ -45,6 +45,10 @@ const accessControl = require('../middleware/accessControl');
  *                 type: string
  *                 description: Feedback provided by the lecturer (optional, lecturer has the option of adding feedback after grading the function).
  *                 example: "Good work!"
+ *               vid_Num:
+ *                 type: number
+ *                 description: Randomly generated 7 numbers that uniquely identifies a video.
+ *                 example: 1234567
  *     responses:
  *       '200':
  *         description: Submission successful
@@ -131,6 +135,9 @@ router.post('/submission', authenticateToken, accessControl.isStudent ,Submissio
  *                       feedback:
  *                         type: string
  *                         example: "Great!"
+ *                       vid_Num:
+ *                         type: number
+ *                         example: 1234567
  *       '500':
  *         description: Server error occurred while retrieving submissions
  *         content:

@@ -30,6 +30,10 @@ const submission_schema = new Schema({
 
     feedback : {
         type : String,
+    },
+
+    vid_Num : {
+        type : Number
     }
 })
 

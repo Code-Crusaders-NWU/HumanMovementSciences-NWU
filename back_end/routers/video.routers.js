@@ -141,7 +141,58 @@ router.post('/video', authenticateToken, accessControl.isStudent,VideoController
 //When the delete API is called
 router.delete('/video', authenticateToken, accessControl.isLecturer ,VideoController.delete);
 
-//router.post
+/**
+ * @swagger
+ * /api/video/{vid_Num}:
+ *   get:
+ *     summary: Retrieve video by vid_Num
+ *     description: Get details of a video based on vid_Num.
+ *     tags:
+ *       - Videos
+ *     parameters:
+ *       - in: path
+ *         name: vid_Num
+ *         required: true
+ *         description: Unique ID of the video to retrieve.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: A video object.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 vid_Num:
+ *                   type: integer
+ *                   description: "The unique identifier for the video"
+ *                   example: 1234567
+ *                 stu_Email:
+ *                   type: string
+ *                   description: "The email of the student who uploaded the video"
+ *                   example: "student@example.com"
+ *                 vid_Link:
+ *                   type: string
+ *                   description: "The URL link to the video"
+ *                   example: "https://example.com/video1"
+ *                 upload_Date:
+ *                   type: string
+ *                   format: date-time
+ *                   description: "The date the video was uploaded"
+ *                   example: "2024-10-11T12:34:56Z"
+ *                 assignm_Num:
+ *                   type: integer
+ *                   description: "The assignment number associated with the video"
+ *                   example: 12345
+ *                 
+ *                   
+ *       403:
+ *         description: Access denied. Only lecturers can perform this action.
+ *       404:
+ *         description: Video not found.
+ */
+router.get('/video/:vid_Num', authenticateToken, accessControl.isLecturer, VideoController.getVideoByVidNum);
 
 //Export the router so it is accessible by the main application
 module.exports = router;
