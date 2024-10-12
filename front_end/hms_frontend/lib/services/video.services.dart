@@ -5,6 +5,7 @@ import 'package:hms_frontend/services/token.services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:video_compress/video_compress.dart';
 
 class VideoServices {
   final Dio _dio = Dio();
@@ -75,5 +76,40 @@ class VideoServices {
       throw Exception('Error uploading video: $e');
     }
   }
+
+
+ // Compress Video Function
+  Future<File?> compressVideo(File videoFile) async {
+    try {
+      //compression progress
+      VideoCompress.compressProgress$.subscribe((progress) {
+        print('Compression Status: $progress%');
+      });
+
+      //video compression
+      final MediaInfo? compVideo = await VideoCompress.compressVideo(
+        videoFile.path,
+        quality: VideoQuality.MediumQuality,
+        deleteOrigin: false, // if true then it deletes the original file after compression
+      );
+
+      if (compVideo != null && compVideo.file != null) {
+        print('Compression success: ${compVideo.file!.path}');
+        return compVideo.file; // Return compressed video file
+      } else {
+        print('Compression failed.');
+        return null;
+      }
+    } catch (e) {
+      print('Error Occurred: $e');
+      return null;
+    }
+  }
+
+  // Dispose after compression completed
+  void disposeCompression() {
+    VideoCompress.dispose();
+  }
+
 }
 
