@@ -4,18 +4,22 @@ import 'package:hms_frontend/components/videoPlayer.dart';
 import 'package:video_player/video_player.dart';
 
 class StudentSubmissionsPage extends StatefulWidget {
-  const StudentSubmissionsPage({
+   StudentSubmissionsPage({
     super.key,
     required this.stuEmail,
     required this.assignmNumb,
     //required this.videoNumb,
-    required this.uri
+    required this.uri,
+    required this.mark,
+    required this.feedback
     });
   
   final String stuEmail;
   final int assignmNumb;
   //final int videoNumb;
   final String uri;
+  int? mark;
+  String? feedback;
   @override
   State<StudentSubmissionsPage> createState() => _SubmissionsPageState();
 }
@@ -23,8 +27,6 @@ class StudentSubmissionsPage extends StatefulWidget {
 class _SubmissionsPageState extends State<StudentSubmissionsPage> {
   bool _showVideoPlayer = false; // New flag to control when to show the video player
   bool _showGradingFeedback = true;
-  final _feedbackController = TextEditingController;
-  final _gradeController = TextEditingController;
 
   @override
   Widget build(BuildContext context) {
@@ -116,10 +118,10 @@ class _SubmissionsPageState extends State<StudentSubmissionsPage> {
           // Show MarkingWidget if grading feedback is enabled
           _showGradingFeedback
               ? MarkingWidget(
-                  grade: 0,
-                  feedback: "",
-                  stuEmail: "stephanschmidt@example.com",
-                  assignNum: 12345,
+                  grade: widget.mark!,
+                  feedback: widget.feedback!,
+                  stuEmail: widget.stuEmail,
+                  assignNum: widget.assignmNumb,
                   total: 100,
                 )
               : const SizedBox(), //Empty when Grading is not shown

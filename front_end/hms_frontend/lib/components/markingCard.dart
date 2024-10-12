@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:hms_frontend/services/submissions.services.dart';
 
 class MarkingWidget extends StatefulWidget {
   const MarkingWidget({
@@ -10,8 +12,8 @@ class MarkingWidget extends StatefulWidget {
     required this.total,
   });
 
-  final int grade;
-  final String feedback;
+  final int? grade;
+  final String? feedback;
   final String stuEmail;
   final int assignNum;
   final int total;
@@ -22,19 +24,20 @@ class MarkingWidget extends StatefulWidget {
 class _MarkingWidgetSate extends State<MarkingWidget> {
   final TextEditingController _gradeController = TextEditingController();
   final TextEditingController _feedbackController = TextEditingController();
+  String _statusMessage = "";
 
   @override
   void initState() {
     super.initState();
-    _gradeController.text = widget.grade.toString();
-    _feedbackController.text = widget.feedback;
+    _gradeController.text = widget.grade?.toString() ?? '';
+    _feedbackController.text = widget.feedback ?? '';
   }
 
   @override
   void dispose() {
-    super.dispose();
     _gradeController.dispose();
     _feedbackController.dispose();
+    super.dispose();
   }
 
   @override
@@ -68,6 +71,9 @@ class _MarkingWidgetSate extends State<MarkingWidget> {
                   labelText: 'Grade',
                   border: OutlineInputBorder(),
                 ),
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
               ),
               const SizedBox(height: 16.0),
               Row(
@@ -76,7 +82,32 @@ class _MarkingWidgetSate extends State<MarkingWidget> {
                   SizedBox(
                     width: 200,
                     child: ElevatedButton.icon(
-                      onPressed: () {},
+                      onPressed: () async {
+                        _resetMessage();
+                        String? gradeInput = _gradeController.text;
+                        var gradeStatus = gradeValidation(gradeInput, 100);
+
+                        if (gradeStatus!=true) {
+                          setState(() {
+                            _statusMessage = gradeStatus;
+                          });
+                        } 
+                        else 
+                        {
+                          bool result = await gradeStudent(widget.assignNum,
+                              widget.stuEmail, int.parse(gradeInput));
+                          if (result) {
+                            setState(() {
+                              _statusMessage = "Successfully graded student";
+                              _gradeController.clear();
+                            });
+                          } else {
+                            setState(() {
+                              _statusMessage = "Grade assignment failed";
+                            });
+                          }
+                        }
+                      },
                       icon: const Icon(Icons.calculate, color: Colors.white),
                       label: const Text(
                         'Grade Submission',
@@ -130,10 +161,51 @@ class _MarkingWidgetSate extends State<MarkingWidget> {
                   ),
                 ],
               ),
+              const SizedBox(height: 16.0),
+              Text(
+                _statusMessage,
+                style: TextStyle(
+                  color: _statusMessage.startsWith("Successfully")
+                      ? Colors.green
+                      : Colors.red,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  void _resetMessage() {
+    setState(() {
+      _statusMessage = "";
+    });
+  }
+
+  Future<bool> gradeStudent(int assignNumb, String stuEmail, int grade) async {
+    dynamic flagB = await SubmissionServices().gradeSubmission(assignNumb, stuEmail, grade);
+    return flagB;
+  }
+
+  dynamic gradeValidation(String? gradeInput, int total) {
+    if (gradeInput == null || gradeInput.isEmpty) {
+      return 'Grade field must not be empty!';
+    }
+
+    int grade;
+    try {
+      grade = int.parse(gradeInput);
+    } catch (e) {
+      return 'Grade must be a valid number!';
+    }
+
+    if (grade > total) {
+      return 'Grade cannot be higher than the total';
+    }
+
+    return true;
   }
 }

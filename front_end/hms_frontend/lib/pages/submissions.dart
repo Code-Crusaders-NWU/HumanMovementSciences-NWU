@@ -52,6 +52,8 @@ class _SubmissionsPageState extends State<SubmissionsPage> {
         ),
         backgroundColor: Colors.deepPurple,
       ),
+
+
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
@@ -66,12 +68,14 @@ class _SubmissionsPageState extends State<SubmissionsPage> {
             itemCount: submissions.length,
             itemBuilder: (context, index) {
               final sub = submissions[index];
+              String? mark = sub['grade'].toString();
               String date = DateFormat('yMMMd')
                   .add_jm()
                   .format(DateTime.parse(sub['submission_Date']));
 
               return Card(
-                color: Colors.blue[100], // Light blue card background
+                elevation: 10,
+                color: Colors.teal[50], // Light blue card background
                 margin: const EdgeInsets.symmetric(vertical: 8.0),
                 child: ListTile(
                   title: Text(
@@ -79,15 +83,29 @@ class _SubmissionsPageState extends State<SubmissionsPage> {
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
-                      color: Colors.black87,
+                      color: Colors.black,
                     ),
                   ),
-                  subtitle: Text(
-                    'Submission: $date',
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: Colors.black54,
-                    ),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 8), 
+                      Text('Mark: ${mark ?? 0}',
+                      textAlign: TextAlign.left,
+                      style: const TextStyle(
+                        fontSize: 12,
+                      ),
+                      ),
+                       const SizedBox(height: 4),
+                      Text(
+                        'Submission: $date',
+                        style: const TextStyle(
+                          fontSize: 11,
+                          color: Colors.black54,
+                        ),
+                      ),
+                      
+                    ],
                   ),
                   trailing: IconButton(
                     icon: const Icon(
@@ -98,10 +116,12 @@ class _SubmissionsPageState extends State<SubmissionsPage> {
                       Navigator.push(
                               context,
                               MaterialPageRoute(
-                              builder: (context) => StudentSubmissionsPage(stuEmail: sub['stu_Email'],
+                              builder: (context) => StudentSubmissionsPage(
+                              stuEmail: sub['stu_Email'],
                               assignmNumb: sub['assignm_Num'],
-                              //videoNumb: sub['vidNumb'],
                               uri: sub['content'],
+                              mark: sub['grade']!,
+                              feedback: sub['feedback']!,
                               ),                  
                                 ));
                     }

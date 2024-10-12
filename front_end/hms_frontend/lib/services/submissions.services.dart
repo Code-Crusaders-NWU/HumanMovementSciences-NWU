@@ -52,7 +52,7 @@ class SubmissionServices {
 
   }
   
-  Future<bool> provideFeedback(assignNumb, stuEmail, feedback) async {
+  Future<bool> provideFeedback(int assignNumb, String stuEmail, String feedback) async {
     try {
       final uri = Uri.parse("$apiURL/api/submission/provide_feedback");
       String? token = await TokenService().getToken();
@@ -76,7 +76,7 @@ class SubmissionServices {
     }
   }
 
-  Future<bool> gradeSubmission(assignNumb, stuEmail, grade) async {
+  Future<dynamic> gradeSubmission(int assignNumb, String stuEmail, int grade) async {
     try {
       final uri = Uri.parse("$apiURL/api/submission/grade_submission");
       String? token = await TokenService().getToken();
@@ -87,16 +87,19 @@ class SubmissionServices {
       },
       body: jsonEncode(<String, dynamic>{
         "assignm_Num" : assignNumb,
-        "stu_email" : stuEmail,
-        "feedback" : grade
+        "stu_Email" : stuEmail,
+        "grade" : grade
       }));
 
       if (response.statusCode == 200){
         return true;
       }
-      return false;
+      else{
+        var resBody = jsonDecode(response.body);
+        return resBody['error'];
+      }
     } catch (e) {
-      throw Exception('Unable to grading student submission, please try again.....');
+       return ('Exception: $e');
     }
   }
 
