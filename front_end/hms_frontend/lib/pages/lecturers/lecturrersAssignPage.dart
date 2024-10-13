@@ -21,16 +21,16 @@ class _AssignmentsPageState extends State<AssignmentsPage> {
 
   Future<void> setLecturerAssignments() async {
     String? token = await TokenService().getToken();
-    
+
     String email = await AuthServices.getEmail(token!);
 
     final List<Map<String, dynamic>> fetchedAssignments =
-      await AssignmentService().fetchLecturerAssignments(email);
+        await AssignmentService().fetchLecturerAssignments(email);
 
     setState(() {
       assignments = fetchedAssignments;
-  });
-    }
+    });
+  }
 
   @override
   void initState() {
@@ -116,76 +116,82 @@ class _AssignmentsPageState extends State<AssignmentsPage> {
                   trailing: SizedBox(
                     width: 120,
                     child: Row(
-                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         IconButton(
-                          icon:  Icon(
+                          icon: Icon(
                             Icons.delete_forever,
                             color: Colors.red[300],
                           ),
                           onPressed: () async {
-
-                            showCupertinoDialog(context: context, 
-                            builder: (BuildContext context)=>CupertinoAlertDialog(
-                              title: const Text('Alert'),
-                              content: const Text('Are you sure you want to delete this assignment?'),
-                              actions: <CupertinoDialogAction>[
-                                CupertinoDialogAction(
-                                child: const Text('No'),
-                                isDestructiveAction: false,
-                                onPressed: (){
-                                  Navigator.pop(context);
-                                },
-                                
-                              ),
-                              CupertinoDialogAction(
-                                isDestructiveAction: true,
-                                onPressed: () async {
-                                   bool deleteState = await AssignmentService().deleteAssignment(a['assignm_Num']); 
-                                    if (deleteState){
-                                      setState(() {
-                                        assignments.removeAt(index);
-                                      });
-                                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Assignment deleted..')));
-                            }
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('Yes'), 
-                              ),
-                              ]
-                            ),);
+                            showCupertinoDialog(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  CupertinoAlertDialog(
+                                      title: const Text('Alert'),
+                                      content: const Text(
+                                          'Are you sure you want to delete this assignment?'),
+                                      actions: <CupertinoDialogAction>[
+                                    CupertinoDialogAction(
+                                      child: const Text('No'),
+                                      isDestructiveAction: false,
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                    CupertinoDialogAction(
+                                      isDestructiveAction: true,
+                                      onPressed: () async {
+                                        bool deleteState =
+                                            await AssignmentService()
+                                                .deleteAssignment(
+                                                    a['assignm_Num']);
+                                        if (deleteState) {
+                                          setState(() {
+                                            assignments.removeAt(index);
+                                          });
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                                  content: Text(
+                                                      'Assignment deleted..')));
+                                        }
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text('Yes'),
+                                    ),
+                                  ]),
+                            );
                           },
                         ),
-                        
                         IconButton(
-                          icon:   Icon(
+                          icon: Icon(
                             Icons.download,
                             color: Colors.blue[200],
                           ),
                           onPressed: () async {
-                            bool downloadStatus = await AssignmentService().downloadMarks(a['assignm_Num'], a['title']);
+                            bool downloadStatus = await AssignmentService()
+                                .downloadMarks(a['assignm_Num'], a['title']);
 
-                            if (!downloadStatus){
+                            if (!downloadStatus) {
                               print('No submissions');
                             }
                           },
                         ),
-
                         IconButton(
-                          icon:  const Icon(
+                          icon: const Icon(
                             Icons.remove_red_eye,
                             color: Colors.black54,
                           ),
                           onPressed: () {
                             print(a['assignm_Num']);
-                             Navigator.push(
+                            Navigator.push(
                               context,
                               MaterialPageRoute(
-                              builder: (context) => SubmissionsPage(
-                                assignNumb: a['assignm_Num'],
+                                builder: (context) => SubmissionsPage(
+                                  assignNumb: a['assignm_Num'],
                                 ),
-                                ),
-                                );
+                              ),
+                            );
                           },
                         ),
                       ],

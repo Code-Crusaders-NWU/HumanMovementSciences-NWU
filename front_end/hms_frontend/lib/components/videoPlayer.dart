@@ -8,10 +8,12 @@ class VideoPlayerWidget extends StatefulWidget {
     super.key,
     required this.url,
     required this.dataSourceType,
+    required this.placeholderImage,
     });
 
   final String url;
   final DataSourceType dataSourceType;
+  final String placeholderImage;
   @override
   State<VideoPlayerWidget> createState() => _VideoPlayerState();
 }
@@ -19,6 +21,7 @@ class VideoPlayerWidget extends StatefulWidget {
 class _VideoPlayerState extends State<VideoPlayerWidget> {
   late VideoPlayerController _videoPlayerController;
   late ChewieController _chewieController;
+  bool _isVideoInitialized = false;
 
   @override
   void initState(){
@@ -39,6 +42,11 @@ class _VideoPlayerState extends State<VideoPlayerWidget> {
          break;
     }
 
+    _videoPlayerController.initialize().then((_) {
+      setState(() {
+        _isVideoInitialized = true;
+      });
+    });
 
     _chewieController = ChewieController(
       videoPlayerController:  _videoPlayerController,
@@ -69,11 +77,20 @@ class _VideoPlayerState extends State<VideoPlayerWidget> {
       ),
         const Divider(),
         Container(
-          child: AspectRatio(aspectRatio: 16 / 9,
-          child: Chewie(
-            controller: _chewieController,
-            ),
-            ),
+          child: _isVideoInitialized
+              ? AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: Chewie(
+                    controller: _chewieController,
+                  ),
+                )
+              : AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: Image.asset( // Placeholder image while the video is loading
+                    widget.placeholderImage,
+                    fit: BoxFit.cover,
+                  ),
+                ),
         )
         
       ],

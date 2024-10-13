@@ -63,12 +63,16 @@ class SubmissionServices {
       },
       body: jsonEncode(<String, dynamic>{
         "assignm_Num" : assignNumb,
-        "stu_email" : stuEmail,
+        "stu_Email" : stuEmail,
         "feedback" : feedback
       }));
 
       if (response.statusCode == 200){
         return true;
+      }
+      else{
+        var resBody = jsonDecode(response.body);
+        print("FLAG A: ${resBody['error']}");
       }
       return false;
     } catch (e) {
@@ -161,4 +165,6 @@ class SubmissionServices {
       return [];
     }
   }
+
+
 }

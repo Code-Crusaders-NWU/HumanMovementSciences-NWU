@@ -20,6 +20,15 @@ class StuNavBar extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.logout_rounded),
+            title: const Text('View Submissions'),
+            onTap: (){
+              Navigator.pushReplacement(
+                            context, 
+                            MaterialPageRoute(builder: (context) => LoginScreen()));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.logout_rounded),
             title: const Text('Logout'),
             onTap: (){
               Navigator.pushReplacement(
@@ -27,8 +36,6 @@ class StuNavBar extends StatelessWidget {
                             MaterialPageRoute(builder: (context) => LoginScreen()));
             },
           ),
-          
-
         ],
       ),
     );

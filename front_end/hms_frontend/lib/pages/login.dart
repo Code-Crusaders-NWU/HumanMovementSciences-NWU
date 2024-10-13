@@ -108,27 +108,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
 
               //Text wdiget to display nice message
-              const Card(
-                elevation: 20,
-                color: Colors.deepPurple,
-                child: Padding(
-                  padding: EdgeInsets.all(15.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      SizedBox(height: 8),
-                      Text(
-                        'HMS NWU',
-                        style: TextStyle(
-                          fontSize: 19,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
+              Image.asset(
+                    'assets/nwu.png',
+                    width: 150,
+                    height: 150,
               ),
+              const SizedBox(height: 5),
+
+              const Text('Welcome to the Human Movement Sciences Digital Platform',
+              style: TextStyle(
+                fontWeight: FontWeight.w800,
+                color: Colors.lightBlue,
+              ),),
 
               const SizedBox(height: 20),
 

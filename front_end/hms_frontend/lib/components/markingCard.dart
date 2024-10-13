@@ -142,7 +142,24 @@ class _MarkingWidgetSate extends State<MarkingWidget> {
                   SizedBox(
                     width: 200,
                     child: ElevatedButton.icon(
-                      onPressed: () {},
+                      onPressed: () async {
+                        
+                        if (feedbackValidation()){
+                          String? text = _feedbackController.text;
+                          bool flag = await provideFeedback(widget.assignNum, widget.stuEmail, text);
+                          if (flag){
+                            setState(() {
+                              _statusMessage = "Successfully provided feedback";
+                              _feedbackController.clear();
+                            });
+                          }
+                          else{
+                            setState(() {
+                              _statusMessage = "Feedback failed, please try again....";
+                            });
+                          }
+                        }
+                      },
                       icon: const Icon(Icons.draw, color: Colors.white),
                       label: const Text(
                         'Provide Feedback',
@@ -190,6 +207,11 @@ class _MarkingWidgetSate extends State<MarkingWidget> {
     return flagB;
   }
 
+  Future <bool> provideFeedback(int assignNumb, String stuEmail, String feedback) async{
+    bool flag = await SubmissionServices().provideFeedback(assignNumb, stuEmail, feedback);
+    return flag;
+  } 
+
   dynamic gradeValidation(String? gradeInput, int total) {
     if (gradeInput == null || gradeInput.isEmpty) {
       return 'Grade field must not be empty!';
@@ -205,7 +227,25 @@ class _MarkingWidgetSate extends State<MarkingWidget> {
     if (grade > total) {
       return 'Grade cannot be higher than the total';
     }
-
     return true;
+  }
+
+  bool feedbackValidation(){
+    if(_feedbackController.text.isEmpty){
+      setState(() {
+        _statusMessage = "Feedback is empty.....";
+      });
+      return false;
+      }
+      if (_feedbackController.text.length > 100){
+        setState(() {
+         _statusMessage = "Feedback should be between 0 and 100 characters.";
+      });
+        
+         return false;
+      }
+
+      return true;
+    
   }
 }

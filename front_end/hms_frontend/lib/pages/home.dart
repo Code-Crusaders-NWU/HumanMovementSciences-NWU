@@ -40,7 +40,13 @@ class _HomePageState extends State<HomePage> {
 
                   const SizedBox(height: 10),
 
-                  
+                  Image.asset(
+                  'assets/nwu.png',
+                  width: 150,
+                  height: 150,
+                  ),
+                  const SizedBox(height: 5),
+
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 30),
                     child: Text(

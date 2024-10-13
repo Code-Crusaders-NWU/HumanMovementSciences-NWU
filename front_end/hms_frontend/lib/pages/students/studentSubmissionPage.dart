@@ -131,6 +131,7 @@ class _SubmissionsPageState extends State<StudentSubmissionsPage> {
               ? VideoPlayerWidget(
                   url: widget.uri,
                   dataSourceType: DataSourceType.network,
+                  placeholderImage: 'assets/nwulogo.png',
                 )
               : const SizedBox(), // Empty container when video player is not shown
         ],

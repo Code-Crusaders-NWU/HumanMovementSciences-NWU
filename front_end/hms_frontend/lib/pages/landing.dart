@@ -72,10 +72,10 @@ class _LandingPageState extends State<LandingPage>
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Image.network(
-                    'https://services.nwu.ac.za/sites/services.nwu.ac.za/files/files/designs-branding/CMYK_NWU_Logo-Purple.png',
-                    width: 100,
-                    height: 100,
+                  Image.asset(
+                    'assets/nwu.png',
+                    width: 150,
+                    height: 150,
 
                     //error handeling for button
                     errorBuilder: (context, error, stackTrace) {
