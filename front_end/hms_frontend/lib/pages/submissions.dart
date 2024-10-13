@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hms_frontend/components/myAppbar.dart';
 import 'package:hms_frontend/components/myButton.dart';
 import 'package:hms_frontend/pages/students/studentSubmissionPage.dart';
 import 'package:intl/intl.dart';
@@ -42,17 +43,7 @@ class _SubmissionsPageState extends State<SubmissionsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Submissions',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-          textAlign: TextAlign.center,
-        ),
-        backgroundColor: Colors.deepPurple,
-      ),
+      appBar: MyAppBar(titleText: "Submissions"),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

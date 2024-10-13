@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:hms_frontend/components/myAppbar.dart';
 import 'package:hms_frontend/pages/admins/admin.dart';
 import 'package:hms_frontend/pages/home.dart';
 import 'package:hms_frontend/pages/lecturers/lecturers.dart';
@@ -19,7 +20,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  
   final TokenService tokenService = TokenService();
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
@@ -48,25 +48,21 @@ class _LoginScreenState extends State<LoginScreen> {
           loginMessage = 'Login successful';
         });
         String token = jsonDecode(response.body)['token'];
-         await tokenService.storeToken(token);
+        await tokenService.storeToken(token);
         return jsonDecode(response.body)['token'];
-
-      } 
-      
-      else {
+      } else {
         var resBody = jsonDecode(response.body);
         setState(() {
           loginMessage = resBody['error'];
         });
         return "";
       }
-    } 
-    catch (e) {
+    } catch (e) {
       setState(() {
         loginMessage = 'An error occurred: $e';
       });
       return "";
-    }finally{
+    } finally {
       setState(() {
         isLoading = false;
       });
@@ -76,17 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'LOGIN',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-          textAlign: TextAlign.center,
-        ),
-        backgroundColor: Colors.deepPurple,
-      ),
+      appBar: MyAppBar(titleText: "Login"),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
@@ -108,69 +94,75 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-            
-                //Text wdiget to display nice message
+
                 Image.asset(
-                      'assets/nwu.png',
-                      width: 150,
-                      height: 150,
+                  'assets/nwu.png',
+                  width: 150,
+                  height: 150,
                 ),
                 const SizedBox(height: 5),
-            
-                const Text('Welcome to the Human Movement Sciences Digital Platform',
-                style: TextStyle(
-                  fontWeight: FontWeight.w800,
-                  color: Colors.lightBlue,
-                ),),
-            
+
+                const Text(
+                  'Welcome to the Human Movement Sciences Digital Platform',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w800,
+                    color: Colors.lightBlue,
+                  ),
+                ),
+
                 const SizedBox(height: 20),
-            
+
                 //Username TextBox
                 TextBox(
                   controller: usernameController,
                   hintText: 'email',
                   obscureText: false,
                 ),
-            
+
                 const SizedBox(height: 20),
-            
+
                 //Password TextBox
                 TextBox(
                   controller: passwordController,
                   hintText: 'password',
                   obscureText: true,
                 ),
-            
+
                 const SizedBox(height: 20),
-                isLoading? const CircularProgressIndicator() :
-                //Login Button
-                  MyButton(
-                    buttonColor: Colors.deepPurple,
-                    icon: Icon(Icons.login),
-                    text: 'Login',
-                    onPressed: () async{
-                          String token = await login() ;
+                isLoading
+                    ? const CircularProgressIndicator()
+                    :
+                    //Login Button
+                    MyButton(
+                        buttonColor: Colors.deepPurple,
+                        icon: Icon(Icons.login),
+                        text: 'Login',
+                        onPressed: () async {
+                          String token = await login();
                           String role = await AuthServices.getRole(token);
-                          if (role =="admin"){  //Ensure there is a token before proceding
+                          if (role == "admin") {
+                            //Ensure there is a token before proceding
                             Navigator.pushReplacement(
-                              context, 
-                              MaterialPageRoute(builder: (context) => const AdminPage(),
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const AdminPage(),
                               ),
                             );
-                          }
-                          else if (role == "lecturer")
-                          {
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LecturerPage()));
-                          }
-                          else{
+                          } else if (role == "lecturer") {
                             Navigator.pushReplacement(
-                              context, 
-                              MaterialPageRoute(builder: (context) => HomePage()));
-                            
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const LecturerPage()));
+                          } else {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomePage()));
                           }
                         },
-                  ),
-            
+                      ),
+
                 const SizedBox(height: 10),
                 //SignUp Button
                 MyButton(
@@ -178,8 +170,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   icon: Icon(Icons.create),
                   text: 'SignUp',
                   onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => SignupScreen()));
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SignupScreen()));
                   },
                 )
               ],

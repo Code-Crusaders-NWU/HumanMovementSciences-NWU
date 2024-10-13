@@ -5,6 +5,7 @@ import 'package:hms_frontend/pages/lecturers/createAssignmentPage.dart';
 import 'package:hms_frontend/pages/lecturers/lecturrersAssignPage.dart';
 import 'package:hms_frontend/pages/login.dart';
 import 'package:hms_frontend/pages/submissions.dart';
+import 'package:hms_frontend/services/token.services.dart';
 
 class LecNavbar extends StatelessWidget {
   const LecNavbar({super.key});
@@ -32,13 +33,12 @@ class LecNavbar extends StatelessWidget {
             leading: const Icon(Icons.logout_rounded),
             title: const Text('Logout'),
             onTap: (){
+              TokenService().deleteToken();
               Navigator.pushReplacement(
                             context, 
                             MaterialPageRoute(builder: (context) => LoginScreen()));
             },
           ),
-          
-
         ],
       ),
     );

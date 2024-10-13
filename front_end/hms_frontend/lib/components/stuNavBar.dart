@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hms_frontend/pages/lecturers/createAssignmentPage.dart';
 import 'package:hms_frontend/pages/login.dart';
 import 'package:hms_frontend/pages/students/studentsAssignment.dart';
+import 'package:hms_frontend/services/token.services.dart';
 
 class StuNavBar extends StatelessWidget {
   const StuNavBar({super.key});
@@ -31,6 +32,7 @@ class StuNavBar extends StatelessWidget {
             leading: const Icon(Icons.logout_rounded),
             title: const Text('Logout'),
             onTap: (){
+              TokenService().deleteToken();
               Navigator.pushReplacement(
                             context, 
                             MaterialPageRoute(builder: (context) => LoginScreen()));

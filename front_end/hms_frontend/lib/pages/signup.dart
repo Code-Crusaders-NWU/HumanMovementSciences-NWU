@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:hms_frontend/components/myAppbar.dart';
 import 'package:hms_frontend/components/myButton.dart';
 import 'package:hms_frontend/components/textBox.dart';
 import 'package:hms_frontend/constants.dart';
@@ -53,21 +54,10 @@ class _SignupScreenState extends State<SignupScreen> {
     _nameController.clear();
     _surnameController.clear();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'SignUp',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-          textAlign: TextAlign.center,
-        ),
-        backgroundColor: Colors.lightBlue,
-      ),
+      appBar:  MyAppBar(titleText: "Signup", backgroundColor: Colors.lightBlue),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
@@ -164,7 +154,7 @@ class _SignupScreenState extends State<SignupScreen> {
       ),
     );
   }
-
+  
   bool validator() {
     String email = _usernameController.text;
     String password = _passwordController.text;

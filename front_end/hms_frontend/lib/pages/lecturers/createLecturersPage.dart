@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:hms_frontend/components/myAppbar.dart';
 import 'package:hms_frontend/components/textBox.dart';
 import 'package:hms_frontend/services/users.services.dart';
 
@@ -25,17 +26,7 @@ class _CreatelecturerspageState extends State<CreateLecturersPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Add a lecturer',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-          textAlign: TextAlign.center,
-        ),
-        backgroundColor: Colors.deepPurple,
-      ),
+      appBar: MyAppBar(titleText: "Add a lecturer", backgroundColor: Colors.lightBlue,),
       body:  Padding(padding: const EdgeInsets.all(8.0),
       child: Center(child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

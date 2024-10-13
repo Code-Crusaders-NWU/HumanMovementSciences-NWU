@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:hms_frontend/components/myAppbar.dart';
 import 'package:hms_frontend/services/submissions.services.dart';
 import 'package:hms_frontend/services/video.services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -102,17 +103,7 @@ class _MediaPageState extends State<MediaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Media Upload',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        backgroundColor: Colors.deepPurple,
-        elevation: 4.0,
-      ),
+      appBar: MyAppBar(titleText: "Video Submission", backgroundColor: Colors.lightBlue,),
       body: SafeArea(
         child: Center(
           child: Padding(

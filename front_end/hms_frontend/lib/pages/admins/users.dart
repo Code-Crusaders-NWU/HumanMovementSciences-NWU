@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hms_frontend/components/myAppbar.dart';
 import 'package:hms_frontend/components/myButton.dart';
 import 'package:hms_frontend/constants.dart';
 import 'package:hms_frontend/services/users.services.dart';
@@ -26,17 +27,7 @@ List<Map<String, dynamic>> users= []; //List of json objects (MAP) which will be
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Manage Users',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-          textAlign: TextAlign.center,
-        ),
-        backgroundColor: Colors.deepPurple,
-      ),
+      appBar: MyAppBar(titleText: "Manage Users"),
       body: Container(
         padding: const EdgeInsets.all(16.0),
         child: Center(child: ListView.builder(

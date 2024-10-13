@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hms_frontend/components/myAppbar.dart';
 import 'package:hms_frontend/components/myButton.dart';
 import 'package:hms_frontend/components/textBox.dart';
 import 'package:hms_frontend/services/assignments.services.dart';
@@ -27,17 +28,7 @@ class _AssignmentsPageState extends State<AssignmentCreatePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Assignments',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-          textAlign: TextAlign.center,
-        ),
-        backgroundColor: Colors.deepPurple,
-      ),
+      appBar: MyAppBar(titleText: "Add an assignment", backgroundColor: Colors.lightBlue,),
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Center(

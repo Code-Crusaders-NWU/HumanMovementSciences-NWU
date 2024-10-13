@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
+import 'package:hms_frontend/components/myAppbar.dart';
 import 'package:hms_frontend/pages/students/studentSubmissionPage.dart';
 import 'package:hms_frontend/pages/submissions.dart';
 import 'package:intl/intl.dart';
@@ -41,17 +42,7 @@ class _AssignmentsPageState extends State<AssignmentsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Assignments',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-          textAlign: TextAlign.center,
-        ),
-        backgroundColor: Colors.deepPurple,
-      ),
+      appBar: MyAppBar(titleText: "Assignments"),
       body: Container(
         child: Center(
           child: ListView.builder(

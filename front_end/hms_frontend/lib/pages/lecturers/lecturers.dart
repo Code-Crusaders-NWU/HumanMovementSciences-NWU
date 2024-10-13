@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hms_frontend/components/lecNavbar.dart';
+import 'package:hms_frontend/components/myAppbar.dart';
 
 class LecturerPage extends StatefulWidget {
   const LecturerPage({super.key});
@@ -14,16 +15,7 @@ class _AdminPageState extends State<LecturerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: LecNavbar(),
-      appBar: AppBar(
-        title: const Text(
-          'NWU HMS Lecturer Page',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),  
-        backgroundColor: Colors.deepPurple,
-      ),
+      appBar: MyAppBar(titleText: "Lecturer's Page"),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

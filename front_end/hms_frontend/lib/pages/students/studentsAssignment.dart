@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hms_frontend/components/myAppbar.dart';
 import 'package:hms_frontend/pages/students/media.dart';
 import 'package:hms_frontend/services/assignments.services.dart';
 import 'package:hms_frontend/services/auth.services.dart';
@@ -37,17 +38,7 @@ class _StudentAssignmentsPageState extends State<StudentsAssignmentsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Assignments',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-          textAlign: TextAlign.center,
-        ),
-        backgroundColor: Colors.deepPurple,
-      ),
+      appBar: MyAppBar(titleText: "Assignments"),
       body: Center(
         child: ListView.builder(
           itemCount: assignments.length,

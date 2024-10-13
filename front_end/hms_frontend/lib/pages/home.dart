@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:hms_frontend/components/myAppbar.dart';
 import 'package:hms_frontend/components/stuNavBar.dart';
 
 
@@ -17,9 +18,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: StuNavBar(),
-      appBar: AppBar(title: Title(color: Colors.blue,child:  const Text('Home', style: TextStyle(color: Colors.white),),),
-      backgroundColor: Colors.deepPurple,
-      ),
+      appBar: MyAppBar(titleText: "Home Page", backgroundColor: Colors.lightBlue,),
       body: ListView(
         children: [
           Padding(

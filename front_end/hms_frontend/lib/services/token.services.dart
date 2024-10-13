@@ -20,4 +20,8 @@ bool isTokenExpired(String token) {
     String? token = await getToken();
     return token != null && token.isNotEmpty;
   }
+
+   Future<void> deleteToken() async {
+    await storage.delete(key: 'jwt_token');
+  }
 }

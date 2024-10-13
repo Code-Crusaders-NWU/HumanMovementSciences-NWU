@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hms_frontend/components/markingCard.dart';
+import 'package:hms_frontend/components/myAppbar.dart';
 import 'package:hms_frontend/components/videoPlayer.dart';
 import 'package:video_player/video_player.dart';
 
@@ -31,17 +32,7 @@ class _SubmissionsPageState extends State<StudentSubmissionsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Student Video Submission',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        backgroundColor: Colors.deepPurple,
-        elevation: 4.0,
-      ),
+      appBar: MyAppBar(titleText: "Student's Submission"),
       body: ListView(
          
         padding: const EdgeInsets.all(20),
