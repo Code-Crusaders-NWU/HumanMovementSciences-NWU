@@ -41,88 +41,91 @@ class _AssignmentsPageState extends State<AssignmentCreatePage> {
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              TextBox(
-                controller: lecturerController,
-                hintText: 'Email of Lecturer',
-                obscureText: false,
-              ),
-
-              const SizedBox(height: 20), //Used for spacing
-
-              TextBox(
-                controller: titleController,
-                hintText: 'Title of Assignment',
-                obscureText: false,
-              ),
-
-              const SizedBox(height: 20), //Used for spacing
-
-              TextBox(
-                controller: descriptionController,
-                hintText: 'Description of Assignment',
-                obscureText: false,
-              ),
-
-              const SizedBox(height: 20), //Used for spacing
-
-              
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 250,
-                    child: TextField(
-                      controller: _dateController,
-                      decoration: const InputDecoration(
-                          labelText: 'Pick a due date...',
-                          filled: true,
-                          prefixIcon: Icon(Icons.calendar_month),
-                          enabledBorder:
-                              OutlineInputBorder(borderSide: BorderSide.none),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.deepPurple))),
-                      onTap: () async {
-                        await _selectDate();
-                      },
-                      readOnly: true,
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                TextBox(
+                  controller: lecturerController,
+                  hintText: 'Email of Lecturer',
+                  obscureText: false,
+                ),
+            
+                const SizedBox(height: 20), //Used for spacing
+            
+                TextBox(
+                  controller: titleController,
+                  hintText: 'Title of Assignment',
+                  obscureText: false,
+                ),
+            
+                const SizedBox(height: 20), //Used for spacing
+            
+                TextBox(
+                  controller: descriptionController,
+                  hintText: 'Description of Assignment',
+                  obscureText: false,
+                ),
+            
+                const SizedBox(height: 20), //Used for spacing
+            
+                
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 250,
+                      child: TextField(
+                        controller: _dateController,
+                        decoration: const InputDecoration(
+                            labelText: 'Pick a due date...',
+                            filled: true,
+                            prefixIcon: Icon(Icons.calendar_month),
+                            enabledBorder:
+                                OutlineInputBorder(borderSide: BorderSide.none),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.deepPurple))),
+                        onTap: () async {
+                          await _selectDate();
+                        },
+                        readOnly: true,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  //Get the time an assignment is due
-                  Container(
-                    width: 250,
-                    child: TextField(
-                      controller: _timeController,
-                      decoration: const InputDecoration(
-                          labelText: 'Pick a due time...',
-                          filled: true,
-                          prefixIcon: Icon(Icons.calendar_month),
-                          enabledBorder:
-                              OutlineInputBorder(borderSide: BorderSide.none),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.deepPurple))),
-                      onTap: () async {
-                        await _selectTime();
-                      },
-                      readOnly: true,
+                    const SizedBox(height: 20),
+                    //Get the time an assignment is due
+                    Container(
+                      width: 250,
+                      child: TextField(
+                        controller: _timeController,
+                        decoration: const InputDecoration(
+                            labelText: 'Pick a due time...',
+                            filled: true,
+                            prefixIcon: Icon(Icons.calendar_month),
+                            enabledBorder:
+                                OutlineInputBorder(borderSide: BorderSide.none),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.deepPurple))),
+                        onTap: () async {
+                          await _selectTime();
+                        },
+                        readOnly: true,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 20), //Used for spacing
-
-
-              MyButton(text: 'Create Assignment', onPressed: () {
-                _createAssignment( lecturerController.text, 100, titleController.text, descriptionController.text);
-
-              },
-              icon: Icon(Icons.add),
-              buttonColor: Colors.blue,)
-            ],
+                  ],
+                ),
+            
+                const SizedBox(height: 20), //Used for spacing
+            
+            
+                MyButton(text: 'Create Assignment', onPressed: () {
+                  _createAssignment( lecturerController.text, 100, titleController.text, descriptionController.text);
+            
+                },
+                icon: Icon(Icons.add),
+                buttonColor: Colors.blue,)
+              ],
+            ),
           ),
         ),
       ),

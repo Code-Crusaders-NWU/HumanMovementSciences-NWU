@@ -74,7 +74,7 @@ class _AssignmentsPageState extends State<AssignmentsPage> {
                       color: Colors.grey.withOpacity(0.5),
                       spreadRadius: 2,
                       blurRadius: 5,
-                      offset: Offset(0, 3), // Changes position of shadow
+                      offset: Offset(0, 3), 
                     ),
                   ],
                 ),
@@ -163,36 +163,40 @@ class _AssignmentsPageState extends State<AssignmentsPage> {
                             );
                           },
                         ),
-                        IconButton(
-                          icon: Icon(
-                            Icons.download,
-                            color: Colors.blue[200],
+                        Flexible(
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.download,
+                              color: Colors.blue[200],
+                            ),
+                            onPressed: () async {
+                              bool downloadStatus = await AssignmentService()
+                                  .downloadMarks(a['assignm_Num'], a['title']);
+                          
+                              if (!downloadStatus) {
+                                print('No submissions');
+                              }
+                            },
                           ),
-                          onPressed: () async {
-                            bool downloadStatus = await AssignmentService()
-                                .downloadMarks(a['assignm_Num'], a['title']);
-
-                            if (!downloadStatus) {
-                              print('No submissions');
-                            }
-                          },
                         ),
-                        IconButton(
-                          icon: const Icon(
-                            Icons.remove_red_eye,
-                            color: Colors.black54,
-                          ),
-                          onPressed: () {
-                            print(a['assignm_Num']);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => SubmissionsPage(
-                                  assignNumb: a['assignm_Num'],
+                        Flexible(
+                          child: IconButton(
+                            icon: const Icon(
+                              Icons.remove_red_eye,
+                              color: Colors.black54,
+                            ),
+                            onPressed: () {
+                              print(a['assignm_Num']);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SubmissionsPage(
+                                    assignNumb: a['assignm_Num'],
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
+                              );
+                            },
+                          ),
                         ),
                       ],
                     ),

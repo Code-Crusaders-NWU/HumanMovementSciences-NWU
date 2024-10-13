@@ -50,65 +50,69 @@ class _SubmissionsPageState extends State<StudentSubmissionsPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-                SizedBox(
-              width: 200,
-              child: ElevatedButton.icon(
-                        onPressed: (){
-                          if (_showVideoPlayer){
-                            setState(() {
-                            _showVideoPlayer = false;
+                Flexible(
+                  child: SizedBox(
+                                width: 200,
+                                child: ElevatedButton.icon(
+                          onPressed: (){
+                            if (_showVideoPlayer){
+                              setState(() {
+                              _showVideoPlayer = false;
+                              });
+                            }else{
+                              setState(() {
+                              _showVideoPlayer = true;
                             });
-                          }else{
-                            setState(() {
-                            _showVideoPlayer = true;
-                          });
-                          }
-                        },
-                        icon: const Icon(Icons.download, color: Colors.white),
-                        label: const Text(
-                          'Toggle Video Player',
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                          backgroundColor:
-                           Colors.blueAccent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0),
+                            }
+                          },
+                          icon: const Icon(Icons.download, color: Colors.white),
+                          label: const Text(
+                            'Toggle Video Player',
+                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                            backgroundColor:
+                             Colors.blueAccent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
                           ),
                         ),
-                      ),
-            ),
+                              ),
+                ),
 
-            SizedBox(
-              width: 175,
-              child: ElevatedButton.icon(
-                         onPressed: (){
-                          if (_showGradingFeedback){
-                            setState(() {
-                            _showGradingFeedback = false;
+            Flexible(
+              child: SizedBox(
+                width: 175,
+                child: ElevatedButton.icon(
+                           onPressed: (){
+                            if (_showGradingFeedback){
+                              setState(() {
+                              _showGradingFeedback = false;
+                              });
+                            }else{
+                              setState(() {
+                              _showGradingFeedback = true;
                             });
-                          }else{
-                            setState(() {
-                            _showGradingFeedback = true;
-                          });
-                          }
-             
-                        },
-                        icon: const Icon(Icons.mark_chat_read_sharp, color: Colors.white),
-                        label: const Text(
-                          'Toggle Grading Sheet',
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                          backgroundColor:
-                           Colors.deepPurple,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
+                            }
+               
+                          },
+                          icon: const Icon(Icons.mark_chat_read_sharp, color: Colors.white),
+                          label: const Text(
+                            'Toggle Grading Sheet',
+                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                            backgroundColor:
+                             Colors.deepPurple,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
                           ),
                         ),
-                      ),
+              ),
             ),
             ],
           ),

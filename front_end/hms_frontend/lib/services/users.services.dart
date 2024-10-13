@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:hms_frontend/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:hms_frontend/services/token.services.dart';
@@ -119,5 +118,32 @@ class UserService{
     } catch (e) {
       throw e.toString();
     }
+  }
+
+  Future <dynamic> signUp(String email, String password, String name, String surname) async{
+    try {
+          var regBody = {
+          "email": email,
+          "password": password,
+          "user_type": "student"
+          };
+          var res = await http.post(
+            Uri.parse("$apiURL/api/signup"),
+            headers: {"Content-Type": "application/json"},
+            body: jsonEncode(regBody),
+          );
+
+          if (res.statusCode == 201) {
+            return true;
+            }
+          else {
+            var resBody = jsonDecode(res.body);
+            print(resBody['error']);
+            return resBody['error'];
+            }
+          }
+        catch (error) {
+          return error.toString();
+        }
   }
 }

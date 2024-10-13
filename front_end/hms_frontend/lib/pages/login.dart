@@ -90,97 +90,100 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              if (loginMessage != null)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Text(
-                    loginMessage!,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: loginMessage == 'Login successful'
-                          ? Colors.green
-                          : Colors.red,
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                if (loginMessage != null)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Text(
+                      loginMessage!,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: loginMessage == 'Login successful'
+                            ? Colors.green
+                            : Colors.red,
+                      ),
                     ),
                   ),
+            
+                //Text wdiget to display nice message
+                Image.asset(
+                      'assets/nwu.png',
+                      width: 150,
+                      height: 150,
                 ),
-
-              //Text wdiget to display nice message
-              Image.asset(
-                    'assets/nwu.png',
-                    width: 150,
-                    height: 150,
-              ),
-              const SizedBox(height: 5),
-
-              const Text('Welcome to the Human Movement Sciences Digital Platform',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-                color: Colors.lightBlue,
-              ),),
-
-              const SizedBox(height: 20),
-
-              //Username TextBox
-              TextBox(
-                controller: usernameController,
-                hintText: 'email',
-                obscureText: false,
-              ),
-
-              const SizedBox(height: 20),
-
-              //Password TextBox
-              TextBox(
-                controller: passwordController,
-                hintText: 'password',
-                obscureText: true,
-              ),
-
-              const SizedBox(height: 20),
-              isLoading? const CircularProgressIndicator() :
-              //Login Button
+                const SizedBox(height: 5),
+            
+                const Text('Welcome to the Human Movement Sciences Digital Platform',
+                style: TextStyle(
+                  fontWeight: FontWeight.w800,
+                  color: Colors.lightBlue,
+                ),),
+            
+                const SizedBox(height: 20),
+            
+                //Username TextBox
+                TextBox(
+                  controller: usernameController,
+                  hintText: 'email',
+                  obscureText: false,
+                ),
+            
+                const SizedBox(height: 20),
+            
+                //Password TextBox
+                TextBox(
+                  controller: passwordController,
+                  hintText: 'password',
+                  obscureText: true,
+                ),
+            
+                const SizedBox(height: 20),
+                isLoading? const CircularProgressIndicator() :
+                //Login Button
+                  MyButton(
+                    buttonColor: Colors.deepPurple,
+                    icon: Icon(Icons.login),
+                    text: 'Login',
+                    onPressed: () async{
+                          String token = await login() ;
+                          String role = await AuthServices.getRole(token);
+                          if (role =="admin"){  //Ensure there is a token before proceding
+                            Navigator.pushReplacement(
+                              context, 
+                              MaterialPageRoute(builder: (context) => const AdminPage(),
+                              ),
+                            );
+                          }
+                          else if (role == "lecturer")
+                          {
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LecturerPage()));
+                          }
+                          else{
+                            Navigator.pushReplacement(
+                              context, 
+                              MaterialPageRoute(builder: (context) => HomePage()));
+                            
+                          }
+                        },
+                  ),
+            
+                const SizedBox(height: 10),
+                //SignUp Button
                 MyButton(
-                  buttonColor: Colors.deepPurple,
-                  icon: Icon(Icons.login),
-                  text: 'Login',
-                  onPressed: () async{
-                        String token = await login() ;
-                        String role = await AuthServices.getRole(token);
-                        if (role =="admin"){  //Ensure there is a token before proceding
-                          Navigator.pushReplacement(
-                            context, 
-                            MaterialPageRoute(builder: (context) => const AdminPage(),
-                            ),
-                          );
-                        }
-                        else if (role == "lecturer")
-                        {
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LecturerPage()));
-                        }
-                        else{
-                          Navigator.pushReplacement(
-                            context, 
-                            MaterialPageRoute(builder: (context) => HomePage()));
-                          
-                        }
-                      },
-                ),
-
-              const SizedBox(height: 10),
-              //SignUp Button
-              MyButton(
-                buttonColor: Colors.lightBlue,
-                icon: Icon(Icons.create),
-                text: 'SignUp',
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => SignupScreen()));
-                },
-              )
-            ],
+                  buttonColor: Colors.lightBlue,
+                  icon: Icon(Icons.create),
+                  text: 'SignUp',
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => SignupScreen()));
+                  },
+                )
+              ],
+            ),
           ),
         ),
       ),
