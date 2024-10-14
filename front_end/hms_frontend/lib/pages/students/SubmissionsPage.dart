@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:hms_frontend/components/myAppbar.dart';
-import 'package:hms_frontend/components/myButton.dart';
 import 'package:hms_frontend/services/order.services.dart';
 import 'package:hms_frontend/services/submissions.services.dart';
 import 'package:intl/intl.dart';
 
-class SubmissionsPageView extends StatefulWidget {
-  const SubmissionsPageView({super.key, required this.stuEmail});
+class StudentViewSubmissionsPage extends StatefulWidget {
+  const StudentViewSubmissionsPage({super.key, required this.stuEmail});
 
   final String stuEmail;
 
   @override
-  State<SubmissionsPageView> createState() => _SubmissionsPageState();
+  State<StudentViewSubmissionsPage> createState() => _SubmissionsPageState();
 }
 
-class _SubmissionsPageState extends State<SubmissionsPageView> {
+class _SubmissionsPageState extends State<StudentViewSubmissionsPage> {
   bool showVideoPlayer = false;
   bool isLoading = true;
   List<Map<String, dynamic>> submissions = [];

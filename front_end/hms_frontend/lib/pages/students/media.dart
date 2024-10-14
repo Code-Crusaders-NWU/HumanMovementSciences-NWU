@@ -13,11 +13,13 @@ class MediaPage extends StatefulWidget {
     super.key,
     required this.assignmNumb,
     required this.stuEmail,
+    required this.assignmTitle,
     }
     );
 
   final String stuEmail;
   final int assignmNumb;
+  final String assignmTitle;
 
   @override
   State<MediaPage> createState() => _MediaPageState();
@@ -74,13 +76,6 @@ class _MediaPageState extends State<MediaPage> {
         if (postSubmission){
             print('Successfully uploaded submission');
         }
-        else{
-          print('FAILED MISSERABLY');
-        }
-
-        
-        
-
         if (videoLink != null) {
           print('Video uploaded successfully: $videoLink');
         } else {

@@ -115,7 +115,9 @@ class _StudentAssignmentsPageState extends State<StudentsAssignmentsPage> {
                         MaterialPageRoute(
                             builder: (context) => MediaPage(
                                 assignmNumb: a['assignm_Num'],
-                                stuEmail: stuEmail)));
+                                stuEmail: stuEmail,
+                                assignmTitle: a['title'],
+                                )));
                   },
                 ),
               ),
