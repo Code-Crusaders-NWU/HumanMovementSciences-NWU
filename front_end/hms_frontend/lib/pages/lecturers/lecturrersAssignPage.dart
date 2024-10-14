@@ -1,14 +1,13 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:hms_frontend/components/myAppbar.dart';
-import 'package:hms_frontend/pages/students/studentSubmissionPage.dart';
 import 'package:hms_frontend/pages/submissions.dart';
+import 'package:hms_frontend/services/order.services.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:hms_frontend/pages/lecturers/createAssignmentPage.dart';
 import 'package:hms_frontend/services/assignments.services.dart';
 import 'package:hms_frontend/services/auth.services.dart';
-import 'package:hms_frontend/services/token.services.dart';
 
 class AssignmentsPage extends StatefulWidget {
   const AssignmentsPage({super.key});
@@ -21,15 +20,16 @@ class _AssignmentsPageState extends State<AssignmentsPage> {
   List<Map<String, dynamic>> assignments = [];
 
   Future<void> setLecturerAssignments() async {
-    String? token = await TokenService().getToken();
-
-    String email = await AuthServices.getEmail(token!);
+    String email = await AuthServices.getEmail();
 
     final List<Map<String, dynamic>> fetchedAssignments =
         await AssignmentService().fetchLecturerAssignments(email);
+  
 
     setState(() {
-      assignments = fetchedAssignments;
+      //Order assignments
+      assignments = OrderServices.sortAssignmentsEarliest(
+          fetchedAssignments);
     });
   }
 
@@ -212,4 +212,10 @@ class _AssignmentsPageState extends State<AssignmentsPage> {
       ),
     );
   }
+
+  void _sortAssignments() {
+   setState(() {
+     assignments = OrderServices.sortAssignmentsEarliest(assignments);
+   });
+}
 }

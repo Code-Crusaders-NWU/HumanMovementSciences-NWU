@@ -3,7 +3,7 @@ import 'package:hms_frontend/components/myAppbar.dart';
 import 'package:hms_frontend/pages/students/media.dart';
 import 'package:hms_frontend/services/assignments.services.dart';
 import 'package:hms_frontend/services/auth.services.dart';
-import 'package:hms_frontend/services/token.services.dart';
+import 'package:hms_frontend/services/order.services.dart';
 import 'package:intl/intl.dart';
 
 class StudentsAssignmentsPage extends StatefulWidget {
@@ -27,9 +27,13 @@ class _StudentAssignmentsPageState extends State<StudentsAssignmentsPage> {
     try {
       final List<Map<String, dynamic>> fetchedAssignments =
           await AssignmentService().fetchAssignments();
+
+          
       setState(() {
         assignments = fetchedAssignments;
       });
+
+      _sortAssignments();
     } catch (e) {
       throw "$e";
     }
@@ -38,7 +42,7 @@ class _StudentAssignmentsPageState extends State<StudentsAssignmentsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(titleText: "Assignments"),
+      appBar: MyAppBar(titleText: "Due Assignments"),
       body: Center(
         child: ListView.builder(
           itemCount: assignments.length,
@@ -105,17 +109,13 @@ class _StudentAssignmentsPageState extends State<StudentsAssignmentsPage> {
                     color: Colors.blue,
                   ),
                   onPressed: () async {
-                    final String? token = await TokenService().getToken();
-                    if (token!=null){
-                      final stuEmail = await AuthServices.getEmail(token);
-                       Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                              builder: (context) =>  
-                              MediaPage(assignmNumb: a['assignm_Num'], 
-                              stuEmail: stuEmail)));
-
-                    }
+                    final stuEmail = await AuthServices.getEmail();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MediaPage(
+                                assignmNumb: a['assignm_Num'],
+                                stuEmail: stuEmail)));
                   },
                 ),
               ),
@@ -124,5 +124,11 @@ class _StudentAssignmentsPageState extends State<StudentsAssignmentsPage> {
         ),
       ),
     );
+  }
+
+  void _sortAssignments() {
+   setState(() {
+     assignments = OrderServices.sortAssignmentsEarliest(assignments);
+   });
   }
 }

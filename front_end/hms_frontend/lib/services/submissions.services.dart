@@ -166,5 +166,33 @@ class SubmissionServices {
     }
   }
 
+  Future<List<Map<String, dynamic>>> fetchStudentSubmissions(String stuEmail) async {
+    try {
+      final uri = Uri.parse("$apiURL/api/studentsubmissions");
+
+      String? token = await TokenService().getToken();
+      final response = await http.post(uri, headers: <String, String>{
+        'Authorization': 'bearer $token',
+        'Content-Type': 'application/json; charset=UTF-8'
+      },
+      body: jsonEncode(<String, String>{
+        "stu_Email" : stuEmail,
+      }));
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> resBody = jsonDecode(response.body);
+        List<dynamic> assignmentsJson = resBody['submissions'];
+        return assignmentsJson.cast<
+            Map<String, dynamic>>(); // Cast to list of Map<String, dynamic>s
+      } else {
+        var resBody = jsonDecode(response.body);
+        throw Exception(resBody['error']);
+      }
+    } catch (e) {
+      print('Error fetching assignments: $e');
+      return [];
+    }
+  }
+
 
 }
