@@ -88,13 +88,7 @@ class LecturerService {
             if (!/^[a-zA-Z\s\-]+$/.test(lec_Surname)) {
                 throw new Error('Surname should only contain alphabetic characters, hyphens, and spaces. ');
             }
-
-
-            //validate title of lecturer
-            if (title !== "B.Sc." && title !== "Hons" && title !== "M" && title !== "Dr.") {
-                throw new Error("The provided lecturer title is not valid.");
-            }
-
+            
         } catch (error) {
             throw error;
         }
