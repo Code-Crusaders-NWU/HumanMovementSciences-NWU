@@ -84,25 +84,25 @@ router.post('/submission', authenticateToken, accessControl.isStudent ,Submissio
 
 /**
  * @swagger
- * /api/submission:
- *   get:
- *     summary: View student submisions
+ * /api/studentsubmissions:
+ *   post:
+ *     summary: View student submissions
  *     description: Retrieve all submissions made by a student using their email address.
  *     security:
- *      - bearerAuth: [] 
+ *      - bearerAuth: []
  *     tags:
  *       - Submissions
- *     parameters:
- *       - in: body
- *         name: stu_Email
- *         required: true
- *         schema:
- *           type: object
- *           properties:
- *             stu_Email:
- *               type: string
- *               description: Email adress of specific student who's submissions will be retreived.
- *               example: "student@example.com"
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               stu_Email:
+ *                 type: string
+ *                 description: Email address of the specific student whose submissions will be retrieved.
+ *                 example: "student@example.com"
  *     responses:
  *       '200':
  *         description: Successfully retrieved all submissions
@@ -150,12 +150,13 @@ router.post('/submission', authenticateToken, accessControl.isStudent ,Submissio
  *                   example: false
  *                 message:
  *                   type: string
- *                   example: "Error"
+ *                   example: "An error occurred while retrieving submissions"
  */
 
 
+
 //When the viewAll API is called
-router.get('/submission',authenticateToken, accessControl.isLecturer ,SubmissionController.viewAll);
+router.post('/studentsubmissions',authenticateToken, accessControl.isStudent ,SubmissionController.viewAll);
 
 /**
  * @swagger

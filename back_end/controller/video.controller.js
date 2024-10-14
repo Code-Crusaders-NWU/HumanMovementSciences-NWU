@@ -54,9 +54,20 @@ exports.getVideoByVidNum = async (req, res, next) => {
     try {
         const { vid_Num } = req.params;
         const video = await VideoService.getVideoByVidNum(vid_Num);
+
+        if (!video) {
+            return res.status(404).json({
+                status: false,
+                message: 'Video not found'
+            });
+        }
+
         res.status(200).json({ status: true, video });
     } catch (error) {
-        res.status(404).json({ status: false, message: error.message });
+        res.status(500).json({
+            status: false,
+            message: 'An error occurred while retrieving the video'
+        });
         next(error);
     }
 }

@@ -64,7 +64,7 @@ class VideoService {
             const video = await Video_Model.findOne({vid_Num});
 
             if (!video) {
-                throw new Error(`No video found with vid_Num: ${vid_Num}`);
+                throw new Error(`No video found with video number: ${vid_Num}`);
             }
             return video;
         } catch (error) {

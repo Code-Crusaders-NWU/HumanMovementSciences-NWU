@@ -344,4 +344,51 @@ describe('SubmissionService', () => {
         });
 
     });
+
+    //getSubmissionByAssignmNum Tests 
+    describe('getSubmissionsByAssignmNum', () => {
+
+        it('should return a list of submissions for a specific assignment number', async () => {
+            const assignm_Num = 12345;
+
+            const mockSubmissions = [
+                { assignm_Num: 12345, stu_Email: 'student1@example.com', content: 'Submission 1' },
+                { assignm_Num: 12345, stu_Email: 'student2@example.com', content: 'Submission 2' }
+            ];
+
+            //Mock the database method to return the mockSubmissions
+            SubmissionModel.find.mockResolvedValue(mockSubmissions);
+
+            const result = await SubmissionService.getSubmissionsByAssignmNum(assignm_Num);
+
+            //Assertions
+            expect(SubmissionModel.find).toHaveBeenCalledWith({ assignm_Num });
+            expect(result).toEqual(mockSubmissions);
+        });
+
+        it('should throw an error if no submissions are found for the assignment number', async () => {
+            const assignm_Num = 12345;
+
+            //Mock the database method to return an empty array (no submissions found)
+            SubmissionModel.find.mockResolvedValue([]);
+
+            //Call the service and expect an error
+            await expect(SubmissionService.getSubmissionsByAssignmNum(assignm_Num))
+                .rejects
+                .toThrow('No submissions found for the given assignment number');
+        });
+
+        it('should handle errors thrown by the database', async () => {
+            const assignm_Num = 12345;
+
+            //Mock the database method to throw an error
+            SubmissionModel.find.mockRejectedValue(new Error('Database error'));
+
+            //Call the service and expect an error
+            await expect(SubmissionService.getSubmissionsByAssignmNum(assignm_Num))
+                .rejects
+                .toThrow('Database error');
+        });
+
+    });
 });

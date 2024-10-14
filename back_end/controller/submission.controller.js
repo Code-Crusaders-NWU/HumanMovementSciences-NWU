@@ -185,9 +185,18 @@ exports.getSubmissionsByAssignmNum = async (req, res, next) => {
     try {
         const {assign_Num} = req.params;
         const submissions = await SubmissionService.getSubmissionsByAssignmNum(assign_Num);
+        
+        if (!submissions || submissions.length === 0) {
+            return res.status(404).json({ status: false, message: 'No submissions found for the given assignment number' });
+        }
+
         res.status(200).json({ status: true, submissions });
     } catch (error) {
-        res.status(500).json({ status: false, message: error.message });
+        if (error.message === 'No submissions found for the given assignment number') {
+            res.status(404).json({ status: false, message: error.message });
+        } else {
+            res.status(500).json({ status: false, message: 'An error occurred while retrieving submissions' });
+        }
         next(error);
     }
 };

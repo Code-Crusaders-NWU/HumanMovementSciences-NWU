@@ -321,5 +321,64 @@ describe('Submission API Implementation Tests', () => {
             expect(response.body.message).toBe('An error occurred while retrieving ungraded submissions');
         });
 
-    })
+    });
+
+
+    //Test for successful retrieval of submissions
+    describe('GET /api/submission/assignment/:assignm_Num', () => {
+
+        it('should return submissions for a specific assignment number and return 200', async () => {
+            const assignm_Num = 12345;
+
+            const mockSubmissions = [
+                { assignm_Num: 12345, stu_Email: 'student1@example.com', content: 'Submission 1' },
+                { assignm_Num: 12345, stu_Email: 'student2@example.com', content: 'Submission 2' }
+            ];
+
+            //Mock the service to return the mockSubmissions
+            SubmissionService.getSubmissionsByAssignmNum.mockResolvedValue(mockSubmissions);
+
+            const response = await request(app)
+                .get(`/api/submission/assignment/${assignm_Num}`)
+                .set('Authorization', 'Bearer token') // Mock authentication if necessary
+
+            //Assertions
+            expect(response.statusCode).toBe(200);
+            expect(response.body.status).toBe(true);
+            expect(response.body.submissions).toEqual(mockSubmissions);
+        });
+
+        it('should return 404 if no submissions are found', async () => {
+            const assignm_Num = 12345;
+
+            //Mock the service to throw an error (no submissions found)
+            SubmissionService.getSubmissionsByAssignmNum.mockRejectedValue(new Error('No submissions found for the given assignment number'));
+
+            const response = await request(app)
+                .get(`/api/submission/assignment/${assignm_Num}`)
+                .set('Authorization', 'Bearer token') //Mock authentication
+
+            //Assertions
+            expect(response.statusCode).toBe(404);
+            expect(response.body.status).toBe(false);
+            expect(response.body.message).toBe('No submissions found for the given assignment number');
+        });
+
+        it('should return 500 if there is a server error', async () => {
+            const assignm_Num = 12345;
+
+            //Mock the service to throw an error
+            SubmissionService.getSubmissionsByAssignmNum.mockRejectedValue(new Error('Database error'));
+
+            const response = await request(app)
+                .get(`/api/submission/assignment/${assignm_Num}`)
+                .set('Authorization', 'Bearer token') //Mock authentication
+
+            //Assertions
+            expect(response.statusCode).toBe(500);
+            expect(response.body.status).toBe(false);
+            expect(response.body.message).toBe('An error occurred while retrieving submissions');
+        });
+
+    });
 });
