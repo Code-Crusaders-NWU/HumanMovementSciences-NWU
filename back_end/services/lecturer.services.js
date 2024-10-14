@@ -57,7 +57,7 @@ class LecturerService {
     }
 
     //Validation
-    static validation(lec_Email, lec_Name, lec_Surname, title, degree){
+    static validation(lec_Email, lec_Name, lec_Surname, title){
         try {
             //Use validation from the validator NodeJS library to check if email is in the correct format.   
             if(!validator.isEmail(lec_Email)){
@@ -93,11 +93,6 @@ class LecturerService {
             //validate title of lecturer
             if (title !== "B.Sc." && title !== "Hons" && title !== "M" && title !== "Dr.") {
                 throw new Error("The provided lecturer title is not valid.");
-            }
-
-            //validate degree of lecturer
-            if (degree !== "Bachelors" && degree !== "Honours" && degree !== "Masters" && degree !== "Doctors") {
-                throw new Error("The provided lecturer degree is not valid.");
             }
 
         } catch (error) {
