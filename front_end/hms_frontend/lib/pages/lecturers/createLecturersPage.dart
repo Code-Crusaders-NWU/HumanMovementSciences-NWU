@@ -21,6 +21,7 @@ class _CreateLecturersPageState extends State<CreateLecturersPage> {
   final titleController = TextEditingController();
   final degreeController = TextEditingController();
   String message = "";
+  Color messageColor = Colors.red; 
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +64,7 @@ class _CreateLecturersPageState extends State<CreateLecturersPage> {
                   if (success) {
                     setState(() {
                       message = "Lecturer created successfully!";
+                      messageColor = Colors.green; 
                     });
                   }
                 },
@@ -79,7 +81,7 @@ class _CreateLecturersPageState extends State<CreateLecturersPage> {
               if (message.isNotEmpty)
                 Text(
                   message,
-                  style: TextStyle(color: Colors.red),
+                  style: TextStyle(color: messageColor, fontWeight: FontWeight.bold), 
                 ),
             ],
           ),
@@ -93,7 +95,7 @@ class _CreateLecturersPageState extends State<CreateLecturersPage> {
     var valEmail = ValidatorService.validateEmail(email);
     
     if (valEmail != true) {
-      return valEmail; // Return validation message
+      return valEmail; 
     }
 
     var valPassword = ValidatorService.validatePasword(passwordController.text,cPasswordController.text);
@@ -102,7 +104,7 @@ class _CreateLecturersPageState extends State<CreateLecturersPage> {
     }
 
     var valName = ValidatorService.validateNames(nameController.text, surnameController.text);
-    if (valName!=true) {
+    if (valName != true) {
       return valName;
     }
 
@@ -139,17 +141,20 @@ class _CreateLecturersPageState extends State<CreateLecturersPage> {
         } else {
           setState(() {
             message = 'Error while creating lecturer';
+            messageColor = Colors.red; 
           });
         }
       } else {
         setState(() {
           message = validate.toString(); 
+          messageColor = Colors.red; 
         });
       }
-      return false; // Validation failed
+      return false; 
     } catch (e) {
       setState(() {
         message = 'Error: ${e.toString()}'; 
+        messageColor = Colors.red; 
       });
       return false;
     }
@@ -158,6 +163,7 @@ class _CreateLecturersPageState extends State<CreateLecturersPage> {
   void clearInput() {
     emailController.clear();
     passwordController.clear();
+    cPasswordController.clear();
     nameController.clear();
     surnameController.clear();
     titleController.clear();

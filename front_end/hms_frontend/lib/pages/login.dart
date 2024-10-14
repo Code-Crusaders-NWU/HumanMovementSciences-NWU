@@ -170,7 +170,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   icon: Icon(Icons.create),
                   text: 'SignUp',
                   onPressed: () {
-                    Navigator.pushReplacement(
+                    Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => SignupScreen()));

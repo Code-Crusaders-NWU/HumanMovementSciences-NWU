@@ -10,20 +10,32 @@ import 'package:hms_frontend/services/assignments.services.dart';
 import 'package:hms_frontend/services/auth.services.dart';
 
 class AssignmentsPage extends StatefulWidget {
-  const AssignmentsPage({super.key});
+  AssignmentsPage(
+    {super.key,
+    required this.email}
+    );
+
+  String? email;
 
   @override
   State<AssignmentsPage> createState() => _AssignmentsPageState();
 }
 
+
+
 class _AssignmentsPageState extends State<AssignmentsPage> {
   List<Map<String, dynamic>> assignments = [];
 
   Future<void> setLecturerAssignments() async {
-    String email = await AuthServices.getEmail();
+    //If lecturer is provided from admin page
+    
+    if(widget.email == null){
+      widget.email = await AuthServices.getEmail();
+    }
+    
 
     final List<Map<String, dynamic>> fetchedAssignments =
-        await AssignmentService().fetchLecturerAssignments(email);
+        await AssignmentService().fetchLecturerAssignments(widget.email!);
   
 
     setState(() {

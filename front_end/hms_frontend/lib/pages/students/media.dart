@@ -46,13 +46,22 @@ class _MediaPageState extends State<MediaPage> {
   Future<void> uploadSelectedVideo() async {
     if (_videoFile != null) {
       try {
+
+        //Compress before uploading
+        File? compressedVideo =await VideoServices.compressVideo(_videoFile!);
+
+        if (compressedVideo == null)
+        {
+          return;
+        }
+
         setState(() {
           _isUploading = true;
           _uploadProgress = 0.0;
         });
 
         String? videoLink = await VideoServices().uploadVideo(
-          _videoFile!,
+          compressedVideo,
           (int sentBytes, int totalBytes) {
             setState(() {
               _uploadProgress = sentBytes / totalBytes;

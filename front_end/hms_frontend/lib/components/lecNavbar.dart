@@ -19,7 +19,7 @@ class LecNavbar extends StatelessWidget {
             leading: const Icon(Icons.create),
             title: const Text('View Assignments'),
             onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const AssignmentsPage())); 
+              Navigator.push(context, MaterialPageRoute(builder: (context) => AssignmentsPage(email: null,))); 
             },
           ),
           ListTile(

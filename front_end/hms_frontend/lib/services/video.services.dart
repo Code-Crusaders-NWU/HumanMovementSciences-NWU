@@ -10,7 +10,7 @@ import 'package:video_compress/video_compress.dart';
 class VideoServices {
   final Dio _dio = Dio();
   
-  Future <bool> postVideo(stuEmail, vURI, uDate, assignNumb) async {
+Future <bool> postVideo(stuEmail, vURI, uDate, assignNumb) async {
     try {
       final uri = Uri.parse("$apiURL/api/assignment");
       String? token = await TokenService().getToken();
@@ -41,7 +41,7 @@ class VideoServices {
     }
   }
   
-  Future<dynamic> uploadVideo(File videoFile, Function(int, int)? onSendProgress) async{
+Future<dynamic> uploadVideo(File videoFile, Function(int, int)? onSendProgress) async{
      try {
       final uri = "$apiURL/api/upload";
       String? token = await TokenService().getToken();
@@ -79,7 +79,7 @@ class VideoServices {
 
 
  // Compress Video Function
-  Future<File?> compressVideo(File videoFile) async {
+  static Future <File?> compressVideo(File videoFile) async {
     try {
       //compression progress
       VideoCompress.compressProgress$.subscribe((progress) {

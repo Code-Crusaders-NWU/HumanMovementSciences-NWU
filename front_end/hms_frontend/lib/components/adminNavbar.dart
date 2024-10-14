@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hms_frontend/pages/admins/users.dart';
 import 'package:hms_frontend/pages/lecturers/createLecturersPage.dart';
-import 'package:hms_frontend/pages/lecturers/lecturrersAssignPage.dart';
 import 'package:hms_frontend/pages/login.dart';
-import 'package:hms_frontend/pages/submissions.dart';
+import 'package:hms_frontend/pages/signup.dart';
 import 'package:hms_frontend/services/token.services.dart';
 
 class AdminNavbar extends StatelessWidget {
@@ -29,20 +28,22 @@ class AdminNavbar extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.assignment_add),
-            title: const Text('Manage Assignments'),
+            leading: const Icon(Icons.person_add_alt_rounded),
+            title: const Text('Add a student'),
             onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const AssignmentsPage()));    
+             TokenService().deleteToken();
+             Navigator.push(context, MaterialPageRoute(builder: (context) => SignupScreen()));     
             },
           ),
           ListTile(
-            leading: const Icon(Icons.assignment_add),
+            leading: const Icon(Icons.logout_rounded),
             title: const Text('Logout'),
             onTap: (){
              TokenService().deleteToken();
              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));    
             },
           ),
+          
         ],
       ),
     );
