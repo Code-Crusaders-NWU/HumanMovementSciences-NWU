@@ -67,7 +67,7 @@ class UserService {
     //Function to get a list of users with their roles
     static async getAllUsers() {
         try {
-            const users = await User_Model.find({}, 'email user_type');
+            const users = await User_Model.find({}, 'email user_type name surname title degree');
 
             //If no users found, throw an error
             if(!users || users.length === 0) {
