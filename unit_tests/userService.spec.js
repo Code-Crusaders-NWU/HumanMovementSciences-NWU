@@ -177,7 +177,7 @@ describe('UserService', () => {
             const result = await UserService.getAllUsers();
     
             //Assertions
-            expect(UserModel.find).toHaveBeenCalledWith({}, 'email user_type');
+            expect(UserModel.find).toHaveBeenCalledWith({}, 'email user_type name surname title degree');
             expect(result).toEqual(mockUsers);
         });
     
@@ -185,7 +185,7 @@ describe('UserService', () => {
             UserModel.find.mockResolvedValue([]);
     
             await expect(UserService.getAllUsers()).rejects.toThrow('No users found');
-            expect(UserModel.find).toHaveBeenCalledWith({}, 'email user_type');
+            expect(UserModel.find).toHaveBeenCalledWith({}, 'email user_type name surname title degree');
         });
     
         it('should throw an error if the database query fails', async () => {
