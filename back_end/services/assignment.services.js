@@ -1,6 +1,5 @@
 //Call Assignm_Model
 const Assignment_Model = require('../models/assignments.model');
-const LecturerService = require('../services/lecturer.services');
 const validator = require('validator');
 
 class AssignmentService {
@@ -128,6 +127,23 @@ class AssignmentService {
             throw error;
         }
     }
+
+    //Function to get a specific assignment by assignm_Num
+    static async getAssignmentByNum(assignm_Num) {
+        try {
+            const assignment = await Assignment_Model.findOne({ assignm_Num });
+            
+            //If no assignment is found, throw an error
+            if (!assignment) {
+                throw new Error('Assignment not found');
+            }
+
+            return assignment;
+        } catch (error) {
+            throw error;
+        }
+    }
+
 
     //Validation
     static async validation(assignm_Num, assignm_Date, lec_Email, grade, due_date, title, description){

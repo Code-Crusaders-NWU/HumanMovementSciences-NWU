@@ -139,7 +139,7 @@ router.post('/video', authenticateToken, accessControl.isStudent,VideoController
 
 
 //When the delete API is called
-router.delete('/video', authenticateToken, accessControl.isLecturer ,VideoController.delete);
+router.delete('/video', authenticateToken, accessControl.isStudent ,VideoController.delete);
 
 /**
  * @swagger

@@ -2,15 +2,16 @@
 const UserService = require("../services/user.services")
 const logger = require('../config/logger')
 const dotenv = require('dotenv')
+const bcrypt = require('bcrypt')
 
 //Export the user function so it can be used in the Route handler for API requests. 
 exports.register = async(req, res, next)=>{
     try{
         //Extracts email and password from the body of an API request.
-        const{email,password,user_type} = req.body;
+        const{email, password, user_type, name, surname, title, degree} = req.body;
         
         //Wait for a success confirmation if the user uploading was successful.
-        const success = await UserService.signUp(email,password,user_type);
+        const success = await UserService.signUp(email, password, user_type, name, surname, title, degree);
         res.status(201).json({status:"true",success: 'User has successfully signed up'});
         logger.userLogger.log('info', 'User added successfully');
     }catch(error){
@@ -117,3 +118,23 @@ exports.searchUser = async (req, res, next) => {
         next(error);
     }
 }
+
+exports.resetPassword = async (req, res, next) => {
+    try {
+        const { email, newPassword } = req.body;
+
+        //Call the service function to reset the password
+        const result = await UserService.resetPassword(email, newPassword);
+
+        res.status(200).json({
+            status: true,
+            message: result.message,
+        });
+    } catch (error) {
+        res.status(404).json({
+            status: false,
+            message: error.message,
+        });
+        next(error);
+    }
+};

@@ -3,7 +3,6 @@ const multer = require('multer');
 const awsController = require('../controller/aws.controller.js');
 const router = express.Router();
 const accessControl = require('../middleware/accessControl');
-
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 const authenticateToken = require('../middleware/auth'); 
@@ -88,6 +87,6 @@ router.post('/upload', authenticateToken, accessControl.isStudent ,upload.array(
  *         description: Server error
  */
 
-router.delete('/delete',  authenticateToken, accessControl.isAdmin ,awsController.deleteFile);
+router.delete('/delete',  authenticateToken, accessControl.isStudent ,awsController.deleteFile);
 
 module.exports = router;

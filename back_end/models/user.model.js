@@ -22,6 +22,22 @@ const user_schema = new Schema({
         type : String,
         lowercase: true,    
         required : true
+    },
+    name : {
+        type : String,
+        required : true
+    },
+    surname : {
+        type : String,
+        required : true
+    },
+    title : {
+        type : String,
+        required : true
+    },
+    degree : {
+        type: String,
+        required: true
     }
 });
 

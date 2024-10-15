@@ -376,5 +376,70 @@ router.get('/dueAssignments', authenticateToken, accessControl.isStudent, Assign
 //When the dueToday API is called
 router.get('/dueToday', authenticateToken, accessControl.isStudent, AssignmentController.dueToday);
 
+
+/**
+ * @swagger
+ * /api/assignment/{assignm_Num}:
+ *   get:
+ *     summary: Get a specific assignment by assignm_Num
+ *     description: Allows a student to get a specific assignment using the assignm_Num.
+ *     security:
+ *      - bearerAuth: []
+ *     tags:
+ *       - Assignments
+ *     parameters:
+ *       - in: path
+ *         name: assignm_Num
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The unique number of the assignment to be retrieved.
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved the assignment
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: true
+ *                 assignment:
+ *                   type: object
+ *                   properties:
+ *                     assignm_Num:
+ *                       type: integer
+ *                       example: 12345
+ *                     title:
+ *                       type: string
+ *                       example: "Assignment Title"
+ *                     description:
+ *                       type: string
+ *                       example: "Assignment description"
+ *                     due_date:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2024-12-01T00:00:00Z"
+ *                     lec_Email:
+ *                       type: string
+ *                       example: "lecturer@example.com"
+ *       '404':
+ *         description: Assignment not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "Assignment not found"
+ */
+
+router.get('/assignment/:assignm_Num', authenticateToken, accessControl.isStudent, AssignmentController.getAssignmentByNum);
+
 //Export the router so it accessible by the main application
 module.exports = router;

@@ -1,11 +1,12 @@
 const User_Model = require('../models/user.model');
 const jwt = require('jsonwebtoken');
 const validator = require('validator');
+const bcrypt = require('bcrypt')
 
 class UserService {
     
     // This is a static method, meaning it can be called directly on the class without creating an instance of it.
-    static async signUp(email, password, user_type) {
+    static async signUp(email, password, user_type, name, surname, title, degree) {
         try {
 
             //Call validation function
@@ -20,7 +21,7 @@ class UserService {
             }
 
             // If no user exists with this email the function can proceed to create a new user
-            const newUser = new User_Model({ email, password, user_type});
+            const newUser = new User_Model({ email, password, user_type, name, surname, title, degree});
             
             // Save the new user to the database and return the saved user objects
             return await newUser.save();
@@ -53,7 +54,7 @@ class UserService {
         try {
             const user = await User_Model.findOne({ email });
             return user;
-        } //Exception handling if database operation goes south
+        } //Exception handling if database operation goes wrong
         catch (err) {
             throw err; 
         }
@@ -96,13 +97,41 @@ class UserService {
             //Return search user details
             return users.map(user => ({
                 email: user.email,
-                user_type: user.user_type
+                user_type: user.user_type,
+                name: user.name,
+                surname: user.surname,
+                title: user.title,
+                degree: user.degree,
             }));
         } catch (error) {
             throw error;
         }
     }
     
+    //Reset user password function
+    static async resetPassword(email, newPassword) {
+        try {
+            //Find the user by their email
+            const user = await User_Model.findOne({ email });
+
+            //If the user doesn't exist, throw an error
+            if (!user) {
+                throw new Error('User not found');
+            }
+
+            //Hash the new password
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+            //Update the user's password in the database
+            user.password = hashedPassword;
+            await user.save();
+
+            return { message: 'Password reset successfully' };
+        } catch (error) {
+            throw error;
+        }
+    }
 
     //Validation
     static validation(email, password, user_type){

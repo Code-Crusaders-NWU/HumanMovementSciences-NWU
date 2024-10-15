@@ -1,6 +1,5 @@
 //Call AssignmentService
 const AssignmentService = require('../services/assignment.services');
-const { verifyLecturer } = require('../services/lecturer.services');
 const logger = require('../config/logger')
 
 
@@ -53,9 +52,6 @@ exports.viewAll = async(req, res, next) => {
         //Extract lecturer's email from the API request body
         const {lec_Email} = req.query;
 
-        //Call verifyLecturer function from assignment.services
-        verifyLecturer();
-
         //Await the result of viewAllAssignments function
         const assignments = await AssignmentService.viewAllAssignments(lec_Email);
 
@@ -105,6 +101,26 @@ exports.viewAll = async(req, res, next) => {
         // Log error and return server error
         logger.assignmentLogger.log('error', error.message);
         res.status(500).json({ status: false, message: 'An error occurred while fetching assignments due today' });
+        next(error);
+    }
+};
+
+exports.getAssignmentByNum = async (req, res, next) => {
+    try {
+        const { assignm_Num } = req.params;
+
+        //Call the service function to get the assignment
+        const assignment = await AssignmentService.getAssignmentByNum(assignm_Num);
+
+        res.status(200).json({
+            status: true,
+            assignment,
+        });
+    } catch (error) {
+        res.status(404).json({
+            status: false,
+            message: error.message,
+        });
         next(error);
     }
 };
