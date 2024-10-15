@@ -1,7 +1,7 @@
 //Call submission model
 const Submission_Model = require('../models/submission.model');
 const validator = require('validator');
-const StudentService = require('../services/student.services');
+//const StudentService = require('../services/student.services');
 const fs = require('fs');
 const {format} = require('@fast-csv/format');
 
@@ -28,6 +28,26 @@ class SubmissionService {
             return await newSubmission.save();
         } catch (error) {
             throw error;
+        }
+    }
+
+    static async deleteSubmission(assignm_Num, stu_Email) {
+        try {
+            //Find the submission based on the assignment number and student email
+            const submission = await Submission_Model.findOne({ assignm_Num, stu_Email });
+    
+            //If no submission is found, return null
+            if (!submission) {
+                return null;
+            }
+    
+            //If submission is found, delete it
+            await Submission_Model.deleteOne({ assignm_Num, stu_Email });
+    
+            return { message: 'Submission deleted successfully' };
+    
+        } catch (error) {
+            throw new Error(error.message || 'Database error');
         }
     }
 

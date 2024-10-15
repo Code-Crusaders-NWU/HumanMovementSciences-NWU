@@ -1,6 +1,5 @@
 //Call AssignmentService
 const AssignmentService = require('../services/assignment.services');
-const { verifyLecturer } = require('../services/lecturer.services');
 const logger = require('../config/logger')
 
 
@@ -52,9 +51,6 @@ exports.viewAll = async(req, res, next) => {
     try {
         //Extract lecturer's email from the API request body
         const {lec_Email} = req.query;
-
-        //Call verifyLecturer function from assignment.services
-        verifyLecturer();
 
         //Await the result of viewAllAssignments function
         const assignments = await AssignmentService.viewAllAssignments(lec_Email);

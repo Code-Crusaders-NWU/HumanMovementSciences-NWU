@@ -1,6 +1,5 @@
 //Call Assignm_Model
 const Assignment_Model = require('../models/assignments.model');
-const LecturerService = require('../services/lecturer.services');
 const validator = require('validator');
 
 class AssignmentService {

@@ -1,6 +1,6 @@
 //Call SubmissionService
 const SubmissionService = require('../services/submission.services')
-const { verifyStudent } = require('../services/student.services');
+//const { verifyStudent } = require('../services/student.services');
 const logger = require('../config/logger');
 
 //Export the submit function so it can be used in the Route handler for an API request
@@ -21,14 +21,34 @@ exports.submit = async(req, res, next) => {
     }
 }
 
+exports.deleteSubmission = async (req, res, next) => {
+    try {
+        //Extract student email and assignment number from the query
+        const { assignm_Num, stu_Email } = req.query;
+
+        //Call the service to delete the submission
+        const result = await SubmissionService.deleteSubmission(assignm_Num, stu_Email);
+
+        if (!result) {
+            //If no submission was found, send a 404
+            return res.status(404).json({ status: false, message: 'Submission not found' });
+        }
+
+        //Return success response
+        return res.status(200).json({ status: true, message: result.message });
+
+    } catch (error) {
+        //If an error occurs, log and return a server error
+        logger.submissionLogger.log('error', error.message);
+        return res.status(500).json({ status: false, message: 'An error occurred during submission deletion' });
+    }
+};
+
 //Export the view all submissions function so it can be used in the Route handler for an API request
 exports.viewAll = async(req, res, next) => {
     try {
         //Extract student's email from the API request body
         const {stu_Email} = req.body;
-
-        //Call verifyStudent from student.services
-        verifyStudent(stu_Email);
 
         //Await the result of viewAllSubmissions function
         const submissions = await SubmissionService.viewAllSubmissions(stu_Email);

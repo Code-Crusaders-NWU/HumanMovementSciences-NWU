@@ -578,5 +578,71 @@ router.get('/submission/ungraded', authenticateToken, accessControl.isLecturer, 
 
 router.get('/submission/assignment/:assign_Num', authenticateToken, accessControl.isLecturer, SubmissionController.getSubmissionsByAssignmNum);
 
+/**
+ * @swagger
+ * /api/submission:
+ *   delete:
+ *     summary: Delete a student's submission.
+ *     description: Deletes the submission for a specific student based on assign_Num and stu_Email
+ *     tags:
+ *       - Submissions
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: assignm_Num
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The assignment number of the submission to be deleted
+ *       - in: query
+ *         name: stu_Email
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The email of the student whose submission is to be deleted
+ *     responses:
+ *       200:
+ *         description: Successful deletion of submission
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: "Submission deleted successfully"
+ *       404:
+ *         description: Submission not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "Submission not found"
+ *       500:
+ *         description: Server error occurred
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "An error occurred during submission deletion"
+ */
+
+router.delete('/submission', authenticateToken, accessControl.isStudent, SubmissionController.deleteSubmission);
 //Export the router
 module.exports = router;

@@ -3,6 +3,7 @@ const router = require('express').Router();
 const UserController = require("../controller/user.controller")
 const authenticateToken = require('../middleware/auth'); 
 const isAdmin = require('../middleware/accessControl');
+const isLecturer = require('../middleware/accessControl')
 
 
 /**
@@ -38,6 +39,22 @@ const isAdmin = require('../middleware/accessControl');
  *                 enum: [student, lecturer, admin]
  *                 description: Role of user which will be used for access control, Can only be admin, lecturer or student.
  *                 example: student
+ *               name: 
+ *                 type: string
+ *                 description: Name of the user.
+ *                 example: Pieter
+ *               surname: 
+ *                 type: string
+ *                 description: Surname of the student
+ *                 example: Roux
+ *               title:
+ *                 type: string
+ *                 description: Title of the user.
+ *                 example: Mr.
+ *               degree:
+ *                 type: string
+ *                 description: Highest degree the user holds
+ *                 example: MSc
  *     responses:
  *       201:
  *         description: Successful User Registration
@@ -124,7 +141,7 @@ router.post('/login',UserController.login);
  * /api/user:
  *   delete:
  *     tags: [User]
- *     summary: Delete a using a user's email
+ *     summary: Delete a user using the user's email
  *     description: This Delete Endpoint removes a user's account from the system by using email.
  *     security:
  *      - bearerAuth: []
@@ -227,6 +244,23 @@ router.get('/allUsers', authenticateToken, isAdmin.isAdmin, UserController.getAl
  *                         type: string
  *                         description: Role of the user.
  *                         example: "admin"
+ *                       name: 
+ *                         type: string
+ *                         description: Name of the user.
+ *                         example: Pieter
+ *                       surname: 
+ *                         type: string
+ *                         description: Surname of the student
+ *                         example: Roux
+ *                       title:
+ *                         type: string
+ *                         description: Title of the user.
+ *                         example: Mr.
+ *                       degree:
+ *                         type: string
+ *                         description: Highest degree the user holds
+ *                         example: MSc
+ *                       
  *       401:
  *         description: Unauthorized access.
  *         content:
@@ -273,7 +307,7 @@ router.get('/allUsers', authenticateToken, isAdmin.isAdmin, UserController.getAl
 
 
 //When the searchUser API is called
-router.get('/searchUser', authenticateToken, isAdmin.isAdmin, UserController.searchUser)
+router.get('/searchUser', authenticateToken, isLecturer.isLecturer, UserController.searchUser)
 
 /**
  * @swagger
@@ -321,6 +355,22 @@ router.get('/searchUser', authenticateToken, isAdmin.isAdmin, UserController.sea
  *                         type: string
  *                         description: Role of the user.
  *                         example: "admin"
+ *                       name: 
+ *                         type: string
+ *                         description: Name of the user.
+ *                         example: Pieter
+ *                       surname:      
+ *                         type: string
+ *                         description: Surname of the student
+ *                         example: Roux
+ *                       title:
+ *                         type: string
+ *                         description: Title of the user.
+ *                         example: Mr.
+ *                       degree:
+ *                         type: string
+ *                         description: Highest degree the user holds
+ *                         example: MSc
  *       400:
  *         description: Invalid or missing email address.
  *         content:

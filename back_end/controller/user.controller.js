@@ -8,10 +8,10 @@ const bcrypt = require('bcrypt')
 exports.register = async(req, res, next)=>{
     try{
         //Extracts email and password from the body of an API request.
-        const{email,password,user_type} = req.body;
+        const{email, password, user_type, name, surname, title, degree} = req.body;
         
         //Wait for a success confirmation if the user uploading was successful.
-        const success = await UserService.signUp(email,password,user_type);
+        const success = await UserService.signUp(email, password, user_type, name, surname, title, degree);
         res.status(201).json({status:"true",success: 'User has successfully signed up'});
         logger.userLogger.log('info', 'User added successfully');
     }catch(error){
