@@ -14,7 +14,7 @@ class SubmissionService {
             this.validation(assignm_Num, stu_Email, submission_Date, content, grade, feedback, vid_Num);
 
             //Check if the submission already exists within the database.
-            const existingSubmission = await Submission_Model.findOne({assignm_Num, stu_Email, submission_Date, content, grade, feedback, vid_Num});
+            const existingSubmission = await Submission_Model.findOne({assignm_Num, stu_Email});
 
             //If the submission exists, the server throws an error
             if (existingSubmission) {
