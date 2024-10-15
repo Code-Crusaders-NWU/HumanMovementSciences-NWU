@@ -1,9 +1,8 @@
-import 'dart:io';
-import 'package:file_picker/file_picker.dart';
 import 'package:hms_frontend/constants.dart';
 import 'package:hms_frontend/services/token.services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'fileDownloaderWeb.dart' if (dart.library.io) 'fileDownloaderMobile.dart';  //only use on web app
 
 class AssignmentService {
   //Function which receives all due assignments
@@ -90,38 +89,30 @@ class AssignmentService {
     }
   }
   //Function to download marks for an assignment
-  Future <bool> downloadMarks(int assignmentNumber, String title) async {
-    try {
-      final uri = Uri.parse("$apiURL/api/download_marks/$assignmentNumber");
-      String? token = await TokenService().getToken();
-      
-      final response =await http.get(uri,
+  Future<bool> downloadMarks(int assignmentNumber, String title) async {
+  try {
+    final uri = Uri.parse("$apiURL/api/download_marks/$assignmentNumber");
+    String? token = await TokenService().getToken();
+
+    final response = await http.get(
+      uri,
       headers: <String, String>{
         'Authorization': 'bearer $token',
-        'Content-Type': 'application/json; charset=UTF-8'
+        'Content-Type': 'application/json; charset=UTF-8',
       },
-      );
+    );
 
-      if (response.statusCode==200){
-        String? outFile = await FilePicker.platform.saveFile(
-          dialogTitle: 'Store marks:',
-          fileName: '$title _marks',
-          type: FileType.custom,
-          allowedExtensions: ['csv'], //can only store csv files
-        );
-
-        File file = File(outFile!);
-        await file.writeAsBytes(response.bodyBytes);
-      
-        return true;
-      }
-
-      return false;      
-    } catch (e) {
-      throw e.toString();
+    if (response.statusCode == 200) {
+      downloadFile(title, response.bodyBytes); 
+      return true;
     }
+    return false;
+  } catch (e) {
+    print('Error while downloading marks: $e');
+    return false; 
   }
-  //Function to delete a student's assignment using their assignmentID
+}
+
   Future <bool> deleteAssignment(int assignmentID) async{
     try {
       final uri = Uri.parse("$apiURL/api/assignment");
@@ -160,12 +151,10 @@ Future<Map<String, dynamic>?> fetchSpecificAssignment(int assignNumb) async {
 
     if (response.statusCode == 200) {
       Map<String, dynamic> resBody = jsonDecode(response.body);
-      
-      // Check if there's an assignment in the response
       if (resBody.containsKey('assignment')) {
         Map<String, dynamic> assignment = resBody['assignment'];
 
-        return assignment; // Return the assignment object
+        return assignment; 
       } else {
         throw Exception('Assignment not found');
       }

@@ -5,17 +5,14 @@ import 'package:hms_frontend/services/submissions.services.dart';
 import 'package:hms_frontend/services/video.services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:path/path.dart'; // For file basename
+import 'package:path/path.dart'; 
 
 class MediaPage extends StatefulWidget {
   const MediaPage(
-    {
-    super.key,
-    required this.assignmNumb,
-    required this.stuEmail,
-    required this.assignmTitle,
-    }
-    );
+      {super.key,
+      required this.assignmNumb,
+      required this.stuEmail,
+      required this.assignmTitle});
 
   final String stuEmail;
   final int assignmNumb;
@@ -29,7 +26,8 @@ class _MediaPageState extends State<MediaPage> {
   File? _videoFile;
   final ImagePicker _picker = ImagePicker();
   double _uploadProgress = 0.0;
-  bool _isUploading = false;
+  bool _isUploading = false;  //to show uploading bar
+  bool _isCompressing = false; //to show loading bar
 
   Future<void> pickVideo() async {
     final inputFile = await _picker.pickVideo(source: ImageSource.gallery);
@@ -46,12 +44,18 @@ class _MediaPageState extends State<MediaPage> {
   Future<void> uploadSelectedVideo() async {
     if (_videoFile != null) {
       try {
+        setState(() {
+          _isCompressing = true;
+        });
 
-        //Compress before uploading
-        File? compressedVideo =await VideoServices.compressVideo(_videoFile!);
+        // Compress before uploading
+        File? compressedVideo = await VideoServices.compressVideo(_videoFile!);
 
-        if (compressedVideo == null)
-        {
+        setState(() {
+          _isCompressing = false;
+        });
+
+        if (compressedVideo == null) {
           return;
         }
 
@@ -73,17 +77,14 @@ class _MediaPageState extends State<MediaPage> {
         String formattedDate = DateFormat("yyyy-MM-ddTHH:mm:ss'Z'").format(now);
 
         var postSubmission = await SubmissionServices().postSubmission(
-          widget.assignmNumb,
-          widget.stuEmail,
-          formattedDate,
-          videoLink);
-        
+            widget.assignmNumb, widget.stuEmail, formattedDate, videoLink);
+
         setState(() {
           _isUploading = false;
         });
 
-        if (postSubmission){
-            print('Successfully uploaded submission');
+        if (postSubmission) {
+          print('Successfully uploaded submission');
         }
         if (videoLink != null) {
           print('Video uploaded successfully: $videoLink');
@@ -91,6 +92,10 @@ class _MediaPageState extends State<MediaPage> {
           print('Failed to upload video.');
         }
       } catch (e) {
+        setState(() {
+          _isCompressing = false;
+          _isUploading = false;
+        });
         print('Error while uploading video: $e');
       }
     } else {
@@ -107,7 +112,10 @@ class _MediaPageState extends State<MediaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(titleText: "Video Submission", backgroundColor: Colors.lightBlue,),
+      appBar: MyAppBar(
+        titleText: "Video Submission",
+        backgroundColor: Colors.lightBlue,
+      ),
       body: SafeArea(
         child: Center(
           child: Padding(
@@ -127,7 +135,8 @@ class _MediaPageState extends State<MediaPage> {
                           const SizedBox(height: 10),
                           ElevatedButton.icon(
                             onPressed: removeAttachedFile,
-                            icon: const Icon(Icons.delete, color: Colors.white),
+                            icon:
+                                const Icon(Icons.delete, color: Colors.white),
                             label: const Text(
                               'Remove File',
                               style: TextStyle(color: Colors.white),
@@ -152,31 +161,46 @@ class _MediaPageState extends State<MediaPage> {
                         ),
                       ),
                 const SizedBox(height: 20),
-                // Attach file button, disabled if file is attached
+
+               //loading bar for compression
+                if (_isCompressing) ...[
+                  const Text('Compressing video...'),
+                  const SizedBox(height: 10),
+                  CircularProgressIndicator(),
+                  const SizedBox(height: 20),
+                ],
+
+                //pick file, disabled when video is uploading
                 ElevatedButton.icon(
-                  onPressed: _videoFile != null ? null : pickVideo,
-                  icon: const Icon(Icons.file_open_rounded, color: Colors.white),
+                  onPressed: _videoFile != null || _isCompressing ? null : pickVideo,
+                  icon:
+                      const Icon(Icons.file_open_rounded, color: Colors.white),
                   label: const Text(
                     'Attach File',
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                    backgroundColor:
-                        _videoFile != null ? Colors.grey : Colors.lightBlue,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 15),
+                    backgroundColor: _videoFile != null || _isCompressing
+                        ? Colors.grey
+                        : Colors.lightBlue,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30.0),
                     ),
                   ),
                 ),
                 const SizedBox(height: 30),
+
                 if (_isUploading) ...[
                   const Text('Uploading...'),
                   const SizedBox(height: 10),
                   LinearProgressIndicator(
                     value: _uploadProgress,
                     backgroundColor: Colors.grey[300],
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.deepPurpleAccent),
+                    valueColor:
+                        AlwaysStoppedAnimation<Color>(Colors.deepPurpleAccent),
                     minHeight: 8,
                   ),
                   const SizedBox(height: 10),
@@ -186,23 +210,29 @@ class _MediaPageState extends State<MediaPage> {
                   ),
                 ],
                 const SizedBox(height: 40),
-                // Upload button, disabled if file is uploading or no file is attached
+
+                // Disabled when no file is selected
                 ElevatedButton.icon(
-                  onPressed: _isUploading || _videoFile == null ? null : uploadSelectedVideo,
+                  onPressed: _isUploading || _videoFile == null || _isCompressing
+                      ? null
+                      : uploadSelectedVideo,
                   icon: const Icon(Icons.cloud_upload, color: Colors.white),
                   label: const Text(
                     'Upload Video',
                     style: TextStyle(color: Colors.white),
                   ),
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                    backgroundColor: _isUploading || _videoFile == null
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 15),
+                    backgroundColor: _isUploading ||
+                            _videoFile == null ||
+                            _isCompressing
                         ? Colors.grey
                         : Colors.deepPurpleAccent,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30.0),
                     ),
-                    elevation: _isUploading ? 0 : 5,
+                    elevation: _isUploading || _isCompressing ? 0 : 5,
                   ),
                 ),
               ],

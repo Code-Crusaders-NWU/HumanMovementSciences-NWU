@@ -28,7 +28,8 @@ class StuNavBar extends StatelessWidget {
               
               Navigator.push(
                             context, 
-                            MaterialPageRoute(builder: (context) => StudentViewSubmissionsPage(stuEmail: email,)));
+                            MaterialPageRoute(builder: (context) => StudentViewSubmissionsPage(stuEmail: email,
+                            isAdminviewer: false,)));
             },
           ),
           ListTile(

@@ -17,7 +17,7 @@ class AssignmentCreatePage extends StatefulWidget {
 
 class _AssignmentsPageState extends State<AssignmentCreatePage> {
   TimeOfDay timeDue =
-      TimeOfDay.now(); //Used to determine time an assignment is due
+      TimeOfDay.now(); 
   DateTime dueDate = DateTime.now();
 
   final  _dateController = TextEditingController();
@@ -113,7 +113,16 @@ class _AssignmentsPageState extends State<AssignmentCreatePage> {
                 ),
             
                 const SizedBox(height: 20), //Used for spacing
-            
+
+                 if (_errorMessage.isNotEmpty) 
+                  Text(
+                    _errorMessage,
+                    style: TextStyle(
+                      color: _errorMessage == "Assignment Created Successfully" ? Colors.green : Colors.red,
+                  ),
+                  ),
+                
+                const SizedBox(height: 20),
             
                 MyButton(text: 'Create Assignment', onPressed: () {
                   _createAssignment( lecturerController.text, 100, titleController.text, descriptionController.text);

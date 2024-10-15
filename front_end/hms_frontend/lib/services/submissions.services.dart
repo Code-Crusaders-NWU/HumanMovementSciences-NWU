@@ -194,5 +194,25 @@ class SubmissionServices {
     }
   }
 
-
+  static Future <dynamic> deleteSubmission(String sEmail,int assignNumb ) async{
+     try {
+      final uri = Uri.parse("$apiURL/api/submission?assignm_Num=$assignNumb&stu_Email=$sEmail");
+      String? token = await TokenService().getToken();
+      final response = await http.delete(uri, 
+      headers: <String, String>{
+        'Authorization': 'bearer $token',
+        'Content-Type': 'application/json; charset=UTF-8'
+      });
+        
+        if (response.statusCode == 200){
+          return true;
+        }
+        else{
+          var resBody = jsonDecode(response.body);
+          return resBody['error'];
+        }
+    } catch (e) {
+      throw Exception('Error while uploading video');
+    }
+  }
 }

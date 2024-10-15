@@ -9,7 +9,6 @@ class ValidatorService {
     "Eng.",
     "PhD",
     "MBA",
-    // Add other titles as necessary
   ];
 
   static dynamic validateTitle(String title) {

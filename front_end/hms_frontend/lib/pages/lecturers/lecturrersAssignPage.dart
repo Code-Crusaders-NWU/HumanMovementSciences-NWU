@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:hms_frontend/components/myAppbar.dart';
 import 'package:hms_frontend/pages/submissions.dart';
@@ -108,7 +107,7 @@ class _AssignmentsPageState extends State<AssignmentsPage> {
                             ? DateFormat('yMMMd')
                                 .add_jm()
                                 .format(DateTime.parse(a['due_date']))
-                            : 'No Due Date', // Ensure date is formatted properly
+                            : 'No Due Date', 
                         style: const TextStyle(
                           fontSize: 12,
                           color: Colors.black54,
@@ -176,9 +175,6 @@ class _AssignmentsPageState extends State<AssignmentsPage> {
                               bool downloadStatus = await AssignmentService()
                                   .downloadMarks(a['assignm_Num'], a['title']);
                           
-                              if (!downloadStatus) {
-                                print('No submissions');
-                              }
                             },
                           ),
                         ),
@@ -189,7 +185,6 @@ class _AssignmentsPageState extends State<AssignmentsPage> {
                               color: Colors.black54,
                             ),
                             onPressed: () {
-                              print(a['assignm_Num']);
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(

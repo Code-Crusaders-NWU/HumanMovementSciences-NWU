@@ -59,7 +59,7 @@ Future<dynamic> uploadVideo(File videoFile, Function(int, int)? onSendProgress) 
             'Content-Type': 'multipart/form-data',
           },
         ),
-        onSendProgress: onSendProgress, // Pass the progress callback
+        onSendProgress: onSendProgress, //Send progress back to interface
       );
 
 
@@ -79,7 +79,7 @@ Future<dynamic> uploadVideo(File videoFile, Function(int, int)? onSendProgress) 
 
 
  // Compress Video Function
-  static Future <File?> compressVideo(File videoFile) async {
+static Future <File?> compressVideo(File videoFile) async {
     try {
       //compression progress
       VideoCompress.compressProgress$.subscribe((progress) {
@@ -90,7 +90,7 @@ Future<dynamic> uploadVideo(File videoFile, Function(int, int)? onSendProgress) 
       final MediaInfo? compVideo = await VideoCompress.compressVideo(
         videoFile.path,
         quality: VideoQuality.MediumQuality,
-        deleteOrigin: false, // if true then it deletes the original file after compression
+        deleteOrigin: false, //To not delete file being compressed
       );
 
       if (compVideo != null && compVideo.file != null) {
@@ -106,6 +106,91 @@ Future<dynamic> uploadVideo(File videoFile, Function(int, int)? onSendProgress) 
     }
   }
 
+
+//Service to store video record in MongoDB
+static Future<dynamic> storeVideoDB(String sEmail, String vURI, DateTime uDate, int assignNum) async{
+  try {
+    final uri = Uri.parse("$apiURL/api/video");
+      String? token = await TokenService().getToken();
+
+      final response = await http.post(uri, 
+      headers: <String, String>{
+        'Authorization': 'bearer $token',
+        'Content-Type': 'application/json; charset=UTF-8'
+      },
+      body: jsonEncode(<String, dynamic>{
+          "stu_Email": sEmail,
+          "vid_Link": vURI,
+          "upload_Date" : uDate,
+          "assignm_Num" : assignNum,
+        }));
+
+        if (response.statusCode == 200){
+          return true;
+        }
+        else{
+          var resBody = jsonDecode(response.body);
+          print(resBody['error']);
+        }
+  } catch (e) {
+    return e.toString();
+  }
+}
+
+//Service to delete video record in MongoDB
+static Future<dynamic> deleteVideoDB(int videoNumb) async {
+  try {
+      final uri = Uri.parse("$apiURL/api/video");
+      String? token = await TokenService().getToken();
+      
+      final response = await http.delete(uri, 
+      headers: <String, String>{
+        'Authorization': 'bearer $token',
+        'Content-Type': 'application/json; charset=UTF-8'
+      },
+      body: jsonEncode(<String, dynamic>{
+          "vid_Num": videoNumb,
+        }));
+
+        if (response.statusCode == 200){
+          return true;
+        }
+        else{
+          var resBody = jsonDecode(response.body);
+          return resBody['error'];
+        }
+    } catch (e) {
+      throw Exception('Error while uploading video');
+    }
+  }
+
+//Service to delete a video from aws s3
+static Future<dynamic> deleteVideo(String url) async {
+  try {
+      final uri = Uri.parse("$apiURL/api/delete");
+      String? token = await TokenService().getToken();
+      
+
+      final response = await http.delete(uri, 
+      headers: <String, String>{
+        'Authorization': 'bearer $token',
+        'Content-Type': 'application/json; charset=UTF-8'
+      },
+      body: jsonEncode(<String, dynamic>{
+          "fileUrl": url
+        }));
+
+        if (response.statusCode == 200){
+          return true;
+        }
+        else{
+          var resBody = jsonDecode(response.body);
+          return resBody['error'];
+        }
+    } catch (e) {
+      throw Exception('Error while uploading video');
+    }
+  }
   // Dispose after compression completed
   void disposeCompression() {
     VideoCompress.dispose();

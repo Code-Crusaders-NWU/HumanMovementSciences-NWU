@@ -8,6 +8,7 @@ import 'package:hms_frontend/components/myButton.dart';
 import 'package:hms_frontend/components/textBox.dart';
 import 'package:hms_frontend/pages/signup.dart';
 import 'package:hms_frontend/constants.dart';
+import 'package:hms_frontend/services/validator.services.dart';
 import 'package:http/http.dart' as http;
 import 'package:hms_frontend/services/token.services.dart';
 import 'package:hms_frontend/services/auth.services.dart';
@@ -28,44 +29,55 @@ class _LoginScreenState extends State<LoginScreen> {
 
   //login function
   Future<String> login() async {
-    setState(() {
-      isLoading = true;
-    });
-    try {
-      final response = await http.post(
-        Uri.parse('$apiURL/api/login'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(<String, String>{
-          'email': usernameController.text,
-          'password': passwordController.text,
-        }),
-      );
 
-      if (response.statusCode == 200) {
+    var validator = ValidatorService.validateEmail(usernameController.text);
+
+    if(validator==true){
+      setState(() {
+        isLoading = true;
+      });
+      try {
+        final response = await http.post(
+          Uri.parse('$apiURL/api/login'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, String>{
+            'email': usernameController.text,
+            'password': passwordController.text,
+          }),
+        );
+
+        if (response.statusCode == 200) {
+          setState(() {
+            loginMessage = 'Login successful';
+          });
+          String token = jsonDecode(response.body)['token'];
+          await tokenService.storeToken(token);
+          return jsonDecode(response.body)['token'];
+        } else {
+          var resBody = jsonDecode(response.body);
+          setState(() {
+            loginMessage = resBody['error'];
+          });
+          return "";
+        }
+      } catch (e) {
         setState(() {
-          loginMessage = 'Login successful';
-        });
-        String token = jsonDecode(response.body)['token'];
-        await tokenService.storeToken(token);
-        return jsonDecode(response.body)['token'];
-      } else {
-        var resBody = jsonDecode(response.body);
-        setState(() {
-          loginMessage = resBody['error'];
+          loginMessage = 'An error occurred: $e';
         });
         return "";
+      } finally {
+        setState(() {
+          isLoading = false;
+        });
       }
-    } catch (e) {
+      }
+    else{
       setState(() {
-        loginMessage = 'An error occurred: $e';
+        loginMessage = validator.toString();
       });
-      return "";
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
+      return validator.toString();
     }
   }
 

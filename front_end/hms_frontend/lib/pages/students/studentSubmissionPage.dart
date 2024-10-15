@@ -26,8 +26,8 @@ class StudentSubmissionsPage extends StatefulWidget {
 }
 
 class _SubmissionsPageState extends State<StudentSubmissionsPage> {
-  bool _showVideoPlayer = false; // New flag to control when to show the video player
-  bool _showGradingFeedback = true;
+  bool _showVideoPlayer = false; //flag to show video controller
+  bool _showGradingFeedback = true; //Flag to show grading controller
 
   @override
   Widget build(BuildContext context) {

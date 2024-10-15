@@ -3,11 +3,16 @@ import 'package:hms_frontend/components/myAppbar.dart';
 import 'package:hms_frontend/services/assignments.services.dart';
 import 'package:hms_frontend/services/order.services.dart';
 import 'package:hms_frontend/services/submissions.services.dart';
+import 'package:hms_frontend/services/video.services.dart';
 import 'package:intl/intl.dart';
 
 class StudentViewSubmissionsPage extends StatefulWidget {
-  const StudentViewSubmissionsPage({super.key, required this.stuEmail});
+  const StudentViewSubmissionsPage({
+    super.key, 
+    required this.stuEmail,
+    required this.isAdminviewer});
 
+  final bool isAdminviewer;
   final String stuEmail;
 
   @override
@@ -19,6 +24,7 @@ class _SubmissionsPageState extends State<StudentViewSubmissionsPage> {
   bool isLoading = true;
   List<Map<String, dynamic>> submissions = [];
   bool isLatestOrder = true;
+  
 
   @override
   void initState() {
@@ -142,6 +148,18 @@ class _SubmissionsPageState extends State<StudentViewSubmissionsPage> {
                                           ),
                                         ],
                                       ),
+                                      // Conditionally add the delete button
+                                      trailing: widget.isAdminviewer
+                                          ? IconButton(
+                                              icon: const Icon(
+                                                Icons.delete,
+                                                color: Colors.red,
+                                              ),
+                                              onPressed: () async { 
+                                                 _deleteSubmission(widget.stuEmail, sub['assignm_Num'], index, sub['content']);
+                                              },
+                                            )
+                                          : null,
                                     ),
                                   );
                                 },
@@ -201,4 +219,54 @@ class _SubmissionsPageState extends State<StudentViewSubmissionsPage> {
       throw Exception('Error');
     }
   }
+
+ void _deleteSubmission(String sEmail, int assignmNum, int index, String? url) async {
+  // Show a confirmation dialog before deleting
+  bool? action = await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Delete submission AND video from storage'),
+        content: const Text('Are you sure you want to delete this submission + video, this action cannot be undone?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(false); //Stop
+            },
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(true); // Proceed
+            },
+            child: const Text('Delete'),
+          ),
+        ],
+      );
+    },
+  );
+
+  //if user wants to delete
+  if (action == true) {
+    bool flag = await SubmissionServices.deleteSubmission(sEmail, assignmNum);
+    bool flagB = true;
+
+    if (url!=null){
+      //if there is a video, delete it from AWS S3
+      flagB = await VideoServices.deleteVideo(url);
+    }
+    if (flag && flagB) {
+      setState(() {
+        submissions.removeAt(index);
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Submission + Video deleted successfully')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to delete submission')),
+      );
+    }
+  }
+}
 }

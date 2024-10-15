@@ -69,7 +69,7 @@ class _VideoPlayerState extends State<VideoPlayerWidget> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
-        padding: const EdgeInsets.all(16.0), // Add some padding around the text
+        padding: const EdgeInsets.all(16.0), 
         child: Text(
           widget.dataSourceType.name.toLowerCase(),
           style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),

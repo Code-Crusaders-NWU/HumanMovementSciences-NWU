@@ -15,7 +15,7 @@ class AdminNavbar extends StatelessWidget {
       child: ListView(
         children: [
           ListTile(
-            leading: const Icon(Icons.create),
+            leading: const Icon(Icons.person_add),
             title: const Text('Add a lecturer'),
             onTap: (){
               Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateLecturersPage())); 
@@ -29,10 +29,9 @@ class AdminNavbar extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.person_add_alt_rounded),
+            leading: const Icon(Icons.draw_sharp),
             title: const Text('Create an Assignment'),
             onTap: (){
-             TokenService().deleteToken();
              Navigator.push(context, MaterialPageRoute(builder: (context) => AssignmentCreatePage(email: null)));     
             },
           ),
@@ -40,7 +39,6 @@ class AdminNavbar extends StatelessWidget {
             leading: const Icon(Icons.person_add_alt_rounded),
             title: const Text('Add a student'),
             onTap: (){
-             TokenService().deleteToken();
              Navigator.push(context, MaterialPageRoute(builder: (context) => SignupScreen()));     
             },
           ),
@@ -52,7 +50,6 @@ class AdminNavbar extends StatelessWidget {
              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));    
             },
           ),
-          
         ],
       ),
     );
