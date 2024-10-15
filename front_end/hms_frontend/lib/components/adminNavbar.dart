@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hms_frontend/pages/admins/users.dart';
+import 'package:hms_frontend/pages/lecturers/createAssignmentPage.dart';
 import 'package:hms_frontend/pages/lecturers/createLecturersPage.dart';
 import 'package:hms_frontend/pages/login.dart';
 import 'package:hms_frontend/pages/signup.dart';
@@ -25,6 +26,14 @@ class AdminNavbar extends StatelessWidget {
             title: const Text('Manage Users'),
             onTap: (){ 
               Navigator.push(context, MaterialPageRoute(builder: (context) => const UsersPage()));   
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.person_add_alt_rounded),
+            title: const Text('Create an Assignment'),
+            onTap: (){
+             TokenService().deleteToken();
+             Navigator.push(context, MaterialPageRoute(builder: (context) => AssignmentCreatePage(email: null)));     
             },
           ),
           ListTile(

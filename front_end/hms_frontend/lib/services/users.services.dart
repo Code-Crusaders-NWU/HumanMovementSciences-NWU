@@ -61,71 +61,19 @@ class UserService{
     }
   }
   //create a lecturer's login information
-  Future <bool> createLecturerUser(email, password) async{
-    try {
-      final uri = Uri.parse("$apiURL/api/signup");
-      String? token = await TokenService().getToken();
-      final response = await http.post(uri,
-      headers: <String, String>{
-        'Authorization' : 'bearer $token',
-        'content-type' : 'application/json; charset=UTF-8'
-      },
-      body: jsonEncode(<String, dynamic>{
-        "email" : email,
-        "password" : password,
-        "user_type" : "lecturer"
-      }));
 
-     if (response.statusCode == 201){
-      return true;
-     }
-     else{
-      var resBody = jsonDecode(response.body);
-      print(resBody['error']);
-     }
-    } catch (e) {
-      throw e.toString();
-    }
-    
-    return true;
-  }
-  //Store lecturer's personal details 
-  Future <bool> createLecturer(email, name, surname, title, degree) async{
+  Future <dynamic> signUp(String email, String password, String role, String name,  String surname, String title, String degree) async{
     try {
-      final uri = Uri.parse("$apiURL/api/lecturer");
-      String? token = await TokenService().getToken();
-      final response = await http.post(uri,
-      headers: <String, String>{
-        'Authorization' : 'bearer $token',
-        'content-type' : 'application/json; charset=UTF-8'
-      },
-      body: jsonEncode(<String, dynamic>{
-        "lec_Email": email,
-        "lec_Name": name,
-        "lec_Surname": surname,
-        "title": title,
-        "degree": degree,
-      }));
 
-      if (response.statusCode == 200){
-        return true;
-      }
-      else{
-      var resBody = jsonDecode(response.body);
-      print(resBody['error']);
-     }
-      return false;
-    } catch (e) {
-      throw e.toString();
-    }
-  }
-
-  Future <dynamic> signUp(String email, String password, String name, String surname) async{
-    try {
+      print(role);
           var regBody = {
           "email": email,
           "password": password,
-          "user_type": "student"
+          "user_type": role,
+          "name" : name,
+          "surname" : surname,
+          "title" : title,
+          "degree" : degree,
           };
           var res = await http.post(
             Uri.parse("$apiURL/api/signup"),

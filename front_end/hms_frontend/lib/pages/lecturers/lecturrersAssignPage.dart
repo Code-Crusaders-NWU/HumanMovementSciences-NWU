@@ -211,11 +211,13 @@ class _AssignmentsPageState extends State<AssignmentsPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async{
+          String email = await AuthServices.getEmail();
           Navigator.push(
+            
               context,
               MaterialPageRoute(
-                  builder: (context) => const AssignmentCreatePage()));
+                  builder: (context) =>  AssignmentCreatePage(email: email,)));
         },
         child: const Icon(
           Icons.add,

@@ -6,8 +6,11 @@ import 'package:hms_frontend/services/assignments.services.dart';
 import 'package:intl/intl.dart';
 
 class AssignmentCreatePage extends StatefulWidget {
-  const AssignmentCreatePage({super.key});
-
+  AssignmentCreatePage(
+    {super.key,
+    required this.email,
+    });
+  String? email;
   @override
   State<AssignmentCreatePage> createState() => _AssignmentsPageState();
 }
@@ -41,6 +44,7 @@ class _AssignmentsPageState extends State<AssignmentCreatePage> {
                   controller: lecturerController,
                   hintText: 'Email of Lecturer',
                   obscureText: false,
+                  isLocked: _isLocked(),
                 ),
             
                 const SizedBox(height: 20), //Used for spacing
@@ -49,6 +53,7 @@ class _AssignmentsPageState extends State<AssignmentCreatePage> {
                   controller: titleController,
                   hintText: 'Title of Assignment',
                   obscureText: false,
+                  isLocked: false,
                 ),
             
                 const SizedBox(height: 20), //Used for spacing
@@ -57,6 +62,7 @@ class _AssignmentsPageState extends State<AssignmentCreatePage> {
                   controller: descriptionController,
                   hintText: 'Description of Assignment',
                   obscureText: false,
+                  isLocked: false,
                 ),
             
                 const SizedBox(height: 20), //Used for spacing
@@ -231,5 +237,14 @@ class _AssignmentsPageState extends State<AssignmentCreatePage> {
   return DateTime(date.year, date.month, date.day, time.hour, time.minute);
 }
 
+  bool _isLocked(){
+    if (widget.email == null){
+      return false;
+    }
+    else{
+      lecturerController.text = widget.email!;
+      return true;
+    }
+  }
 
 }

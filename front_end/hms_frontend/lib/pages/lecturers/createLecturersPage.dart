@@ -36,19 +36,19 @@ class _CreateLecturersPageState extends State<CreateLecturersPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TextBox(controller: emailController, hintText: 'Email Address', obscureText: false),
+              TextBox(controller: emailController, hintText: 'Email Address', obscureText: false, isLocked: false,),
               const SizedBox(height: 20),
-              TextBox(controller: passwordController, hintText: 'Lecturer Password', obscureText: true),
+              TextBox(controller: passwordController, hintText: 'Lecturer Password', obscureText: true, isLocked: false,),
               const SizedBox(height: 20),
-              TextBox(controller: cPasswordController, hintText: 'Confirm Password', obscureText: true),
+              TextBox(controller: cPasswordController, hintText: 'Confirm Password', obscureText: true, isLocked: false,),
               const SizedBox(height: 20),
-              TextBox(controller: nameController, hintText: 'First Name', obscureText: false),
+              TextBox(controller: nameController, hintText: 'First Name', obscureText: false, isLocked: false,),
               const SizedBox(height: 20),
-              TextBox(controller: surnameController, hintText: 'Surname', obscureText: false),
+              TextBox(controller: surnameController, hintText: 'Surname', obscureText: false, isLocked:  false,),
               const SizedBox(height: 20),
-              TextBox(controller: titleController, hintText: 'Title e.g. Dr.', obscureText: false),
+              TextBox(controller: titleController, hintText: 'Title e.g. Dr.', obscureText: false, isLocked: false,),
               const SizedBox(height: 20),
-              TextBox(controller: degreeController, hintText: 'Degree', obscureText: false),
+              TextBox(controller: degreeController, hintText: 'Degree', obscureText: false, isLocked: false,),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () async {
@@ -132,10 +132,9 @@ class _CreateLecturersPageState extends State<CreateLecturersPage> {
 
       if (validate == true) {
        
-        bool flag1 = await UserService().createLecturerUser(email, password);
-        bool flag2 = await UserService().createLecturer(email, name, surname, title, degree);
+        bool flag = await UserService().signUp(email, password, "lecturer", name, surname, title, degree);
         
-        if (flag1 && flag2) {
+        if (flag)  {
           clearInput();
           return true;
         } else {

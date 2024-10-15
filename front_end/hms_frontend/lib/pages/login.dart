@@ -117,6 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   controller: usernameController,
                   hintText: 'email',
                   obscureText: false,
+                  isLocked: false,
                 ),
 
                 const SizedBox(height: 20),
@@ -126,6 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   controller: passwordController,
                   hintText: 'password',
                   obscureText: true,
+                  isLocked: false,
                 ),
 
                 const SizedBox(height: 20),

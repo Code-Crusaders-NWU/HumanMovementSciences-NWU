@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hms_frontend/components/myAppbar.dart';
+import 'package:hms_frontend/services/assignments.services.dart';
 import 'package:hms_frontend/services/order.services.dart';
 import 'package:hms_frontend/services/submissions.services.dart';
 import 'package:intl/intl.dart';
@@ -29,7 +30,7 @@ class _SubmissionsPageState extends State<StudentViewSubmissionsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(
-        titleText: "My Submissons",
+        titleText: "My Submissions",
         backgroundColor: Colors.lightBlue,
       ),
       body: Padding(
@@ -37,7 +38,7 @@ class _SubmissionsPageState extends State<StudentViewSubmissionsPage> {
         child: Column(
           children: [
             Row(
-              children: [      
+              children: [
                 Expanded(
                   child: ElevatedButton.icon(
                     onPressed: _toggleOrder,
@@ -47,10 +48,12 @@ class _SubmissionsPageState extends State<StudentViewSubmissionsPage> {
                           (Widget child, Animation<double> animation) {
                         return RotationTransition(
                           turns: child.key == const ValueKey('latest')
-                              ? Tween<double>(begin: 0, end: 1).animate(animation)
+                              ? Tween<double>(begin: 0, end: 1)
+                                  .animate(animation)
                               : Tween<double>(begin: 0.5, end: 1)
                                   .animate(animation),
-                          child: FadeTransition(opacity: animation, child: child),
+                          child:
+                              FadeTransition(opacity: animation, child: child),
                         );
                       },
                       child: Icon(
@@ -90,51 +93,58 @@ class _SubmissionsPageState extends State<StudentViewSubmissionsPage> {
                               String date = DateFormat('yMMMd').add_jm().format(
                                   DateTime.parse(sub['submission_Date']));
 
-                              return Card(
-                                elevation: 10,
-                                color: Colors.teal[50],
-                                margin:
-                                    const EdgeInsets.symmetric(vertical: 8.0),
-                                child: ListTile(
-                                  title: Text(
-                                    sub['assignm_Num'].toString(),
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w900,
-                                      fontSize: 14,
-                                      color: Colors.black,
+                              return FutureBuilder<String>(
+                                future: getAssignmentTitle(sub['assignm_Num']),
+                                builder: (context, snapshot) {
+                                  String title = snapshot.data ?? 'Loading...';
+
+                                  return Card(
+                                    elevation: 10,
+                                    color: Colors.teal[50],
+                                    margin: const EdgeInsets.symmetric(
+                                        vertical: 8.0),
+                                    child: ListTile(
+                                      title: Text(
+                                        title,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w900,
+                                          fontSize: 14,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      subtitle: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const SizedBox(height: 8),
+                                          Text(
+                                            'Feedback: ${sub['feedback']?.toString() ?? 'No feedback'}',
+                                            style: const TextStyle(
+                                              color: Colors.black54,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Text(
+                                            'Mark: $mark',
+                                            textAlign: TextAlign.left,
+                                            style: const TextStyle(
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            date,
+                                            style: const TextStyle(
+                                              fontSize: 11,
+                                              color: Colors.black54,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  subtitle: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const SizedBox(height: 8),
-                                      Text(
-                                        'Feedback: ${sub['feedback']?.toString() ?? 'No feedback'}',
-                                        style: const TextStyle(
-                                          color: Colors.black54,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Text(
-                                        'Mark: $mark',
-                                        textAlign: TextAlign.left,
-                                        style: const TextStyle(
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        date,
-                                        style: const TextStyle(
-                                          fontSize: 11,
-                                          color: Colors.black54,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                  );
+                                },
                               );
                             },
                           ),
@@ -179,6 +189,16 @@ class _SubmissionsPageState extends State<StudentViewSubmissionsPage> {
     } else {
       submissions = OrderServices.sortSubmissionsEarliest(
           submissions); //Order by ascending
+    }
+  }
+
+  Future<String> getAssignmentTitle(int assignmNum) async {
+    Map<String, dynamic>? assignment =
+        await AssignmentService().fetchSpecificAssignment(assignmNum);
+    if (assignment != null) {
+      return assignment['title'];
+    } else {
+      throw Exception('Error');
     }
   }
 }

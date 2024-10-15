@@ -60,7 +60,7 @@ class _UsersPageState extends State<UsersPage> {
                     ),
                   ),
                   subtitle: Text(
-                    u['user_type'],
+                    "${u['user_type']}",
                     style: const TextStyle(fontSize: 12, color: Colors.black54),
                   ),
                   trailing: Row(
@@ -146,7 +146,9 @@ class _UsersPageState extends State<UsersPage> {
   void getUsers() async {
     try {
       final fetchUsers = await UserService().fetchUsers();
+      print(fetchUsers);
       setState(() {
+       
         users = fetchUsers;
       });
     } catch (e) {

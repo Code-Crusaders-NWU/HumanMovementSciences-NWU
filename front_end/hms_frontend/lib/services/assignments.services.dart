@@ -147,4 +147,33 @@ class AssignmentService {
       throw e.toString();
     }
   }
+
+Future<Map<String, dynamic>?> fetchSpecificAssignment(int assignNumb) async {
+  try {
+    final uri = Uri.parse("$apiURL/api/assignment/$assignNumb");
+
+    String? token = await TokenService().getToken();
+    final response = await http.get(uri, headers: <String, String>{
+      'Authorization': 'bearer $token',
+      'Content-Type': 'application/json; charset=UTF-8'
+    });
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> resBody = jsonDecode(response.body);
+      
+      // Check if there's an assignment in the response
+      if (resBody.containsKey('assignment')) {
+        Map<String, dynamic> assignment = resBody['assignment'];
+
+        return assignment; // Return the assignment object
+      } else {
+        throw Exception('Assignment not found');
+      }
+    } else {
+      throw Exception('Failed to load assignment');
+    }
+  } catch (e) {
+    return null;
+  }
+}
 }

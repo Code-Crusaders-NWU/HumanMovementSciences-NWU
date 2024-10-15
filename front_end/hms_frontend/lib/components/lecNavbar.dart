@@ -5,6 +5,7 @@ import 'package:hms_frontend/pages/lecturers/createAssignmentPage.dart';
 import 'package:hms_frontend/pages/lecturers/lecturrersAssignPage.dart';
 import 'package:hms_frontend/pages/login.dart';
 import 'package:hms_frontend/pages/submissions.dart';
+import 'package:hms_frontend/services/auth.services.dart';
 import 'package:hms_frontend/services/token.services.dart';
 
 class LecNavbar extends StatelessWidget {
@@ -18,15 +19,17 @@ class LecNavbar extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.create),
             title: const Text('View Assignments'),
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => AssignmentsPage(email: null,))); 
+            onTap: () async{
+              String email = await AuthServices.getEmail();
+              Navigator.push(context, MaterialPageRoute(builder: (context) => AssignmentsPage(email: email,))); 
             },
           ),
           ListTile(
             leading: const Icon(Icons.manage_accounts),
             title: const Text('Create Assignments'),
-            onTap: (){ 
-              Navigator.push(context, MaterialPageRoute(builder: (context) =>  AssignmentCreatePage()));   
+            onTap: () async{ 
+              String email = await AuthServices.getEmail();
+              Navigator.push(context, MaterialPageRoute(builder: (context) =>  AssignmentCreatePage(email: email,)));   
             },
           ),
           ListTile(

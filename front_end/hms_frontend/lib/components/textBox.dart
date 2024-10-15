@@ -4,12 +4,14 @@ class TextBox extends StatelessWidget {
   final TextEditingController controller; 
   final String hintText;
   final bool obscureText;
+  final bool isLocked;
 
   const TextBox({
     super.key,
     required this.controller,
     required this.hintText,
     required this.obscureText,
+    required this.isLocked,
   });
 
   @override
@@ -19,6 +21,7 @@ class TextBox extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 25.0),
         child: TextField(
+          enabled: !isLocked,
           controller: controller,
           obscureText: obscureText,
           textAlign: TextAlign.start, 
