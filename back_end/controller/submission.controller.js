@@ -34,8 +34,12 @@ exports.viewAll = async(req, res, next) => {
         const submissions = await SubmissionService.viewAllSubmissions(stu_Email);
         logger.submissionLogger.log('info', 'Submitted successfully');
 
+        if (!submissions || submissions.length === 0) {
+            return res.status(404).json({ status: false, message: 'No submissions found' });
+        }
+
         //Return submissions
-        return res.json({ status: true, submissions });
+        return res.status(200).json({ status: true, submissions });
 
     } catch (error) {
         //Respond with server error (Status code: 500)

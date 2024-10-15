@@ -85,7 +85,7 @@ describe('Submission API Implementation Tests', () => {
     });
 
     //View All Submissions tests
-    describe('GET /api/submission', () => {
+    describe('POST /api/studentsubmissions', () => {
         
         it('should successfully return all submissions for a student', async () => {
             const reqBody = {
@@ -106,7 +106,7 @@ describe('Submission API Implementation Tests', () => {
             SubmissionService.viewAllSubmissions.mockResolvedValue(mockSubmissions);
 
             const response = await request(app)
-                .get('/api/submission')
+                .post('/api/studentsubmissions')
                 .send(reqBody);
 
             //Assertions
@@ -121,7 +121,7 @@ describe('Submission API Implementation Tests', () => {
             SubmissionService.viewAllSubmissions.mockRejectedValue(new Error('Retrieval failed'));
 
             const response = await request(app)
-                .get('/api/submission')
+                .post('/api/studentsubmissions')
                 .send(reqBody);
 
             // Assertions

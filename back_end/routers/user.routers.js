@@ -376,4 +376,60 @@ router.get('/searchUser', authenticateToken, isAdmin.isAdmin, UserController.sea
  */
 
 
+/**
+ * @swagger
+ * /api/user/reset-password:
+ *   patch:
+ *     summary: Reset a user's password
+ *     description: Allows an admin to reset a user's password by providing the user's email and the new password.
+ *     security:
+ *      - bearerAuth: []
+ *     tags:
+ *       - User
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: The email of the user whose password is being reset.
+ *                 example: "user@example.com"
+ *               newPassword:
+ *                 type: string
+ *                 description: The new password to assign to the user.
+ *                 example: "NewPassword123"
+ *     responses:
+ *       '200':
+ *         description: Password reset successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: "Password reset successfully"
+ *       '404':
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "User not found"
+ */
+
+router.patch('/user/reset-password', authenticateToken, isAdmin.isAdmin, UserController.resetPassword);
+
 module.exports = router; //Export router so it can be used by the main application file

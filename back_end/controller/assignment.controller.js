@@ -108,3 +108,23 @@ exports.viewAll = async(req, res, next) => {
         next(error);
     }
 };
+
+exports.getAssignmentByNum = async (req, res, next) => {
+    try {
+        const { assignm_Num } = req.params;
+
+        //Call the service function to get the assignment
+        const assignment = await AssignmentService.getAssignmentByNum(assignm_Num);
+
+        res.status(200).json({
+            status: true,
+            assignment,
+        });
+    } catch (error) {
+        res.status(404).json({
+            status: false,
+            message: error.message,
+        });
+        next(error);
+    }
+};

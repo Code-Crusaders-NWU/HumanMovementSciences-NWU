@@ -1,6 +1,7 @@
 const User_Model = require('../models/user.model');
 const jwt = require('jsonwebtoken');
 const validator = require('validator');
+const bcrypt = require('bcrypt')
 
 class UserService {
     
@@ -53,7 +54,7 @@ class UserService {
         try {
             const user = await User_Model.findOne({ email });
             return user;
-        } //Exception handling if database operation goes south
+        } //Exception handling if database operation goes wrong
         catch (err) {
             throw err; 
         }
@@ -103,6 +104,30 @@ class UserService {
         }
     }
     
+    //Reset user password function
+    static async resetPassword(email, newPassword) {
+        try {
+            //Find the user by their email
+            const user = await User_Model.findOne({ email });
+
+            //If the user doesn't exist, throw an error
+            if (!user) {
+                throw new Error('User not found');
+            }
+
+            //Hash the new password
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+            //Update the user's password in the database
+            user.password = hashedPassword;
+            await user.save();
+
+            return { message: 'Password reset successfully' };
+        } catch (error) {
+            throw error;
+        }
+    }
 
     //Validation
     static validation(email, password, user_type){
